@@ -1,0 +1,38 @@
+{
+  "name": "splish-desktop",
+  "version": "1.0.0",
+  "description": "Desktop Micro-Video Editor",
+  "main": "main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "next build renderer && next export renderer",
+    "dist": "npm run build && build"
+  },
+  "repository": "https://github.com/zdenham/splish-desktop",
+  "keywords": [
+    "Splish",
+    "Micro-video",
+    "Editor",
+    "Moving Photos"
+  ],
+  "author": "Zac Denham",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "~1.7.8"
+  },
+  "dependencies": {
+    "electron-builder": "^19.49.0",
+    "electron-is-dev": "^0.3.0",
+    "electron-next": "^3.1.3",
+    "next": "beta",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "build": {
+    "files": [
+      "**/*",
+      "!renderer",
+      "renderer/out"
+    ]
+  }
+}
