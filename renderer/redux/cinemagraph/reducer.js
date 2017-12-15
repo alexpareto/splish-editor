@@ -7,7 +7,6 @@ const initialState = {
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
-  console.log("action called: ", action);
   switch (action.type) {
     case Constants.CHANGE_TEST:
       return {

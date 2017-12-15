@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import makeStore from "../redux/main/makeStore";
 import withRedux from "next-redux-wrapper";
+import Cinemagraph from "../containers/cinemagraph/cinemagraph";
 
 class Start extends Component {
   static getInitialProps({ store, isServer, pathname, query }) {
     return {};
   }
-  
+
   myClick = () => {
     this.props.dispatch({type: 'CHANGE_TEST'});
   };
@@ -14,8 +15,7 @@ class Start extends Component {
   render() {
     return (
       <div>
-        <div>Prop from Redux {this.props.cinemagraph.test}</div>
-        <div onClick={this.myClick}>Click me to change the above</div>
+        <Cinemagraph />
       </div>
     );
   }
