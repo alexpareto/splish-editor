@@ -18,7 +18,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({ width: 800, height: 600 });
 
   // and load the index.html of the app.
-  const devPath = 'http://localhost:8000/start'
+  const devPath = "http://localhost:8000/start";
   const prodPath = path.resolve("renderer/out/start/index.html");
   const entry = isDev ? devPath : "file://" + prodPath;
 
