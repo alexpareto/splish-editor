@@ -15,7 +15,7 @@ class Start extends Component {
   render() {
     return (
       <div>
-        <Cinemagraph />
+        <Cinemagraph dispatch={this.props.dispatch} cinemagraph={this.props.cinemagraph} />
       </div>
     );
   }
