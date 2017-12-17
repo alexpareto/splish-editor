@@ -1,5 +1,5 @@
 import React from "react";
-import ss from "./cinemagraph.scss";
+import Logo from "../../components/logo/logo";
 
 class Cinemagraph extends React.Component {
 
@@ -9,8 +9,8 @@ class Cinemagraph extends React.Component {
 
 	render() {
 		return (
-			<div className={ss.cinemagraph} onClick={this.myClick}>
-				Cinemagraph Container with test message: {this.props.cinemagraph.test}
+			<div onClick={this.myClick}>
+				<Logo />
 			</div>
 		);
 	}
