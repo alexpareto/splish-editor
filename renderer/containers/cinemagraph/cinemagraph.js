@@ -10,7 +10,7 @@ class Cinemagraph extends React.Component {
 	render() {
 		return (
 			<div onClick={this.myClick}>
-				<Logo size={300} />
+				<Logo size={100} />
 			</div>
 		);
 	}

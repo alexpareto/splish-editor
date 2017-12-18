@@ -4,7 +4,7 @@ import * as globalStyles from '../../globalStyles';
 const Logo = props => {
 	const size = props.size;
 	const strokeW = props.size / 50;
-	const duration = 1.75;
+	const duration = 1.4;
 
 	console.log("STROKEW", strokeW);
 
@@ -60,6 +60,7 @@ const Logo = props => {
 			      	  0 0 0 46 -8`}
 		      	  result="filter" />
 			    </filter>
+
 			  </defs>
 	    	
 	    </svg>
@@ -91,9 +92,9 @@ const Logo = props => {
 	    	}
 
 	    	@keyframes bulgeAnimation {
-			    10% { cy: 0; ry: ${strokeW}; rx: ${strokeW}}
-			    23% { cy: 0; ry: ${strokeW * 10}; rx: ${strokeW/2}; }
-			    50% { cy: 0; ry: 0; rx: 0; }
+			    20% { cy: 0; ry: ${strokeW}; rx: ${strokeW}}
+			    40% { cy: 0; ry: ${strokeW * 9}; rx: ${strokeW/2}; }
+			    80% { cy: 0; ry: 0; rx: 0; }
 				};
 
 	    	.mainDroplet { 
@@ -101,6 +102,7 @@ const Logo = props => {
 	    		animation-name: mainDropletAnimation;
 	    		animation-duration: ${duration}s;
 	    		animation-iteration-count:infinite;
+	    		animation-timing-function: ease-in-out;
 	    	};
 
 	    	.mainDropletFriend { 
@@ -108,6 +110,7 @@ const Logo = props => {
 	    		animation-name: mainDropletFriendAnimation;
 	    		animation-duration: ${duration * 1}s;
 	    		animation-iteration-count:infinite;
+	    		animation-timing-function: ease-in-out;
 	    	};
 
 	    	.mainDropletFriend2 { 
@@ -115,6 +118,7 @@ const Logo = props => {
 	    		animation-name: mainDropletFriend2Animation;
 	    		animation-duration: ${duration * 1}s;
 	    		animation-iteration-count:infinite;
+	    		animation-timing-function: ease-in-out;
 	    	};
 
 	    	.droplet { 
@@ -122,18 +126,45 @@ const Logo = props => {
 	    	};
 
 	    	@keyframes mainDropletFriendAnimation {
-	    		from { cy: -${strokeW*5}; rx: ${strokeW*1.5}; ry: ${strokeW*1.5}; }
-	    		to { cy: ${size}; rx: ${strokeW*1}; ry: ${strokeW*1}; }
+	    		from { 
+	    			cy: -${strokeW*5}; 
+	    			rx: ${strokeW*1.5}; 
+	    			ry: ${strokeW*1.5}; 
+	    			fill: ${globalStyles.background}; 
+	    		}
+	    		to { 
+	    			cy: ${size}; 
+	    			rx: ${strokeW*1}; 
+	    			ry: ${strokeW*1};
+	    			fill: #77FF94;
+
+	    		}
 	    	}
 
 	    	@keyframes mainDropletFriend2Animation {
-	    		from { cy: -${strokeW*5}; rx: ${strokeW*1}; ry: ${strokeW*1}; }
-	    		to { cy: ${size + strokeW*7}; rx: ${strokeW*1}; ry: ${strokeW*1}; }
+	    		from { 
+	    			cy: -${strokeW*5};
+	    			rx: ${strokeW*1};
+	    			ry: ${strokeW*1};
+	    		}
+	    		to { 
+	    			cy: ${size + strokeW*7}; 
+	    			rx: ${strokeW*1}; 
+	    			ry: ${strokeW*1}; 
+	    		}
 	    	}
 
     		@keyframes mainDropletAnimation {
-	    		from { cy: -${strokeW*5}; rx: ${strokeW*4}; ry: ${strokeW * 4}; }
-	    		to { cy: ${size + strokeW*15}; rx: ${strokeW*4}; ry: ${strokeW * 4}; }
+	    		from { 
+	    			cy: -${strokeW*5};
+	    			rx: ${strokeW*4};
+	    			ry: ${strokeW * 4};
+	    		}
+	    		to { 
+	    			cy: ${size + strokeW*15};
+	    			rx: ${strokeW*4};
+	    			ry: ${strokeW * 4};
+	    		}
 	    	}
 
 	    `}
