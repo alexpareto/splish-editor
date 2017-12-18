@@ -3,8 +3,10 @@ import * as globalStyles from '../../globalStyles';
 
 const Logo = props => {
 	const size = props.size;
-	const strokeW = Math.max(props.size / 50, 2);
-	const duration = 4;
+	const strokeW = props.size / 50;
+	const duration = 1.5;
+
+	console.log("STROKEW", strokeW);
 
   return (
   	<div className="container">
@@ -41,15 +43,15 @@ const Logo = props => {
     		</g>
   			<defs>
 			    <filter id="dropletFilter">
-			      <feGaussianBlur in="SourceGraphic" stdDeviation={strokeW} />
+			      <feGaussianBlur in="SourceGraphic" stdDeviation={strokeW + 1} />
 			      <feColorMatrix 
 			      	in="blur" 
 			      	mode="matrix" 
-			      	values="
+			      	values={`
 			      		1 0 0 0 0
 			      	  0 1 0 0 0  
 			      	  0 0 1 0 0  
-			      	  0 0 0 46 -8" 
+			      	  0 0 0 46 -8`}
 		      	  result="filter" />
 			    </filter>
 			  </defs>
@@ -83,10 +85,9 @@ const Logo = props => {
 	    	}
 
 	    	@keyframes bulgeAnimation {
-			    0% { cy: 0; ry: ${strokeW}; rx: ${strokeW}}
-			    20% { cy: 0; ry: ${strokeW * 6}; rx: ${strokeW}; }
-			    40% { cy: 0; ry: 0; rx: 0; }
-			    
+			    10% { cy: 0; ry: ${strokeW}; rx: ${strokeW}}
+			    20% { cy: 0; ry: ${strokeW * 8}; rx: ${strokeW/2}; }
+			    50% { cy: 0; ry: 0; rx: 0; }
 				};
 
 	    	.mainDroplet { 
@@ -94,7 +95,8 @@ const Logo = props => {
 	    		animation-name: mainDropletAnimation;
 	    		animation-duration: ${duration}s;
 	    		animation-iteration-count:infinite;
-	    		transition-timing-function: linear;
+	    		transition-timing-function: easeInExpo;
+	    		cy: -${strokeW*5}; rx: ${strokeW*4}; ry: ${strokeW * 4};
 	    	};
 
 	    	.mainDropletFriend { 
@@ -110,8 +112,8 @@ const Logo = props => {
 	    	};
 
     		@keyframes mainDropletAnimation {
-	    		0% { cy: -${strokeW*6}; rx: ${strokeW*5}; ry: ${strokeW * 6}; }
-	    		100% { cy: ${size + strokeW*6}; rx: ${strokeW*5}; ry: ${strokeW * 6}; }
+	    		from { cy: -${strokeW*5}; rx: ${strokeW*4}; ry: ${strokeW * 4}; }
+	    		to { cy: ${size + strokeW*5}; rx: ${strokeW*4}; ry: ${strokeW * 4}; }
 	    	}
 
 	    `}
