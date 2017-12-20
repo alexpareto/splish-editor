@@ -11,6 +11,7 @@ class Cinemagraph extends React.Component {
 			<div>
 				<Head>
 					<script src="/static/lib/literallyCanvasCore.js"></script>
+					<link rel="stylesheet" type="text/css" href="/static/css/literally.css"/>
 				</Head>
 				<NavBar />
 				<DrawingCanvas />
