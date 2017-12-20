@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import makeStore from "../redux/main/makeStore";
+import makeStore from "../containers/makeStore";
 import withRedux from "next-redux-wrapper";
 import Cinemagraph from "../containers/cinemagraph/cinemagraph";
 

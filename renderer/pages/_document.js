@@ -13,7 +13,7 @@ export default class MyDocument extends Document {
         <Head>
           <link rel='stylesheet' href='/static/css/bundle.css' />
         </Head>
-        <body>
+        <body style={{overflow: 'hidden', height: '100vh'}}>
           {this.props.customValue}
           <Main />
           <NextScript />

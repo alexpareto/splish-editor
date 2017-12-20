@@ -1,10 +1,11 @@
 import React from 'react';
-import * as globalStyles from '../../globalStyles';
+import * as globalStyles from '../globalStyles';
 
 const Logo = props => {
 	const size = props.size;
 	const strokeW = props.size / 50;
 	const duration = 1.4;
+	const contrast = size < 80 ? 6:7;
 
 	console.log("STROKEW", strokeW);
 
@@ -21,16 +22,17 @@ const Logo = props => {
 	    		y={strokeW}
 	    		cx={size/2}
 	    		cy={size/2}
-		    	r={(size - strokeW*2)/2}
+		    	r={(size - strokeW*3)/2}
+		    	fill={globalStyles.primary}
 	    		className="boundingCircle"
 	    		strokeWidth={strokeW} />
 	    	<g className="droplet">
 	    		<circle 
-		    		x={strokeW/2}
-		    		y={strokeW/2}
+		    		x={strokeW}
+		    		y={strokeW}
 		    		cx={size/2}
 		    		cy={size/2}
-			    	r={(size - strokeW)/2}
+			    	r={(size - strokeW*3)/2}
 		    		fill="none"
 		    		strokeWidth={strokeW} 
 	    			stroke="#fff"/>
@@ -57,8 +59,12 @@ const Logo = props => {
 			      		1 0 0 0 0
 			      	  0 1 0 0 0  
 			      	  0 0 1 0 0  
-			      	  0 0 0 46 -8`}
+			      	  0 0 0 46 -${contrast}`}
 		      	  result="filter" />
+		      	  <linearGradient id="MyGradient">
+		            <stop offset="5%"  stopColor="green"/>
+		            <stop offset="95%" stopColor="gold"/>
+			        </linearGradient>
 			    </filter>
 
 			  </defs>
@@ -69,15 +75,10 @@ const Logo = props => {
 	    {`
 	    	.container { 
     			background-color: ${globalStyles.background};
-					width: 100vw;
-					height: 100vh;
-					margin-left: -8px;
-					margin-top: -8px;
 	    	}; 
 
 	    	.svg { 
-	    		margin-left: 10px;
-					margin-top: 10px;
+	    		border-bottom: 1px solid ${globalStyles.primary}
 	    	}; 
 
 	    	.boundingCircle { 
@@ -136,8 +137,7 @@ const Logo = props => {
 	    			cy: ${size}; 
 	    			rx: ${strokeW*1}; 
 	    			ry: ${strokeW*1};
-	    			fill: #77FF94;
-
+	    			fill: ${globalStyles.background};
 	    		}
 	    	}
 
