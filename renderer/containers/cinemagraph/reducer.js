@@ -3,15 +3,18 @@ import * as Constants from './constants';
 const initialState = {
   undoStack: [],
   redoStack: [],
-  test: "hello world",
+  selectedVideoPath: '',
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
   switch (action.type) {
-    case Constants.CHANGE_TEST:
+    case Constants.INITIALIZE_CINEMAGRAPH_CANVAS:
       return {
         ...state,
-        test: "hello redux world",
+      };
+    case Constants.SELECT_CINEMAGRAPH_VIDEO:
+      return {
+        ...state,
       };
     default:
       return state;

@@ -24,7 +24,7 @@ class NavBar extends React.Component {
 						top: 0;
 						margin-left: -8px;
 						margin-top: -8px;
-						height: 6vh;
+						height: 45px;
 						width: 100vw;
 						border-bottom: 1px solid ${globalStyles.primary};
 						background-color: ${globalStyles.background};

@@ -1,28 +1,35 @@
 import React, { Component } from "react";
-import makeStore from "../containers/makeStore";
+import makeStore from "../lib/makeStore";
 import withRedux from "next-redux-wrapper";
 import Cinemagraph from "../containers/cinemagraph/cinemagraph";
+import { bindActionCreators } from "redux";
+import * as Actions from "../containers/cinemagraph/actions";
 
 class Start extends Component {
-  static getInitialProps({ store, isServer, pathname, query }) {
-    return {};
+  static getInitialProps({ store, isServer, pathname, query}) {
+    return {}
   }
-
-  myClick = () => {
-    this.props.dispatch({type: 'CHANGE_TEST'});
-  };
 
   render() {
     return (
       <div>
-        <Cinemagraph dispatch={this.props.dispatch} cinemagraph={this.props.cinemagraph} />
+        <Cinemagraph />
       </div>
     );
   }
 }
 
-Start = withRedux(makeStore, state => ({ cinemagraph: state.cinemagraph }))(
-  Start
-);
+const mapDispatchToProps = dispatch => {
+  return {
+    initializeCinemagraphCanvas: bindActionCreators(Actions.initializeCinemagraphCanvas, dispatch),
+    selectCinemagraphVideo: bindActionCreators(Actions.selectCinemagraphVideo, dispatch),
+  };
+};
 
-export default Start;
+const mapStateToProps = state => ({ cinemagraph: state.cinemagraph });
+
+export default withRedux(
+  makeStore,
+  mapStateToProps,
+  mapDispatchToProps
+)(Start);

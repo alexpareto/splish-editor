@@ -2,16 +2,16 @@ import React from "react";
 import NavBar from '../../components/navBar';
 import DrawingCanvas from '../../components/drawingCanvas';
 import Trimmer from '../../components/trimmer';
+import Head from 'next/head'
 
 class Cinemagraph extends React.Component {
 
-	myClick = () => {
-		this.props.dispatch({type: 'CHANGE_TEST'});
-	}
-
 	render() {
 		return (
-			<div onClick={this.myClick}>
+			<div>
+				<Head>
+					<script src="/static/lib/literallyCanvasCore.js"></script>
+				</Head>
 				<NavBar />
 				<DrawingCanvas />
 				<Trimmer />
