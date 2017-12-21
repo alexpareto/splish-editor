@@ -2,20 +2,26 @@ import React from "react";
 import NavBar from "../../components/navBar";
 import DrawingCanvas from "../../components/drawingCanvas";
 import Trimmer from "../../components/trimmer";
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 
 class Cinemagraph extends React.Component {
 	render() {
+		console.log("RENDERING", this.props);
 		return (
 			<div>
-				<NavBar
-					selectCinemagraphVideo={this.props.selectCinemagraphVideo}
-					initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
-				/>
-				<DrawingCanvas src={this.props.cinemagraph.videoPath} videoHeight={this.props.cinemagraph.videoHeight} />
-				<Trimmer />
+				hello !
 			</div>
 		);
 	}
 }
 
-export default Cinemagraph;
+const getUsers = gql`
+	query {
+		allUsers {
+	  	name
+	  }
+	}
+`;
+
+export default graphql(getUsers)(Cinemagraph);

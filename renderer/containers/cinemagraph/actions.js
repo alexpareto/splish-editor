@@ -1,10 +1,17 @@
-import * as constants from './constants';
+export const actionTypes = {
+	INITIALIZE_CINEMAGRAPH_CANVAS: 'INITIALIZE_CINEMAGRAPH_CANVAS',
+	SELECT_CINEMAGRAPH_VIDEO: 'SELECT_CINEMAGRAPH_VIDEO',
+	BRUSH_STROKE_COMPLETE: 'BRUSH_STROKE_COMPLETE',
+	UNDO_CINEMAGRAPH: 'UNDO_CINEMAGRAPH',
+	REDO_CINEMAGRAPH: 'REDO_CINEMAGRAPH',
+	RENDER_CINEMAGRAPH: 'RENDER_CINEMAGRAPH',
+};
 
 // ACTIONS
 export const initializeCinemagraphCanvas = () => {
-	return { type: constants.INITIALIZE_CINEMAGRAPH_CANVAS};
+	return { type: actionTypes.INITIALIZE_CINEMAGRAPH_CANVAS};
 }
 
 export const selectCinemagraphVideo = (files) => {
-	return { type: constants.SELECT_CINEMAGRAPH_VIDEO, files: files };
+	return { type: actionTypes.SELECT_CINEMAGRAPH_VIDEO, files: files };
 }

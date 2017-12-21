@@ -1,4 +1,4 @@
-import * as Constants from './constants';
+import {actionTypes} from './actions';
 
 const initialState = {
   undoStack: [],
@@ -11,7 +11,7 @@ const initialState = {
 
 export const cinemagraphReducer = (state = initialState, action) => {
   switch (action.type) {
-    case Constants.INITIALIZE_CINEMAGRAPH_CANVAS:
+    case actionTypes.INITIALIZE_CINEMAGRAPH_CANVAS:
       var lc = LC.init(document.getElementsByClassName("literally core")[0]);
       var tools = {
         pencil: new LC.tools.Pencil(lc),
@@ -30,7 +30,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
         tools,
         videoHeight,
       };
-    case Constants.SELECT_CINEMAGRAPH_VIDEO:
+    case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
       const videoPath = 'file://' + action.files[0];
       return {
         ...state,

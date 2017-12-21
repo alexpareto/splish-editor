@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { cinemagraphReducer } from './cinemagraph/reducer';
+import { cinemagraphReducer } from '../containers/cinemagraph/reducer';
 
 const rootReducer = combineReducers({
   cinemagraph: cinemagraphReducer,
