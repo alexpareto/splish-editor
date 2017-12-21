@@ -3,7 +3,7 @@ import * as Constants from './constants';
 const initialState = {
   undoStack: [],
   redoStack: [],
-  selectedVideoPath: '',
+  videoPath: '',
   canvas: {},
   tools: {},
 };
@@ -28,6 +28,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
     case Constants.SELECT_CINEMAGRAPH_VIDEO:
       return {
         ...state,
+        videoPath: action.files[0],
       };
     default:
       return state;

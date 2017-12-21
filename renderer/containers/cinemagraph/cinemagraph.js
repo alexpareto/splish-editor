@@ -9,6 +9,7 @@ class Cinemagraph extends React.Component {
 			<div>
 				<NavBar selectCinemagraphVideo={this.props.selectCinemagraphVideo} />
 				<DrawingCanvas
+					src={this.props.cinemagraph.videoPath}
 					initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
 				/>
 				<Trimmer />
