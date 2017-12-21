@@ -2,26 +2,18 @@ import React from "react";
 import NavBar from "../../components/navBar";
 import DrawingCanvas from "../../components/drawingCanvas";
 import Trimmer from "../../components/trimmer";
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { connect } from 'react-redux'
+
 
 class Cinemagraph extends React.Component {
 	render() {
-		console.log("RENDERING", this.props);
+		console.log("PROPS: ", this.props);
 		return (
 			<div>
-				hello !
+				hello still
 			</div>
 		);
 	}
 }
 
-const getUsers = gql`
-	query {
-		allUsers {
-	  	name
-	  }
-	}
-`;
-
-export default graphql(getUsers)(Cinemagraph);
+export default connect(state => state)(Cinemagraph)
