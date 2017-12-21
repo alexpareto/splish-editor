@@ -1,20 +1,16 @@
 import React from "react";
-import NavBar from '../../components/navBar';
-import DrawingCanvas from '../../components/drawingCanvas';
-import Trimmer from '../../components/trimmer';
-import Head from 'next/head'
+import NavBar from "../../components/navBar";
+import DrawingCanvas from "../../components/drawingCanvas";
+import Trimmer from "../../components/trimmer";
 
 class Cinemagraph extends React.Component {
-
 	render() {
 		return (
 			<div>
-				<Head>
-					<script src="/static/lib/literallyCanvasCore.js"></script>
-					<link rel="stylesheet" type="text/css" href="/static/css/literally.css"/>
-				</Head>
-				<NavBar />
-				<DrawingCanvas />
+				<NavBar selectCinemagraphVideo={this.props.selectCinemagraphVideo} />
+				<DrawingCanvas
+					initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
+				/>
 				<Trimmer />
 			</div>
 		);

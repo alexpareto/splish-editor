@@ -7,7 +7,29 @@ import * as globalStyles from "../globalStyles";
 class NavBar extends React.Component {
 
 	openFileDialog = () => {
-		const files = remote.dialog.showOpenDialog();
+		let files;
+		switch(this.props.type){
+			case 'burst':
+				files = remote.dialog.showOpenDialog();
+				break;
+			case 'video':
+				files = remote.dialog.showOpenDialog({
+					title: "Choose a video!",
+					filters: [
+				    {name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'mov']},
+				  ],
+					defaultPath: "~/",
+					buttonLabel: "Choose",
+					properties: ['openFile'],
+				});
+				break;
+			case 'img':
+				files = remote.dialog.showOpenDialog();
+				break;
+			default:
+				files = remote.dialog.showOpenDialog();
+		}
+		this.props.filesHandler(files);
 	};
 
 	render() {

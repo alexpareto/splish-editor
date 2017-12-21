@@ -8,7 +8,7 @@ class NavBar extends React.Component {
 		return (
 			<div className="container">
 				<div className="flex">
-					<FileSelection />
+					<FileSelection type="video" filesHandler={this.props.selectCinemagraphVideo} />
 				</div>
 				<style jsx>{
 					`
