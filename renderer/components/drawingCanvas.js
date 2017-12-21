@@ -4,14 +4,24 @@ import Head from "next/head";
 import { remote } from "electron";
 
 class DrawingCanvas extends React.Component {
-	componentDidMount() {
-		this.props.initializeCinemagraphCanvas();
-	}
-
 	render() {
-		const video = this.props.src ? <video src={'file:///Users/zdenham/Desktop/IMG_0205.MOV'} /> : null;
+		const video = this.props.src
+			? <video
+					id="cinemagraphVideo"
+					className="cinemagraphVideo"
+					style={{
+						width: "70vw",
+						left: "15vw",
+						position: "absolute"
+					}}
+					autoPlay={true}
+					src={this.props.src}
+					muted={true}
+					loop
+				/>
+			: null;
 		return (
-			<div>
+			<div className="container">
 				<Head>
 					<script src="/static/lib/literallyCanvasCore.js" />
 					<link
@@ -21,11 +31,23 @@ class DrawingCanvas extends React.Component {
 					/>
 				</Head>
 				{video}
-				<div id="tool-eraser"> </div>
-				<div id="tool-pencil"> </div>
 				<div className="literally core" />
 				<style jsx>
-					{`  `}
+					{`
+						.cinemagraphVideo {
+							width: 70vw;
+						}
+
+						.container {
+							height: ${this.props.videoHeight}vw;
+							width: 70vw;
+							margin-left: calc(15vw - 8px);
+						}
+
+						.literally core {
+							height: ${this.props.videoHeight}vw;
+						}
+					`}
 				</style>
 			</div>
 		);

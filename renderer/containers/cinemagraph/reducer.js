@@ -6,6 +6,7 @@ const initialState = {
   videoPath: '',
   canvas: {},
   tools: {},
+  videoHeight: 10,
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
@@ -16,19 +17,24 @@ export const cinemagraphReducer = (state = initialState, action) => {
         pencil: new LC.tools.Pencil(lc),
         eraser: new LC.tools.Eraser(lc)
       };
-
+      const vid = document.getElementById("cinemagraphVideo");
+      const aspect = vid.videoWidth / vid.videoHeight;
+      const videoHeight = 70 / aspect;
+      tools.pencil.strokeWidth = 35;
+      console.log("TOOLS: ", tools);
       lc.setTool(tools.pencil);
-      console.log("LC", lc);
 
       return {
         ...state,
         canvas: lc,
-        tools
+        tools,
+        videoHeight,
       };
     case Constants.SELECT_CINEMAGRAPH_VIDEO:
+      const videoPath = 'file://' + action.files[0];
       return {
         ...state,
-        videoPath: action.files[0],
+        videoPath,
       };
     default:
       return state;

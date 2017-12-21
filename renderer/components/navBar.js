@@ -1,6 +1,7 @@
 import React from "react";
 import * as globalStyles from '../globalStyles';
 import FileSelection from './fileSelection';
+import IconButton from './iconButton';
 
 class NavBar extends React.Component {
 
@@ -9,6 +10,12 @@ class NavBar extends React.Component {
 			<div className="container">
 				<div className="flex">
 					<FileSelection type="video" filesHandler={this.props.selectCinemagraphVideo} />
+					<IconButton
+						onClick={this.props.initializeCinemagraphCanvas}
+						stroke={globalStyles.background}
+						name="crosshair"
+						backgroundColor={globalStyles.secondary}
+					/>
 				</div>
 				<style jsx>{
 					`
