@@ -3,6 +3,6 @@
 .literally{opacity: .3; position:relative;height: 100%;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;-ms-touch-action:none;user-select:none}
 .literally,.literally *{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 .literally>*{position:absolute}
-.literally .lc-drawing{right:0;left:0;bottom:0;left:0}
+.literally .lc-drawing{height: 100%; right:0;left:0;bottom:0;left:0}
 .literally .lc-drawing>*{position:absolute;top:0;right:0;bottom:0;left:0}
 

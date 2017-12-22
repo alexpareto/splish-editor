@@ -39,7 +39,6 @@ class DrawingCanvas extends React.Component {
 						}
 
 						.container {
-							height: ${this.props.videoHeight}vw;
 							width: 70vw;
 							margin-left: calc(15vw - 8px);
 						}
