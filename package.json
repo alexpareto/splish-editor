@@ -5,6 +5,7 @@
   "main": "main/main.js",
   "scripts": {
     "start": "electron .",
+    "rebuild": "electron-rebuild -w opencv4nodejs",
     "build": "next build renderer && next export renderer",
     "dist": "npm run build && build"
   },
@@ -25,6 +26,7 @@
     "electron-builder": "^19.49.0",
     "electron-is-dev": "^0.3.0",
     "electron-next": "^3.1.3",
+    "electron-rebuild": "^1.6.0",
     "es6-promise": "^4.2.1",
     "graphql": "^0.12.3",
     "graphql-anywhere": "^4.1.0",
@@ -33,7 +35,7 @@
     "next": "beta",
     "next-redux-saga": "^1.0.1",
     "next-redux-wrapper": "^1.3.5",
-    "opencv-updated-gyp": "^0.0.5",
+    "opencv4nodejs": "^2.27.0",
     "react": "^16.2.0",
     "react-apollo": "^2.0.4",
     "react-dom": "^16.2.0",

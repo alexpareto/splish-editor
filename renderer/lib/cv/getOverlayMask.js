@@ -1,5 +1,10 @@
-import cv from "opencv-updated-gyp";
+import {remote} from 'electron';
 
-export default (mask, video, videoTime) => {
-
+export default (mask, video, videoTime=0) => {
+	let cv;
+	if(remote)
+	{
+		cv = remote.require('opencv4nodejs');
+		console.log('CV: ', cv);
+	}
 }

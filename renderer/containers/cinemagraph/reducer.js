@@ -1,16 +1,18 @@
 import { actionTypes } from "./actions";
 import * as globalStyles from "../../globalStyles";
+import getOverlayMask from '../../lib/cv/getOverlayMask';
 
 const initialState = {
   undoStack: [],
   redoStack: [],
   videoPath: "",
-  canvas: {},
+  lc: null,
   tools: {},
   videoHeight: 10
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
+  let lc;
   switch (action.type) {
     case actionTypes.INITIALIZE_CINEMAGRAPH_CANVAS:
       const vid = document.getElementById("cinemagraphVideo");
@@ -18,7 +20,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
       const videoHeight = 70 / aspect;
       vid.parentElement.setAttribute("style", `height: ${videoHeight}vw;`);
 
-      var lc = LC.init(document.getElementsByClassName("literally core")[0]);
+      lc = LC.init(document.getElementsByClassName("literally core")[0]);
       var tools = {
         pencil: new LC.tools.Pencil(lc),
         eraser: new LC.tools.Eraser(lc)
@@ -41,7 +43,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
       console.log("LC: ", lc);
       return {
         ...state,
-        canvas: lc,
+        lc,
         tools,
         videoHeight
       };
@@ -51,6 +53,16 @@ export const cinemagraphReducer = (state = initialState, action) => {
         ...state,
         videoPath
       };
+    case actionTypes.ATTEMPT_PREVIEW_CINEMAGRAPH:
+      // use cv to render an image mask to place over the video
+      console.log("PREVIEWING!!!");
+      // lc = state.lc;
+      // const mask = lc.getImage();
+      getOverlayMask();
+
+      return {
+        ...state,
+      }
     default:
       return state;
   }

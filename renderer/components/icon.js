@@ -467,6 +467,22 @@ const Icon = props => {
           <line x1="12" y1="22" x2="12" y2="18" />
         </svg>
       );
+    case "play":
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke={props.stroke}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polygon points="5 3 19 12 5 21 5 3" />
+        </svg>
+      );
     default:
       return null;
   }

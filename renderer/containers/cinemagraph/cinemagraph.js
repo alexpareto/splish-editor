@@ -13,6 +13,7 @@ class Cinemagraph extends React.Component {
 				<NavBar
 					selectCinemagraphVideo={this.props.selectCinemagraphVideo}
 					initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
+					attemptPreviewCinemagraph={this.props.attemptPreviewCinemagraph}
 				/>
 				<DrawingCanvas src={this.props.cinemagraph.videoPath} videoHeight={this.props.cinemagraph.videoHeight} />
 				<Trimmer />
@@ -25,6 +26,7 @@ const mapDispatchToProps = dispatch => {
   return {
     initializeCinemagraphCanvas: () => dispatch(Actions.initializeCinemagraphCanvas()),
     selectCinemagraphVideo: (files) => dispatch(Actions.selectCinemagraphVideo(files)),
+    attemptPreviewCinemagraph: () => dispatch(Actions.attemptPreviewCinemagraph()),
   };
 };
 

@@ -16,6 +16,12 @@ class NavBar extends React.Component {
 						name="crosshair"
 						backgroundColor={globalStyles.secondary}
 					/>
+					<IconButton
+						onClick={this.props.attemptPreviewCinemagraph}
+						stroke={globalStyles.background}
+						name="play"
+						backgroundColor={globalStyles.secondary}
+					/>
 				</div>
 				<style jsx>{
 					`
