@@ -10,8 +10,8 @@ class DrawingCanvas extends React.Component {
 					id="cinemagraphVideo"
 					className="cinemagraphVideo"
 					style={{
-						width: "70vw",
-						left: "15vw",
+						width: "80vw",
+						left: "10vw",
 						position: "absolute"
 					}}
 					autoPlay={true}
@@ -35,15 +35,17 @@ class DrawingCanvas extends React.Component {
 				<style jsx>
 					{`
 						.cinemagraphVideo {
-							width: 70vw;
+							width: 80vw;
 						}
 
 						.container {
-							width: 70vw;
-							margin-left: calc(15vw - 8px);
+							overflow: none;
+							width: 80vw;
+							margin-left: calc(10vw - 8px);
 						}
 
 						.literally core {
+							overflow: none;
 							height: ${this.props.videoHeight}vw;
 						}
 					`}

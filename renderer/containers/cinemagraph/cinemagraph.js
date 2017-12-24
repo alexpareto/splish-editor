@@ -2,9 +2,8 @@ import React from "react";
 import NavBar from "../../components/navBar";
 import DrawingCanvas from "../../components/drawingCanvas";
 import Trimmer from "../../components/trimmer";
-import { connect } from 'react-redux';
-import * as Actions from './actions';
-
+import { connect } from "react-redux";
+import * as Actions from "./actions";
 
 class Cinemagraph extends React.Component {
 	render() {
@@ -15,7 +14,12 @@ class Cinemagraph extends React.Component {
 					initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
 					attemptPreviewCinemagraph={this.props.attemptPreviewCinemagraph}
 				/>
-				<DrawingCanvas src={this.props.cinemagraph.videoPath} videoHeight={this.props.cinemagraph.videoHeight} />
+				<DrawingCanvas
+					overlaySource={this.props.cinemagraph.overalaySource}
+					viewMode={this.props.cinemagraph.viewMode}
+					avideoSrc={this.props.cinemagraph.videoPath}
+					videoHeight={this.props.cinemagraph.videoHeight}
+				/>
 				<Trimmer />
 			</div>
 		);
@@ -23,13 +27,16 @@ class Cinemagraph extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => {
-  return {
-    initializeCinemagraphCanvas: () => dispatch(Actions.initializeCinemagraphCanvas()),
-    selectCinemagraphVideo: (files) => dispatch(Actions.selectCinemagraphVideo(files)),
-    attemptPreviewCinemagraph: () => dispatch(Actions.attemptPreviewCinemagraph()),
-  };
+	return {
+		initializeCinemagraphCanvas: () =>
+			dispatch(Actions.initializeCinemagraphCanvas()),
+		selectCinemagraphVideo: files =>
+			dispatch(Actions.selectCinemagraphVideo(files)),
+		attemptPreviewCinemagraph: () =>
+			dispatch(Actions.attemptPreviewCinemagraph())
+	};
 };
 
 const mapStateToProps = state => ({ cinemagraph: state.cinemagraph });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cinemagraph)
+export default connect(mapStateToProps, mapDispatchToProps)(Cinemagraph);
