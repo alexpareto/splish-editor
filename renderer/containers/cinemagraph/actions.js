@@ -19,6 +19,5 @@ export const selectCinemagraphVideo = (files) => {
 }
 
 export const attemptPreviewCinemagraph = () => {
-	console.log("IN THE ACTION");
 	return { type: actionTypes.ATTEMPT_PREVIEW_CINEMAGRAPH };
 }

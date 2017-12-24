@@ -1,6 +1,6 @@
 import { actionTypes } from "./actions";
 import * as globalStyles from "../../globalStyles";
-import getOverlayMask from '../../lib/cv/getOverlayMask';
+import getOverlayMask from "../../lib/cv/getOverlayMask";
 
 const initialState = {
   undoStack: [],
@@ -40,7 +40,6 @@ export const cinemagraphReducer = (state = initialState, action) => {
       lc.setTool(tools.eraser);
       lc.setColor("primary", globalStyles.secondary);
 
-      console.log("LC: ", lc);
       return {
         ...state,
         lc,
@@ -55,14 +54,17 @@ export const cinemagraphReducer = (state = initialState, action) => {
       };
     case actionTypes.ATTEMPT_PREVIEW_CINEMAGRAPH:
       // use cv to render an image mask to place over the video
-      console.log("PREVIEWING!!!");
-      // lc = state.lc;
-      // const mask = lc.getImage();
-      getOverlayMask();
+      lc = state.lc;
+      const mask = lc
+        .getImage()
+        .toDataURL()
+        .split(",")[1];
+
+      const overlay = getOverlayMask(mask, state.videoPath);
 
       return {
-        ...state,
-      }
+        ...state
+      };
     default:
       return state;
   }
