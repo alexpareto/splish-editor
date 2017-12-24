@@ -22,6 +22,12 @@ class NavBar extends React.Component {
 						name="play"
 						backgroundColor={globalStyles.secondary}
 					/>
+					<IconButton
+						onClick={this.props.attemptRenderCinemagraph}
+						stroke={globalStyles.background}
+						name="share"
+						backgroundColor={globalStyles.secondary}
+					/>
 				</div>
 				<style jsx>{
 					`

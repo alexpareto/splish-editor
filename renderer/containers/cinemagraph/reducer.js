@@ -10,8 +10,8 @@ const initialState = {
   tools: {},
   videoHeight: 10,
   boundingRect: {},
-  viewMode: 'edit',
-  overlayPath: ''
+  viewMode: "edit",
+  overlayPath: ""
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
@@ -22,9 +22,12 @@ export const cinemagraphReducer = (state = initialState, action) => {
       const aspect = vid.videoWidth / vid.videoHeight;
       const videoHeight = 80 / aspect;
       vid.parentElement.setAttribute("style", `height: ${videoHeight}vw;`);
-      console.log("vid: ", vid.clientHeight);
+      var imageSize = { width: vid.videoWidth, height: vid.videoHeight };
 
-      lc = LC.init(document.getElementsByClassName("literally core")[0]);
+      lc = LC.init(document.getElementsByClassName("literally core")[0], {
+        imageSize: imageSize
+      });
+      
       var tools = {
         pencil: new LC.tools.Pencil(lc),
         eraser: new LC.tools.Eraser(lc)
@@ -76,7 +79,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
       return {
         ...state,
         overlayPath,
-        viewMode: 'preview',
+        viewMode: "preview"
       };
     default:
       return state;

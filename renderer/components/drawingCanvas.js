@@ -21,7 +21,6 @@ class DrawingCanvas extends React.Component {
 				/>
 			: null;
 
-		console.log("OVERLAY SOURCE: ", this.props.overlaySrc);
 		const overlay = this.props.viewMode == "preview"
 			? <img
 					src={this.props.overlaySrc}
@@ -29,8 +28,8 @@ class DrawingCanvas extends React.Component {
 					style={{
 						width: "80vw",
 						height: `${this.props.videoHeight}vw`,
-						"zIndex": "1002",
-						position: 'absolute'
+						zIndex: "1002",
+						position: "absolute"
 					}}
 				/>
 			: null;
