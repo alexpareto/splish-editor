@@ -2,6 +2,7 @@ import React from "react";
 import * as globalStyles from '../globalStyles';
 import FileSelection from './fileSelection';
 import IconButton from './iconButton';
+import PreviewToggle from './previewToggle';
 
 class NavBar extends React.Component {
 
@@ -16,12 +17,7 @@ class NavBar extends React.Component {
 						name="crosshair"
 						backgroundColor={globalStyles.secondary}
 					/>
-					<IconButton
-						onClick={this.props.attemptPreviewCinemagraph}
-						stroke={globalStyles.background}
-						name="play"
-						backgroundColor={globalStyles.secondary}
-					/>
+					<PreviewToggle viewMode={this.props.viewMode} />
 					<IconButton
 						onClick={this.props.attemptRenderCinemagraph}
 						stroke={globalStyles.background}

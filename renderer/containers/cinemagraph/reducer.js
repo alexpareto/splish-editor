@@ -27,7 +27,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
       lc = LC.init(document.getElementsByClassName("literally core")[0], {
         imageSize: imageSize
       });
-      
+
       var tools = {
         pencil: new LC.tools.Pencil(lc),
         eraser: new LC.tools.Eraser(lc)
@@ -80,6 +80,11 @@ export const cinemagraphReducer = (state = initialState, action) => {
         ...state,
         overlayPath,
         viewMode: "preview"
+      };
+    case actionTypes.START_CINEMAGRAPH_EDIT_MODE:
+      return {
+        ...state,
+        viewMode: "edit"
       };
     default:
       return state;

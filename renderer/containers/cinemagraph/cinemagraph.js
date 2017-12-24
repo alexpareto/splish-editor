@@ -13,6 +13,8 @@ class Cinemagraph extends React.Component {
 					selectCinemagraphVideo={this.props.selectCinemagraphVideo}
 					initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
 					attemptPreviewCinemagraph={this.props.attemptPreviewCinemagraph}
+					startCinemagraphEditMode={this.props.startCinemagraphEditMode}
+					viewMode={this.props.cinemagraph.viewMode}
 				/>
 				<DrawingCanvas
 					overlaySrc={this.props.cinemagraph.overlayPath}
@@ -33,7 +35,9 @@ const mapDispatchToProps = dispatch => {
 		selectCinemagraphVideo: files =>
 			dispatch(Actions.selectCinemagraphVideo(files)),
 		attemptPreviewCinemagraph: () =>
-			dispatch(Actions.attemptPreviewCinemagraph())
+			dispatch(Actions.attemptPreviewCinemagraph()),
+		startCinemagraphEditMode: () =>
+			dispatch(Action.startCinemagraphEditMode())
 	};
 };
 
