@@ -15,9 +15,9 @@ class Cinemagraph extends React.Component {
 					attemptPreviewCinemagraph={this.props.attemptPreviewCinemagraph}
 				/>
 				<DrawingCanvas
-					overlaySource={this.props.cinemagraph.overalaySource}
+					overlaySrc={this.props.cinemagraph.overlayPath}
 					viewMode={this.props.cinemagraph.viewMode}
-					avideoSrc={this.props.cinemagraph.videoPath}
+					videoSrc={this.props.cinemagraph.videoPath}
 					videoHeight={this.props.cinemagraph.videoHeight}
 				/>
 				<Trimmer />

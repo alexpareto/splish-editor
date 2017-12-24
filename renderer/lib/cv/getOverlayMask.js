@@ -6,24 +6,20 @@ export default (mask, video, videoTime = 0) => {
 	if (remote) {
 		cv = remote.require("opencv4nodejs");
 		const vc = new cv.VideoCapture(video);
-		console.log("CV: ", cv);
 		let overlay = vc.read();
 
-		const path = "./renderer/temp/mask.png";
+		const path = "./renderer/static/assets/mask.png";
 		fs.writeFileSync(path, mask, { encoding: "base64" });
 		let A = cv
 			.imread(path, cv.IMREAD_GRAYSCALE)
 			.resize(overlay.rows, overlay.cols)
 			.threshold(10, 255, cv.THRESH_BINARY);
-
-		cv.imwrite("./renderer/temp/greymask.png", A);
 		
 		const [B, G, R] = overlay.splitChannels();
 		const maskedOverlay = new cv.Mat([B, G, R, A]);
-		console.log("mask: ", maskedOverlay);
 
-		cv.imwrite("./renderer/temp/overlay.png", maskedOverlay);
+		cv.imwrite("./renderer/static/assets/overlay.png", maskedOverlay);
 
-		return "./renderer/temp/overlay.png";
+		return "./static/assets/overlay.png";
 	}
 };

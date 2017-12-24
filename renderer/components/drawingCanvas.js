@@ -5,7 +5,7 @@ import { remote } from "electron";
 
 class DrawingCanvas extends React.Component {
 	render() {
-		const video = this.props.src
+		const video = this.props.videoSrc
 			? <video
 					id="cinemagraphVideo"
 					className="cinemagraphVideo"
@@ -15,11 +15,26 @@ class DrawingCanvas extends React.Component {
 						position: "absolute"
 					}}
 					autoPlay={true}
-					src={this.props.src}
+					src={this.props.videoSrc}
 					muted={true}
 					loop
 				/>
 			: null;
+
+		console.log("OVERLAY SOURCE: ", this.props.overlaySrc);
+		const overlay = this.props.viewMode == "preview"
+			? <img
+					src={this.props.overlaySrc}
+					className="overlay"
+					style={{
+						width: "80vw",
+						height: `${this.props.videoHeight}vw`,
+						"zIndex": "1002",
+						position: 'absolute'
+					}}
+				/>
+			: null;
+
 		return (
 			<div className="container">
 				<Head>
@@ -31,21 +46,21 @@ class DrawingCanvas extends React.Component {
 					/>
 				</Head>
 				{video}
+				{overlay}
 				<div className="literally core" />
 				<style jsx>
 					{`
 						.cinemagraphVideo {
 							width: 80vw;
+							z-index: 0;
 						}
 
 						.container {
-							overflow: none;
 							width: 80vw;
 							margin-left: calc(10vw - 8px);
 						}
 
 						.literally core {
-							overflow: none;
 							height: ${this.props.videoHeight}vw;
 						}
 					`}
