@@ -3,19 +3,13 @@ import IconButton from "./iconButton";
 import * as globalStyles from "../globalStyles";
 
 class PreviewToggle extends React.Component {
-	onClick = () => {
-		if(this.props.viewMode) {
-
-		} else {
-			
-		}
-	}
 
 	render() {
 		const name = this.props.viewMode == "edit" ? "play" : "composer";
+		const onClick = this.props.viewMode == "edit" ? this.props.attemptPreviewCinemagraph : this.props.startCinemagraphEditMode;
 		return (
 			<IconButton
-				onClick={this.onClick}
+				onClick={onClick}
 				stroke={globalStyles.background}
 				name={name}
 				backgroundColor={globalStyles.secondary}

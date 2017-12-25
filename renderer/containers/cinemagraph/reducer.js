@@ -58,7 +58,8 @@ export const cinemagraphReducer = (state = initialState, action) => {
         lc,
         tools,
         videoHeight,
-        boundingRect
+        boundingRect,
+        overlayPath: ''
       };
     case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
       const videoPath = "file://" + action.files[0];

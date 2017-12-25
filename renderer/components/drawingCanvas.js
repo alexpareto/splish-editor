@@ -23,7 +23,7 @@ class DrawingCanvas extends React.Component {
 
 		const overlay = this.props.viewMode == "preview"
 			? <img
-					src={this.props.overlaySrc}
+					src={`${this.props.overlaySrc}?${new Date().getTime()}`}
 					className="overlay"
 					style={{
 						width: "80vw",

@@ -17,7 +17,11 @@ class NavBar extends React.Component {
 						name="crosshair"
 						backgroundColor={globalStyles.secondary}
 					/>
-					<PreviewToggle viewMode={this.props.viewMode} />
+					<PreviewToggle 
+						viewMode={this.props.viewMode}
+						attemptPreviewCinemagraph={this.props.attemptPreviewCinemagraph}
+						startCinemagraphEditMode={this.props.startCinemagraphEditMode}
+						/>
 					<IconButton
 						onClick={this.props.attemptRenderCinemagraph}
 						stroke={globalStyles.background}

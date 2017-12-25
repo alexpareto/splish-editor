@@ -37,7 +37,7 @@ const mapDispatchToProps = dispatch => {
 		attemptPreviewCinemagraph: () =>
 			dispatch(Actions.attemptPreviewCinemagraph()),
 		startCinemagraphEditMode: () =>
-			dispatch(Action.startCinemagraphEditMode())
+			dispatch(Actions.startCinemagraphEditMode())
 	};
 };
 
