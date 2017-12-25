@@ -26,3 +26,7 @@ export const attemptPreviewCinemagraph = () => {
 export const startCinemagraphEditMode = () => {
 	return { type: actionTypes.START_CINEMAGRAPH_EDIT_MODE };
 }
+
+export const renderCinemagraph = (path) => {
+	return { type: actionTypes.RENDER_CINEMAGRAPH, path: path };
+}

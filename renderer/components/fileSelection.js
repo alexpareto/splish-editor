@@ -4,7 +4,7 @@ import {remote} from 'electron';
 import IconButton from "./iconButton";
 import * as globalStyles from "../globalStyles";
 
-class NavBar extends React.Component {
+class FileSelection extends React.Component {
 
 	openFileDialog = () => {
 		let files;
@@ -45,4 +45,4 @@ class NavBar extends React.Component {
 	}
 }
 
-export default NavBar;
+export default FileSelection;

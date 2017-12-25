@@ -1,6 +1,7 @@
 import { actionTypes } from "./actions";
 import * as globalStyles from "../../globalStyles";
 import getOverlayMask from "../../lib/cv/getOverlayMask";
+import renderCinemagraph from "../../lib/cv/renderCinemagraph";
 
 const initialState = {
   undoStack: [],
@@ -11,11 +12,12 @@ const initialState = {
   videoHeight: 10,
   boundingRect: {},
   viewMode: "edit",
-  overlayPath: ""
+  overlayPath: "",
+  renderPath: "",
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
-  let lc;
+  let lc, mask;
   switch (action.type) {
     case actionTypes.INITIALIZE_CINEMAGRAPH_CANVAS:
       const vid = document.getElementById("cinemagraphVideo");
@@ -70,7 +72,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
     case actionTypes.ATTEMPT_PREVIEW_CINEMAGRAPH:
       // use cv to render an image mask to place over the video
       lc = state.lc;
-      const mask = lc
+      mask = lc
         .getImage({ rect: state.boundingRect })
         .toDataURL()
         .split(",")[1];
@@ -87,6 +89,18 @@ export const cinemagraphReducer = (state = initialState, action) => {
         ...state,
         viewMode: "edit"
       };
+    case actionTypes.RENDER_CINEMAGRAPH:
+      const renderPath = "file://" + action.path;
+      mask = lc
+        .getImage({ rect: state.boundingRect })
+        .toDataURL()
+        .split(",")[1];
+
+      renderCinemagraph(mask, state.videoPath, renderPath);
+      return {
+        ...state,
+        renderPath
+      }
     default:
       return state;
   }

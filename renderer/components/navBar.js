@@ -1,36 +1,34 @@
 import React from "react";
-import * as globalStyles from '../globalStyles';
-import FileSelection from './fileSelection';
-import IconButton from './iconButton';
-import PreviewToggle from './previewToggle';
+import * as globalStyles from "../globalStyles";
+import FileSelection from "./fileSelection";
+import FileSaver from "./fileSaver";
+import IconButton from "./iconButton";
+import PreviewToggle from "./previewToggle";
 
 class NavBar extends React.Component {
-
 	render() {
 		return (
 			<div className="container">
 				<div className="flex">
-					<FileSelection type="video" filesHandler={this.props.selectCinemagraphVideo} />
+					<FileSelection
+						type="video"
+						filesHandler={this.props.selectCinemagraphVideo}
+					/>
 					<IconButton
 						onClick={this.props.initializeCinemagraphCanvas}
 						stroke={globalStyles.background}
 						name="crosshair"
 						backgroundColor={globalStyles.secondary}
 					/>
-					<PreviewToggle 
+					<PreviewToggle
 						viewMode={this.props.viewMode}
 						attemptPreviewCinemagraph={this.props.attemptPreviewCinemagraph}
 						startCinemagraphEditMode={this.props.startCinemagraphEditMode}
-						/>
-					<IconButton
-						onClick={this.props.attemptRenderCinemagraph}
-						stroke={globalStyles.background}
-						name="share"
-						backgroundColor={globalStyles.secondary}
 					/>
+					<FileSaver type="video" fileHandler={this.props.renderCinemagraph} />
 				</div>
-				<style jsx>{
-					`
+				<style jsx>
+					{`
 					.flex {
 						display:flex;
 						align-items: center;
