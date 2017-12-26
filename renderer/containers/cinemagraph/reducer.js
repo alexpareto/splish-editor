@@ -12,6 +12,7 @@ const initialState = {
   videoHeight: 10,
   boundingRect: {},
   viewMode: "edit",
+  videoDimensions: {},
   overlayPath: "",
   renderPath: "",
 };
@@ -61,7 +62,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
         tools,
         videoHeight,
         boundingRect,
-        overlayPath: ''
+        videoDimensions: imageSize,
       };
     case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
       const videoPath = "file://" + action.files[0];
@@ -91,12 +92,13 @@ export const cinemagraphReducer = (state = initialState, action) => {
       };
     case actionTypes.RENDER_CINEMAGRAPH:
       const renderPath = "file://" + action.path;
+      lc = state.lc;
       mask = lc
         .getImage({ rect: state.boundingRect })
         .toDataURL()
         .split(",")[1];
 
-      renderCinemagraph(mask, state.videoPath, renderPath);
+      renderCinemagraph(mask, state.videoPath, state.videoDimensions, renderPath);
       return {
         ...state,
         renderPath
