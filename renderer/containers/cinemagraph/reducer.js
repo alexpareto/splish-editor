@@ -6,15 +6,14 @@ import renderCinemagraph from "../../lib/cv/renderCinemagraph";
 const initialState = {
   undoStack: [],
   redoStack: [],
-  videoPath: "",
+  videoPath: "file:///Users/zdenham/Desktop/IMG_0186.TRIM.MOV",
   lc: null,
   tools: {},
   videoHeight: 10,
   boundingRect: {},
   viewMode: "edit",
-  videoDimensions: {},
   overlayPath: "",
-  renderPath: "",
+  renderPath: ""
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
@@ -61,11 +60,11 @@ export const cinemagraphReducer = (state = initialState, action) => {
         lc,
         tools,
         videoHeight,
-        boundingRect,
-        videoDimensions: imageSize,
+        boundingRect
       };
     case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
       const videoPath = "file://" + action.files[0];
+      console.log("VIDEOPATH: ", videoPath);
       return {
         ...state,
         videoPath
@@ -98,11 +97,11 @@ export const cinemagraphReducer = (state = initialState, action) => {
         .toDataURL()
         .split(",")[1];
 
-      renderCinemagraph(mask, state.videoPath, state.videoDimensions, renderPath);
+      renderCinemagraph(mask, state.videoPath, renderPath);
       return {
         ...state,
         renderPath
-      }
+      };
     default:
       return state;
   }

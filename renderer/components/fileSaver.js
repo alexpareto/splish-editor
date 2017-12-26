@@ -10,7 +10,7 @@ class FileSelection extends React.Component {
 		const path = remote.dialog.showSaveDialog({
 				title: "Choose a video!",
 				filters: [
-			    {name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'mov']},
+			    {name: 'Movies', extensions: ['avi']},
 			  ],
 				buttonLabel: "Render",
 				properties: ['openFile'],
