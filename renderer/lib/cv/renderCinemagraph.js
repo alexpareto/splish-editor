@@ -18,14 +18,9 @@ export default (mask, video, newPath) => {
 
 		let mMaskInverse = mMask.bitwiseNot();
 
-		cv.imwrite("./renderer/static/assets/greyScale.png", mMask);
-		cv.imwrite("./renderer/static/assets/inverse.png", mMaskInverse);
-
 		let overlay = new cv.Mat(frame.rows, frame.cols, cv.CV_8UC3);
 
 		frame.copyTo(overlay, mMask);
-
-		cv.imwrite("./renderer/static/assets/ov3rlay.png", overlay);
 
 		const vw = new cv.VideoWriter(
 			newPath,
