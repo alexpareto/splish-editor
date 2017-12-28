@@ -1,14 +1,19 @@
 import { actionTypes } from "./actions";
-import renderMovingStill from "../../lib/cv/renderCinemagraph";
+import * as globalStyles from "../../globalStyles";
+import getOverlayMask from "../../lib/cv/getOverlayMask";
+import renderCinemagraph from "../../lib/cv/renderCinemagraph";
 
 const initialState = {
   undoStack: [],
   redoStack: [],
-  imgPath: "",
+  videoPath: "", // file:///Users/zdenham/Desktop/IMG_0186.TRIM.MOV
   lc: null,
   tools: {},
+  videoHeight: 10,
   boundingRect: {},
   viewMode: "edit",
+  overlayPath: "",
+  renderPath: ""
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
@@ -57,12 +62,12 @@ export const cinemagraphReducer = (state = initialState, action) => {
         videoHeight,
         boundingRect
       };
-    case actionTypes.SELECT_MOVING_STILL_IMAGE:
-      const imgPath = "file://" + action.files[0];
+    case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
+      const videoPath = "file://" + action.files[0];
       console.log("VIDEOPATH: ", videoPath);
       return {
         ...state,
-        imgPath
+        videoPath
       };
     case actionTypes.ATTEMPT_PREVIEW_CINEMAGRAPH:
       // use cv to render an image mask to place over the video

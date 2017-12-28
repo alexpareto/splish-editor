@@ -58,7 +58,10 @@ export default ComposedComponent => {
         }
         // getDataFromTree does not call componentWillUnmount
         // head side effect therefore need to be cleared manually
-        Head.rewind()
+        if(process.browser)
+        {
+          Head.rewind();
+        }
 
         // Extract query data from the store
         const state = {}

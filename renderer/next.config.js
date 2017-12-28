@@ -1,19 +1,19 @@
-
 module.exports = {
   webpack(config) {
-
     config.node = {
       __dirname: false,
       __filename: false
     };
 
-    config.target = 'electron-renderer'
+    config.target = "electron-renderer";
 
-    return config
+    return config;
   },
   exportPathMap() {
     return {
-      '/start': { page: '/start' }
-    }
+      "/mainMenu": { page: "/mainMenu" },
+      "/cinemagraph": { page: "/cinemagraph" },
+      "/movingStill": { page: "/movingStill" }
+    };
   }
-}
+};
