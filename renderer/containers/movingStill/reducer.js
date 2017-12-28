@@ -6,68 +6,68 @@ import renderCinemagraph from "../../lib/cv/renderCinemagraph";
 const initialState = {
   undoStack: [],
   redoStack: [],
-  videoPath: "", // file:///Users/zdenham/Desktop/IMG_0186.TRIM.MOV
-  lc: null,
-  tools: {},
-  videoHeight: 10,
+  imgPath: "", 
+  isInitialized: false,
+  imageHeight: 10,
   boundingRect: {},
+  currentTool: "",
   viewMode: "edit",
   overlayPath: "",
   renderPath: ""
 };
 
-export const cinemagraphReducer = (state = initialState, action) => {
+export const movingStillReducer = (state = initialState, action) => {
   let lc, mask;
   switch (action.type) {
-    case actionTypes.INITIALIZE_CINEMAGRAPH_CANVAS:
-      const vid = document.getElementById("cinemagraphVideo");
-      const aspect = vid.videoWidth / vid.videoHeight;
-      const videoHeight = 80 / aspect;
-      vid.parentElement.setAttribute("style", `height: ${videoHeight}vw;`);
-      var imageSize = { width: vid.videoWidth, height: vid.videoHeight };
+    case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
+      // const vid = document.getElementById("movingStillImage");
+      // const aspect = vid.videoWidth / vid.videoHeight;
+      // const videoHeight = 80 / aspect;
+      // vid.parentElement.setAttribute("style", `height: ${videoHeight}vw;`);
+      // var imageSize = { width: vid.videoWidth, height: vid.videoHeight };
 
-      lc = LC.init(document.getElementsByClassName("literally core")[0], {
-        imageSize: imageSize
-      });
+      // lc = LC.init(document.getElementsByClassName("literally core")[0], {
+      //   imageSize: imageSize
+      // });
 
-      var tools = {
-        pencil: new LC.tools.Pencil(lc),
-        eraser: new LC.tools.Eraser(lc)
-      };
-      tools.pencil.strokeWidth = 35;
-      tools.eraser.strokeWidth = 35;
-      const fill = LC.createShape("Rectangle", {
-        x: 0,
-        y: 0,
-        width: vid.clientWidth,
-        height: vid.clientHeight,
-        strokeWidth: 1,
-        strokeColor: globalStyles.accent,
-        fillColor: globalStyles.accent
-      });
-      lc.saveShape(fill);
-      lc.setTool(tools.eraser);
-      lc.setColor("primary", globalStyles.secondary);
-      const boundingRect = {
-        x: 0,
-        y: 0,
-        width: vid.clientWidth,
-        height: vid.clientHeight
-      };
+      // var tools = {
+      //   pencil: new LC.tools.Pencil(lc),
+      //   eraser: new LC.tools.Eraser(lc)
+      // };
+      // tools.pencil.strokeWidth = 35;
+      // tools.eraser.strokeWidth = 35;
+      // const fill = LC.createShape("Rectangle", {
+      //   x: 0,
+      //   y: 0,
+      //   width: vid.clientWidth,
+      //   height: vid.clientHeight,
+      //   strokeWidth: 1,
+      //   strokeColor: globalStyles.accent,
+      //   fillColor: globalStyles.accent
+      // });
+      // lc.saveShape(fill);
+      // lc.setTool(tools.eraser);
+      // lc.setColor("primary", globalStyles.secondary);
+      // const boundingRect = {
+      //   x: 0,
+      //   y: 0,
+      //   width: vid.clientWidth,
+      //   height: vid.clientHeight
+      // };
+
+      console.log("TOOL", action.tool);
 
       return {
         ...state,
-        lc,
-        tools,
-        videoHeight,
-        boundingRect
+        isInitialized: true,
+        currentTool: action.tool,
       };
-    case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
-      const videoPath = "file://" + action.files[0];
-      console.log("VIDEOPATH: ", videoPath);
+    case actionTypes.SELECT_MOVING_STILL_IMAGE:
+      const imgPath = "file://" + action.files[0];
+      console.log("IMGPATH: ", imgPath);
       return {
         ...state,
-        videoPath
+        imgPath
       };
     case actionTypes.ATTEMPT_PREVIEW_CINEMAGRAPH:
       // use cv to render an image mask to place over the video

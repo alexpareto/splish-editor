@@ -6,18 +6,43 @@ import IconButton from "./iconButton";
 import PreviewToggle from "./previewToggle";
 
 class NavBar extends React.Component {
+
+	anchorClicked = () => {
+		if(this.props.isInitialized)
+		{
+			this.props.selectAnchorTool();
+		} else {
+			this.props.initializeMovingStillCanvas("anchor");
+		}
+	};
+
+	vectorClicked = () => {
+		if(this.props.isInitialized)
+		{
+			this.props.selectAnchorTool();
+		} else {
+			this.props.initializeMovingStillCanvas("vector");
+		}
+	};
+
 	render() {
 		return (
 			<div className="container">
 				<div className="flex">
 					<FileSelection
-						type="video"
-						filesHandler={this.props.selectCinemagraphVideo}
+						type="img"
+						filesHandler={this.props.selectMovingStillImage}
 					/>
 					<IconButton
-						onClick={this.props.initializeCinemagraphCanvas}
+						onClick={this.vectorClicked}
 						stroke={globalStyles.background}
-						name="crosshair"
+						name="arrowDownLeft"
+						backgroundColor={globalStyles.secondary}
+					/>
+					<IconButton
+						onClick={this.anchorClicked}
+						stroke={globalStyles.background}
+						name="anchor"
 						backgroundColor={globalStyles.secondary}
 					/>
 					<PreviewToggle

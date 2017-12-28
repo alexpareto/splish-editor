@@ -7,8 +7,8 @@ class DrawingCanvas extends React.Component {
 	render() {
 		const video = this.props.videoSrc
 			? <video
-					id="cinemagraphVideo"
-					className="cinemagraphVideo"
+					id="movingStillVideo"
+					className="movingStillVideo"
 					style={{
 						width: "80vw",
 						left: "10vw",
@@ -21,46 +21,32 @@ class DrawingCanvas extends React.Component {
 				/>
 			: null;
 
-		const overlay = this.props.viewMode == "preview"
+		const img = this.props.imgSrc
 			? <img
-					src={`${this.props.overlaySrc}?${new Date().getTime()}`}
-					className="overlay"
+					id="movingStillImage"
 					style={{
 						width: "80vw",
-						height: `${this.props.videoHeight}vw`,
-						zIndex: "1002",
+						left: "10vw",
 						position: "absolute"
 					}}
+					src={this.props.imgSrc}
 				/>
 			: null;
 
+		const display = this.props.viewMode == "edit" ? img : video;
+
 		return (
 			<div className="container">
-				<Head>
-					<script src="/static/lib/literallyCanvasCore.js" />
-					<link
-						rel="stylesheet"
-						type="text/css"
-						href="/static/css/literally.css"
-					/>
-				</Head>
-				{video}
-				{overlay}
-				<div className="literally core" />
+				{display}
 				<style jsx>
 					{`
 						.cinemagraphVideo {
 							width: 80vw;
 							z-index: 0;
 						}
-
 						.container {
 							width: 80vw;
 							margin-left: calc(10vw - 8px);
-						}
-
-						.literally core {
-							height: ${this.props.videoHeight}vw;
 						}
 					`}
 				</style>

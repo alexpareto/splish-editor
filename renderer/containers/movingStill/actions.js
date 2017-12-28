@@ -11,8 +11,8 @@ export const actionTypes = {
 };
 
 // ACTIONS
-export const initializeMovingStillCanvas = () => {
-	return { type: actionTypes.INITIALIZE_MOVING_STILL_CANVAS };
+export const initializeMovingStillCanvas = (tool) => {
+	return { type: actionTypes.INITIALIZE_MOVING_STILL_CANVAS, tool };
 };
 
 export const selectMovingStillImage = (files) => {
@@ -29,5 +29,13 @@ export const startMovingStillPreviewMode = () => {
 
 export const renderMovingStill = (path) => {
 	return { type: actionTypes.RENDER_MOVING_STILL, path };
+}
+
+export const selectAnchorTool = () => {
+	return { type: actionTypes.SELECT_ANCHOR_TOOL };
+}
+
+export const selectVectorTool = () => {
+	return { type: actionTypes.SELECT_VECTOR_TOOL };
 }
 

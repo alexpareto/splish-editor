@@ -24,7 +24,15 @@ class FileSelection extends React.Component {
 				});
 				break;
 			case 'img':
-				files = remote.dialog.showOpenDialog();
+				files = remote.dialog.showOpenDialog({
+					title: "Choose a still image!",
+					filters: [
+				    {name: 'Images', extensions: ['jpg', 'png', 'bmp', 'jpeg']},
+				  ],
+					defaultPath: "~/",
+					buttonLabel: "Choose",
+					properties: ['openFile'],
+				});
 				break;
 			default:
 				files = remote.dialog.showOpenDialog();

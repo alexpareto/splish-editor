@@ -5,12 +5,23 @@ import Trimmer from "../../components/trimmer";
 import { connect } from "react-redux";
 import * as Actions from "./actions";
 
-class Cinemagraph extends React.Component {
+class MovingStill extends React.Component {
 	render() {
 		return (
 			<div>
-				<ToolBar />
-				<VectorCanvas />
+				<ToolBar
+					selectMovingStillImage={this.props.selectMovingStillImage}
+					viewMode={this.props.movingStill.viewMode}
+					initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
+					selectAnchorTool={this.props.selectAnchorTool}
+					selectVectorTool={this.props.selectVectorTool}
+					isInitialized={this.props.movingStill.isInitialized}
+				/>
+				<VectorCanvas
+					imgSrc={this.props.movingStill.imgPath}
+					viewMode={this.props.movingStill.viewMode}
+					initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
+				/>
 				<Trimmer />
 			</div>
 		);
@@ -19,19 +30,20 @@ class Cinemagraph extends React.Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		initializeMovingStillCanvas: () =>
-			dispatch(Actions.initializeMovingStillCanvas()),
-		selectCinemagraphVideo: files =>
+		initializeMovingStillCanvas: (tool) =>
+			dispatch(Actions.initializeMovingStillCanvas(tool)),
+		selectMovingStillImage: files =>
 			dispatch(Actions.selectMovingStillImage(files)),
 		startMovingStillPreviewMode: () =>
 			dispatch(Actions.startMovingStillPreviewMode()),
 		startMovingStillEditMode: () =>
 			dispatch(Actions.startMovingStillEditMode()),
-		renderMovingStill: path =>
-			dispatch(Actions.renderMovingStill(path))
+		renderMovingStill: path => dispatch(Actions.renderMovingStill(path)),
+		selectVectorTool: () => dispatch(Actions.selectVectorTool()),
+		selectAnchorTool: () => dispatch(Actions.selectAnchorTool()),
 	};
 };
 
-const mapStateToProps = state => ({ cinemagraph: state.cinemagraph });
+const mapStateToProps = state => ({ movingStill: state.movingStill });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cinemagraph);
+export default connect(mapStateToProps, mapDispatchToProps)(MovingStill);
