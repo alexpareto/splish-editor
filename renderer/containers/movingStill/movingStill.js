@@ -21,6 +21,8 @@ class MovingStill extends React.Component {
 					imgSrc={this.props.movingStill.imgPath}
 					viewMode={this.props.movingStill.viewMode}
 					initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
+					isInitialized={this.props.movingStill.isInitialized}
+					imageHeight={this.props.movingStill.imageHeight}
 				/>
 				<Trimmer />
 			</div>
