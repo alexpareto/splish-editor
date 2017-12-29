@@ -19,7 +19,7 @@ class NavBar extends React.Component {
 	vectorClicked = () => {
 		if(this.props.isInitialized)
 		{
-			this.props.selectAnchorTool();
+			this.props.selectVectorTool();
 		} else {
 			this.props.initializeMovingStillCanvas("vector");
 		}

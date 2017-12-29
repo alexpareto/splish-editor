@@ -18,21 +18,33 @@ const initialState = {
 export const movingStillReducer = (state = initialState, action) => {
   let lc, mask;
   switch (action.type) {
-    case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
-      const img = document.getElementById("movingStillImage");
-      const imageHeight = img.clientHeight;
-
-      return {
-        ...state,
-        imageHeight,
-        isInitialized: true
-      };
     case actionTypes.SELECT_MOVING_STILL_IMAGE:
       const imgPath = "file://" + action.files[0];
       return {
         ...state,
         imgPath
       };
+    case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
+      const img = document.getElementById("movingStillImage");
+      const imageHeight = img.clientHeight;
+
+      console.log("INITIALIZATION ACTION: ", action);
+      return {
+        ...state,
+        imageHeight,
+        isInitialized: true,
+        currentTool: action.tool,
+      };
+    case actionTypes.SELECT_VECTOR_TOOL:
+      return {
+        ...state,
+        currentTool: "vector",
+      }
+    case actionTypes.SELECT_ANCHOR_TOOL:
+      return {
+        ...state,
+        currentTool: "anchor",
+      }
     case actionTypes.ATTEMPT_PREVIEW_CINEMAGRAPH:
       // use cv to render an image mask to place over the video
       lc = state.lc;
