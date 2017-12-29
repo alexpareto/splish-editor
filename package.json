@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "apollo-client-preset": "^1.0.5",
+    "d3": "^4.12.2",
     "electron-builder": "^19.49.0",
     "electron-is-dev": "^0.3.0",
     "electron-next": "^3.1.3",

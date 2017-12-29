@@ -1,34 +1,38 @@
 import { actionTypes } from "./actions";
 import * as globalStyles from "../../globalStyles";
-import getOverlayMask from "../../lib/cv/getOverlayMask";
-import renderCinemagraph from "../../lib/cv/renderCinemagraph";
+import * as d3 from "d3";
+console.log("D3: ", d3);
 
 const initialState = {
   undoStack: [],
   redoStack: [],
-  imgPath: "", 
+  imgPath: "",
   isInitialized: false,
   imageHeight: 10,
   boundingRect: {},
   currentTool: "",
   viewMode: "edit",
   overlayPath: "",
-  renderPath: ""
+  renderPath: "",
+  canvas: {}
 };
 
 export const movingStillReducer = (state = initialState, action) => {
   let lc, mask;
   switch (action.type) {
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
-      // const vid = document.getElementById("movingStillImage");
-      // const aspect = vid.videoWidth / vid.videoHeight;
-      // const videoHeight = 80 / aspect;
-      // vid.parentElement.setAttribute("style", `height: ${videoHeight}vw;`);
-      // var imageSize = { width: vid.videoWidth, height: vid.videoHeight };
+      const img = document.getElementById("movingStillImage");
+      const parent = img.parentElement;
+      const aspect = img.clientWidth / img.clientHeight;
+      console.log("PARENT ELEMENT: ", parent);
+      const imageHeight = img.clientHeight;
+      parent.setAttribute("style", `height: ${imageHeight}px;`);
 
-      // lc = LC.init(document.getElementsByClassName("literally core")[0], {
-      //   imageSize: imageSize
-      // });
+      let canvas = d3
+        .select("#movingStillContainer")
+        .append("svg")
+        .attr("width", "80vw")
+        .attr("height", `${imageHeight}px`);
 
       // var tools = {
       //   pencil: new LC.tools.Pencil(lc),
@@ -55,16 +59,12 @@ export const movingStillReducer = (state = initialState, action) => {
       //   height: vid.clientHeight
       // };
 
-      console.log("TOOL", action.tool);
-
       return {
         ...state,
-        isInitialized: true,
-        currentTool: action.tool,
+        isInitialized: true
       };
     case actionTypes.SELECT_MOVING_STILL_IMAGE:
       const imgPath = "file://" + action.files[0];
-      console.log("IMGPATH: ", imgPath);
       return {
         ...state,
         imgPath

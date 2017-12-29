@@ -36,7 +36,7 @@ class DrawingCanvas extends React.Component {
 		const display = this.props.viewMode == "edit" ? img : video;
 
 		return (
-			<div className="container">
+			<div className="container" id="movingStillContainer">
 				{display}
 				<style jsx>
 					{`
