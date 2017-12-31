@@ -1,5 +1,7 @@
 import { actionTypes } from "./actions";
 import * as globalStyles from "../../globalStyles";
+import previewMovingStill from "../../lib/cv/previewMovingStill";
+import * as d3 from "d3";
 
 const initialState = {
   undoStack: [],
@@ -10,10 +12,9 @@ const initialState = {
   boundingRect: {},
   currentTool: "",
   viewMode: "edit",
-  overlayPath: "",
   renderPath: "",
   anchors: [],
-  vectors: [],
+  vectors: []
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -28,25 +29,30 @@ export const movingStillReducer = (state = initialState, action) => {
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       const img = document.getElementById("movingStillImage");
       const imageHeight = img.clientHeight;
-
-      console.log("INITIALIZATION ACTION: ", action);
       return {
         ...state,
         imageHeight,
         isInitialized: true,
-        currentTool: action.tool,
+        currentTool: action.tool
       };
     case actionTypes.SELECT_VECTOR_TOOL:
       return {
         ...state,
-        currentTool: "vector",
-      }
+        currentTool: "vector"
+      };
     case actionTypes.SELECT_ANCHOR_TOOL:
       return {
         ...state,
-        currentTool: "anchor",
-      }
+        currentTool: "anchor"
+      };
     case actionTypes.START_MOVING_STILL_PREVIEW_MODE:
+      let svg = d3.select("#movingStillSVG");
+      previewMovingStill(
+        state.imgPath,
+        state.vectors,
+        state.anchors,
+        svg.node().getBoundingClientRect()
+      );
       return {
         ...state,
         viewMode: "preview"
@@ -66,15 +72,15 @@ export const movingStillReducer = (state = initialState, action) => {
       anchors.push(action.anchor);
       return {
         ...state,
-        anchors,
-      }
+        anchors
+      };
     case actionTypes.ADD_VECTOR:
       let vectors = state.vectors;
       vectors.push(action.vector);
       return {
         ...state,
-        vectors,
-      }
+        vectors
+      };
     default:
       return state;
   }
