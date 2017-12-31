@@ -46,38 +46,20 @@ export const movingStillReducer = (state = initialState, action) => {
         ...state,
         currentTool: "anchor",
       }
-    case actionTypes.ATTEMPT_PREVIEW_CINEMAGRAPH:
-      // use cv to render an image mask to place over the video
-      lc = state.lc;
-      mask = lc
-        .getImage({ rect: state.boundingRect })
-        .toDataURL()
-        .split(",")[1];
-
-      const overlayPath = getOverlayMask(mask, state.videoPath);
-
+    case actionTypes.START_MOVING_STILL_PREVIEW_MODE:
       return {
         ...state,
-        overlayPath,
         viewMode: "preview"
       };
-    case actionTypes.START_CINEMAGRAPH_EDIT_MODE:
+    case actionTypes.START_MOVING_STILL_EDIT_MODE:
       return {
         ...state,
         viewMode: "edit"
       };
-    case actionTypes.RENDER_CINEMAGRAPH:
+    case actionTypes.RENDER_MOVING_STILL:
       const renderPath = "file://" + action.path;
-      lc = state.lc;
-      mask = lc
-        .getImage({ rect: state.boundingRect })
-        .toDataURL()
-        .split(",")[1];
-
-      renderCinemagraph(mask, state.videoPath, renderPath);
       return {
-        ...state,
-        renderPath
+        ...state
       };
     case actionTypes.ADD_ANCHOR:
       let anchors = state.anchors;

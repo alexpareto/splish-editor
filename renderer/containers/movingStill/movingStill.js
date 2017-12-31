@@ -16,6 +16,8 @@ class MovingStill extends React.Component {
 					selectAnchorTool={this.props.selectAnchorTool}
 					selectVectorTool={this.props.selectVectorTool}
 					isInitialized={this.props.movingStill.isInitialized}
+					startMovingStillPreviewMode={this.props.startMovingStillPreviewMode}
+					startMovingStillEditMode={this.props.startMovingStillEditMode}
 				/>
 				<VectorCanvas
 					currentTool={this.props.movingStill.currentTool}

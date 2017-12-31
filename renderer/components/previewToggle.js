@@ -6,7 +6,7 @@ class PreviewToggle extends React.Component {
 
 	render() {
 		const name = this.props.viewMode == "edit" ? "play" : "composer";
-		const onClick = this.props.viewMode == "edit" ? this.props.attemptPreviewCinemagraph : this.props.startCinemagraphEditMode;
+		const onClick = this.props.viewMode == "edit" ? this.props.startPreview : this.props.startEdit;
 		return (
 			<IconButton
 				onClick={onClick}

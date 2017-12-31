@@ -26,7 +26,7 @@ export const startMovingStillEditMode = () => {
 };
 
 export const startMovingStillPreviewMode = () => {
-	return { type: actionTypes.START_MOVING_PREVIEW_MODE };
+	return { type: actionTypes.START_MOVING_STILL_PREVIEW_MODE };
 };
 
 export const renderMovingStill = path => {

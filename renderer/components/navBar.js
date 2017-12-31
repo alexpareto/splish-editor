@@ -22,8 +22,8 @@ class NavBar extends React.Component {
 					/>
 					<PreviewToggle
 						viewMode={this.props.viewMode}
-						attemptPreviewCinemagraph={this.props.attemptPreviewCinemagraph}
-						startCinemagraphEditMode={this.props.startCinemagraphEditMode}
+						startPreview={this.props.attemptPreviewCinemagraph}
+						startEdit={this.props.startCinemagraphEditMode}
 					/>
 					<FileSaver type="video" fileHandler={this.props.renderCinemagraph} />
 				</div>
