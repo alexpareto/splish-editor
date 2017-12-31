@@ -158,6 +158,7 @@ class DrawingCanvas extends React.Component {
 							z-index: 30000;
 							position: absolute;
 	            user-select: none;
+	            display: ${this.props.viewMode == "edit" ? "block" : "none"}
 						}
 						path {
 							stroke-width: 2;

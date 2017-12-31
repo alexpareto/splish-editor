@@ -1,11 +1,28 @@
 import { remote } from "electron";
 import fs from "fs";
 
-export default (image, vectors, anchors, dimensions) => {
+export default (imagePath, vectors, anchors, dimensions) => {
 	let cv;
 	if (remote) {
 		cv = remote.require("opencv4nodejs");
-		console.log("RENDERING MOVING STILL UH OH PLOTA", image, vectors, anchors, dimensions);
-		return '';	
+		imagePath = imagePath.split("ile://")[1];
+
+		let image = cv.imread(imagePath);
+
+		const vw = new cv.VideoWriter(
+			"./renderer/static/assets/previewMovingStill.mp4",
+			cv.VideoWriter.fourcc("H264"),
+			24,
+			new cv.Size(image.cols, image.rows)
+		);
+
+		for(let i = 0; i < 48; i++)
+		{
+			vw.write(image);
+		}
+
+		vw.release();
+
+		return './static/assets/previewMovingStill.mp4';	
 	}
 };

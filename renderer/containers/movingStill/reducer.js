@@ -7,9 +7,9 @@ const initialState = {
   undoStack: [],
   redoStack: [],
   imgPath: "",
+  videoPath: "",
   isInitialized: false,
   imageHeight: 0,
-  boundingRect: {},
   currentTool: "",
   viewMode: "edit",
   renderPath: "",
@@ -47,7 +47,7 @@ export const movingStillReducer = (state = initialState, action) => {
       };
     case actionTypes.START_MOVING_STILL_PREVIEW_MODE:
       let svg = d3.select("#movingStillSVG");
-      previewMovingStill(
+      let videoPath = previewMovingStill(
         state.imgPath,
         state.vectors,
         state.anchors,
@@ -55,7 +55,8 @@ export const movingStillReducer = (state = initialState, action) => {
       );
       return {
         ...state,
-        viewMode: "preview"
+        viewMode: "preview",
+        videoPath,
       };
     case actionTypes.START_MOVING_STILL_EDIT_MODE:
       return {

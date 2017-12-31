@@ -22,6 +22,7 @@ class MovingStill extends React.Component {
 				<VectorCanvas
 					currentTool={this.props.movingStill.currentTool}
 					imgSrc={this.props.movingStill.imgPath}
+					videoSrc={this.props.movingStill.videoPath}
 					viewMode={this.props.movingStill.viewMode}
 					initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
 					isInitialized={this.props.movingStill.isInitialized}
