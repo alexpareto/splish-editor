@@ -56,6 +56,7 @@ class DrawingCanvas extends React.Component {
 		} else {
 			let circle = this.state.svg.append("circle");
 			circle.attr("cx", mouse[0]).attr("cy", mouse[1]).attr("r", 3);
+			this.props.addAnchor({ x: mouse[0], y: mouse[1] });
 		}
 	};
 
@@ -97,6 +98,10 @@ class DrawingCanvas extends React.Component {
 				.attr("d", this.lineFunction(dataPath))
 				.attr("stroke", "red")
 				.attr("fill", "none");
+			this.props.addVector([
+				{ x: this.state.data[0].x, y: this.state.data[0].y },
+				{ x: mouse[0], y: mouse[1] }
+			]);
 		}
 		this.setState({ data: [], isDown: false, path: null });
 	};

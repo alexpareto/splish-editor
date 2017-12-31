@@ -24,6 +24,8 @@ class MovingStill extends React.Component {
 					initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
 					isInitialized={this.props.movingStill.isInitialized}
 					imageHeight={this.props.movingStill.imageHeight}
+					addVector={this.props.addVector}
+					addAnchor={this.props.addAnchor}
 				/>
 				<Trimmer />
 			</div>
@@ -44,6 +46,8 @@ const mapDispatchToProps = dispatch => {
 		renderMovingStill: path => dispatch(Actions.renderMovingStill(path)),
 		selectVectorTool: () => dispatch(Actions.selectVectorTool()),
 		selectAnchorTool: () => dispatch(Actions.selectAnchorTool()),
+		addVector: vector => dispatch(Actions.addVector(vector)),
+		addAnchor: anchor => dispatch(Actions.addAnchor(anchor)),
 	};
 };
 

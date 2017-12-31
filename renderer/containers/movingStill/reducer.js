@@ -12,7 +12,8 @@ const initialState = {
   viewMode: "edit",
   overlayPath: "",
   renderPath: "",
-  canvas: {}
+  anchors: [],
+  vectors: [],
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -78,6 +79,20 @@ export const movingStillReducer = (state = initialState, action) => {
         ...state,
         renderPath
       };
+    case actionTypes.ADD_ANCHOR:
+      let anchors = state.anchors;
+      anchors.push(action.anchor);
+      return {
+        ...state,
+        anchors,
+      }
+    case actionTypes.ADD_VECTOR:
+      let vectors = state.vectors;
+      vectors.push(action.vector);
+      return {
+        ...state,
+        vectors,
+      }
     default:
       return state;
   }
