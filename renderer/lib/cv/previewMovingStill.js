@@ -9,6 +9,22 @@ export default (imagePath, vectors, anchors, dimensions) => {
 
 		let image = cv.imread(imagePath);
 
+		let scale = image.rows / dimensions.height;
+
+		let i;
+		// normalize to image size
+		for(i in anchors) {
+			anchors[i].x *= scale;
+			anchors[i].y *= scale;
+		}
+
+		for(i in vectors) {
+			vectors[i][0].x *= scale;
+			vectors[i][0].y *= scale;
+			vectors[i][1].x *= scale;
+			vectors[i][1].y *= scale;
+		}
+
 		const vw = new cv.VideoWriter(
 			"./renderer/static/assets/previewMovingStill.mp4",
 			cv.VideoWriter.fourcc("H264"),
