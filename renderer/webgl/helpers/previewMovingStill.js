@@ -1,8 +1,6 @@
 
 'use strict';
 
-// main();
-
 // Point object - converts incoming values to a -1 to 1 range).
 function Point(x, y) {
   if (x<-1) x = -1;
@@ -540,7 +538,7 @@ var inputHandler = new function() {
 }
 
 // Program starts here
-function main() {
+function main(imagePath, anchors, vectors, boundingBox) {
   renderer.init();  // Initialize WebGL shapes and image
   inputHandler.init(); // Initialize mouse and UI handler        
 }
@@ -691,6 +689,5 @@ function handleFileSelect(evt) {
   reader.readAsDataURL(file);
 }
 
-// document.getElementById('fileSelectorForMovingStill').addEventListener('change', handleFileSelect, false);
-
+export default main;
 
