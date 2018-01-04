@@ -1,20 +1,18 @@
 import { actionTypes } from "./actions";
 import * as globalStyles from "../../globalStyles";
-import previewMovingStill from "../../lib/cv/previewMovingStill";
 import * as d3 from "d3";
 
 const initialState = {
   undoStack: [],
   redoStack: [],
   imgPath: "",
-  videoPath: "",
   isInitialized: false,
   imageHeight: 0,
   currentTool: "",
   viewMode: "edit",
-  renderPath: "",
   anchors: [],
-  vectors: []
+  vectors: [],
+  boundingRect: {},
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -47,16 +45,11 @@ export const movingStillReducer = (state = initialState, action) => {
       };
     case actionTypes.START_MOVING_STILL_PREVIEW_MODE:
       let svg = d3.select("#movingStillSVG");
-      let videoPath = previewMovingStill(
-        state.imgPath,
-        state.vectors,
-        state.anchors,
-        svg.node().getBoundingClientRect()
-      );
+      let boundingRect = svg.node().getBoundingClientRect();
       return {
         ...state,
         viewMode: "preview",
-        videoPath,
+        boundingRect,
       };
     case actionTypes.START_MOVING_STILL_EDIT_MODE:
       return {

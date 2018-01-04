@@ -1,12 +1,27 @@
 import React from "react";
 import ToolBar from "../../components/movingStillToolBar";
 import VectorCanvas from "../../components/vectorCanvas";
-import Trimmer from "../../components/trimmer";
+import MovingStillPreview from "../../components/movingStillPreview";
 import { connect } from "react-redux";
 import * as Actions from "./actions";
 
 class MovingStill extends React.Component {
 	render() {
+		let display = this.props.movingStill.viewMode == "edit"
+			? <VectorCanvas
+					currentTool={this.props.movingStill.currentTool}
+					imgSrc={this.props.movingStill.imgPath}
+					isInitialized={this.props.movingStill.isInitialized}
+					imageHeight={this.props.movingStill.imageHeight}
+					addVector={this.props.addVector}
+					addAnchor={this.props.addAnchor}
+				/>
+			: <MovingStillPreview
+					imgSrc={this.props.movingStill.imgPath}
+					anchors={this.props.movingStill.anchors}
+					vectors={this.props.movingStill.vectors}
+					boundingRect={this.props.movingStill.boundingRect}
+				/>;
 		return (
 			<div>
 				<ToolBar
@@ -19,18 +34,7 @@ class MovingStill extends React.Component {
 					startMovingStillPreviewMode={this.props.startMovingStillPreviewMode}
 					startMovingStillEditMode={this.props.startMovingStillEditMode}
 				/>
-				<VectorCanvas
-					currentTool={this.props.movingStill.currentTool}
-					imgSrc={this.props.movingStill.imgPath}
-					videoSrc={this.props.movingStill.videoPath}
-					viewMode={this.props.movingStill.viewMode}
-					initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
-					isInitialized={this.props.movingStill.isInitialized}
-					imageHeight={this.props.movingStill.imageHeight}
-					addVector={this.props.addVector}
-					addAnchor={this.props.addAnchor}
-				/>
-				<Trimmer />
+				{display}
 			</div>
 		);
 	}
@@ -38,7 +42,7 @@ class MovingStill extends React.Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		initializeMovingStillCanvas: (tool) =>
+		initializeMovingStillCanvas: tool =>
 			dispatch(Actions.initializeMovingStillCanvas(tool)),
 		selectMovingStillImage: files =>
 			dispatch(Actions.selectMovingStillImage(files)),
@@ -50,7 +54,7 @@ const mapDispatchToProps = dispatch => {
 		selectVectorTool: () => dispatch(Actions.selectVectorTool()),
 		selectAnchorTool: () => dispatch(Actions.selectAnchorTool()),
 		addVector: vector => dispatch(Actions.addVector(vector)),
-		addAnchor: anchor => dispatch(Actions.addAnchor(anchor)),
+		addAnchor: anchor => dispatch(Actions.addAnchor(anchor))
 	};
 };
 

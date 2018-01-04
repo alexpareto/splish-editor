@@ -8,6 +8,7 @@ export default (imagePath, vectors, anchors, dimensions) => {
 		imagePath = imagePath.split("ile://")[1];
 
 		let image = cv.imread(imagePath);
+		let frame = image;
 
 		let scale = image.rows / dimensions.height;
 

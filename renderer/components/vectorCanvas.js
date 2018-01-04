@@ -107,22 +107,6 @@ class DrawingCanvas extends React.Component {
 	};
 
 	render() {
-		const video = this.props.videoSrc
-			? <video
-					id="movingStillVideo"
-					className="movingStillVideo"
-					style={{
-						width: "80vw",
-						left: "10vw",
-						position: "absolute"
-					}}
-					autoPlay={true}
-					src={this.props.videoSrc}
-					muted={true}
-					loop
-				/>
-			: null;
-
 		const img = this.props.imgSrc
 			? <img
 					id="movingStillImage"
@@ -135,12 +119,10 @@ class DrawingCanvas extends React.Component {
 				/>
 			: null;
 
-		const display = this.props.viewMode == "edit" ? img : video;
-
 		return (
 			<div className="container" id="movingStillContainer">
 				<svg className="d3SVG" id="movingStillSVG" />
-				{display}
+				{img}
 				<style jsx>
 					{`
 						.cinemagraphVideo {
@@ -158,7 +140,7 @@ class DrawingCanvas extends React.Component {
 							z-index: 30000;
 							position: absolute;
 	            user-select: none;
-	            display: ${this.props.viewMode == "edit" ? "block" : "none"}
+	            cursor: crosshair;
 						}
 						path {
 							stroke-width: 2;
