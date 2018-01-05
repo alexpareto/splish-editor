@@ -217,6 +217,7 @@ var renderer = new function() {
   };
 
   this.render = function() {
+    console.log("RENDERING WITH MOVES:", moves);
     var gl = this.gl;
 
     // Create two arrays to hold start and end point uniforms
@@ -328,7 +329,7 @@ var renderer = new function() {
       }
     }
   };
-  // (point) is where the mouse was clicked
+
   this.newMove = function(
     point // Where the warp starts (-1 to 1 range)
   ) {
@@ -460,9 +461,29 @@ var renderer = new function() {
 }();
 
 // Program starts here
-function main(imagePath, anchors, vectors, boundingBox) {
+function main(imagePath, anchors, vectors, boundingRect) {
   renderer.init(); // Initialize WebGL shapes and image
   setImage(imagePath);
+  setTimeout(() => {
+    let i, move;
+    for (i in vectors) {
+      move = renderer.newMove(
+        normalizedPoint(
+          vectors[i][0].x,
+          vectors[i][0].y,
+          boundingRect.width,
+          boundingRect.height
+        )
+      );
+      move.point2 = normalizedPoint(
+        vectors[i][1].x,
+        vectors[i][1].y,
+        boundingRect.width,
+        boundingRect.height
+      );
+      renderer.render();
+    }
+  }, 500);
 }
 
 // Resets the current distortion to 0
@@ -488,11 +509,9 @@ function save() {
   renderer.save();
 }
 
-function normalizedPoint(x, y) {
-  // converts screen coordinates to -1 to 1
-  var canvas = document.getElementById("2dcanvas");
-  x = x / canvas.width * 2 - 1;
-  y = (1 - y / canvas.height) * 2 - 1;
+function normalizedPoint(x, y, width, height) {
+  x = x / width * 2 - 1;
+  y = (1 - y / height) * 2 - 1;
 
   return new Point(x, y);
 }
@@ -557,7 +576,6 @@ function loadProgram(gl, vertexShader, fragmentShader) {
 }
 
 function setImage(imagePath) {
-
   imagePath = imagePath.split("file://")[1];
 
   var bitmap = fs.readFileSync(imagePath);

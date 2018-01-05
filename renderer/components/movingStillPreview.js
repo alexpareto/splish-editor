@@ -8,7 +8,7 @@ class MovingStillPreview extends React.Component {
 			this.props.imgSrc,
 			this.props.anchors,
 			this.props.vectors,
-			this.props.boundingBox
+			this.props.boundingRect
 		);
 	}
 
