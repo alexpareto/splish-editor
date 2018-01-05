@@ -1,3 +1,6 @@
+import vertexShader from '../shaders/previewVertexShader';
+import gridFragShader from '../shaders/gridFragShader';
+import imageFragShader from '../shaders/imageFragShader';
 
 'use strict';
 
@@ -48,19 +51,12 @@ var renderer = new function () {
     this.init = function () {
       // Get a context from our canvas object with id = "webglcanvas".
       var canvas = document.getElementById("webglcanvas"); 
-        try {
-          // Get the context into a local gl and and a public gl.
-          // Use preserveDrawingBuffer:true to keep the drawing buffer after presentation
-          var gl = this.gl = canvas.getContext("webgl");
-        }
-          catch (e) {
-          // Fail quietly 
-        }
+      var gl = this.gl = canvas.getContext("webgl");
 
         try {
         // Load the GLSL source written in the HTML file.
         // Create a program with the two shaders
-        this.lineprogram = loadProgram(gl, getShader(gl, "2d-vertex-shader"), getShader(gl, "red"));
+        this.lineprogram = loadProgram(gl, getShader(gl, vertexShader, "vertex"), getShader(gl, gridFragShader, "frag"));
 
           // Tell webGL to use this program
         gl.useProgram(this.lineprogram);
@@ -91,8 +87,8 @@ var renderer = new function () {
         }
 
         try {
-          var vertexshader = getShader(gl, "2d-vertex-shader");
-          var fragmentshader = getShader(gl, "2d-fragment-shader");
+          var vertexshader = getShader(gl, vertexShader, "vertex");
+          var fragmentshader = getShader(gl, imageFragShader, "frag");
         
           this.pictureprogram = loadProgram(gl, vertexshader, fragmentshader);
           gl.useProgram(this.pictureprogram);
@@ -515,31 +511,15 @@ function setVec2(id, a, b) {
 // Parameters:
 //   WebGL context
 //   id of script element containing the shader to load
-function getShader(gl, id) {
-  var shaderScript = document.getElementById(id);
-
-  // error - element with supplied id couldn't be retrieved
-  if (!shaderScript) {
-    return null;
-  }
-
-  // If successful, build a string representing the shader source
-  var str = "";
-  var k = shaderScript.firstChild;
-  while (k) {
-    if (k.nodeType == 3) {
-      str += k.textContent;
-    }
-    k = k.nextSibling;
-  }
+function getShader(gl, str, type) {
 
   var shader;
 
   // Create shaders based on the type we set
   //   note: these types are commonly used, but not required
-  if (shaderScript.type == "x-shader/x-fragment") {
+  if (type == "frag") {
     shader = gl.createShader(gl.FRAGMENT_SHADER);
-  } else if (shaderScript.type == "x-shader/x-vertex") {
+  } else if (type == "vertex") {
     shader = gl.createShader(gl.VERTEX_SHADER);
   } else {
     return null;
@@ -550,7 +530,7 @@ function getShader(gl, id) {
 
   // Check the compile status, return an error if failed
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.log(gl.getShaderInfoLog(shader));
+    console.log("SHADER FAILED TO COMPILE: ", gl.getShaderInfoLog(shader));
     return null;
   }
 
