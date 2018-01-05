@@ -1,14 +1,15 @@
 import React from "react";
 import * as globalStyles from "../globalStyles";
-import Head from 'next/head';
+import preview from '../webgl/helpers/previewMovingStill';
 
 class MovingStillPreview extends React.Component {
+	componentDidMount()
+	{
+		preview();
+	}
 	render() {
 		return (
 			<div>
-				<Head>
-					<script src="/static/lib/previewMovingStill.js" />
-				</Head>
 				<div>
 					Hello Preview!
 				</div>

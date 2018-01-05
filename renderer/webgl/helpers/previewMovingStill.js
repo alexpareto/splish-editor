@@ -87,7 +87,6 @@ var renderer = new function () {
 
         catch (e) {
             // Display the fail on the screen if the shaders/program fail.
-            log('shader fail');
             return;
         }
 
@@ -116,7 +115,6 @@ var renderer = new function () {
           gl.uniform1i(this.pictureprogram.u_image, 0);
         }
         catch (e) {
-            log('shader fail');
             return;
         }
              
@@ -469,78 +467,9 @@ var renderer = new function () {
     }
 }
 
-// getMousePoint
-// input - mouse event e
-function getMousePoint(e) {
-    var x;
-    var y;
-    // The standard way to get mouse coordinates
-    if (e.offsetX) {
-        x = e.offsetX;
-        y = e.offsetY;
-    }
-    // LayerX and layerY are provided for cross-browser compatibility
-    else if (e.layerX) {
-        x = e.layerX;
-        y = e.layerY;
-    }
-    else {
-        return undefined; //Work around Chrome
-    }
-
-    return normalizedPoint(x, y); // Converts pixels to -1 to 1
-}
-var inputHandler = new function() {
-    var move; // Pointer to a uniform variable in the renderer object
-
-    this.init = function () {
-        var canvas = document.getElementById("2dcanvas");
-      //  Set up mouse events on the canvas object. 
-        canvas.onmousedown = function (e) {
-          console.log("onmousedown");
-          this.move = renderer.newMove(getMousePoint(e));            
-        }
-
-        canvas.onmouseup = function (e) {
-          console.log("onmouseup");
-            this.move = undefined;
-            renderer.render();
-        }
-
-        canvas.onmouseout = function (e) {
-          console.log("onmouseout");
-          this.move = undefined;
-            renderer.render();
-        };
-
-        canvas.onmousemove = function (e) {
-          console.log("onmousemove");
-
-          var point = getMousePoint(e);
-
-            if (typeof this.move != 'undefined')
-            {
-                if (typeof point != 'undefined')
-                {
-                    this.move.move(point);
-                }
-                renderer.render();
-            }
-
-        };
-
-        canvas.ondragstart = function (e) { //Workaround for Chrome
-          console.log("ondragstart");
-          e.preventDefault();
-        };
-    }
-
-}
-
 // Program starts here
 function main(imagePath, anchors, vectors, boundingBox) {
-  renderer.init();  // Initialize WebGL shapes and image
-  inputHandler.init(); // Initialize mouse and UI handler        
+  renderer.init();  // Initialize WebGL shapes and image      
 }
 
 // Resets the current distortion to 0
@@ -580,19 +509,6 @@ function normalizedPoint(x, y)
 
 function setVec2(id, a, b) {
   gl.uniform2f(gl.getUniformLocation(program, id), a, b);
-}
-
-
-// Adds a string to the log in the web page
-function log(result) {
-  var resultDiv = document.getElementById("log");
-  resultDiv.innerHTML += result + "<br />";
-}
-
-// Adds a string to the log in the web page; overwrites everything in the log with the new string
-function logi(result) {
-  var resultDiv = document.getElementById('log');
-  resultDiv.innerHTML = result;
 }
 
 // Loads a shader from a script tag
