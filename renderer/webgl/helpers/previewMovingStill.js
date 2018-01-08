@@ -38,7 +38,7 @@ var renderer = new function() {
 
   this.texCoordBuffer; // The buffer for the texture for the picture fragment shader.
   this.texCoordBuffer2; // The buffer for the texture for the line fragment shader.
-  this.tween = 0.0;
+  this.tween = { val: 0.0 };
 
   var moves = new Array();
   var tMove = {};
@@ -225,7 +225,6 @@ var renderer = new function() {
     // Create two arrays to hold start and end point uniforms
     var p1 = new Float32Array(MAXMOVES * 2); //x and y
     var p2 = new Float32Array(MAXMOVES * 2); //x and y
-    console.log("RENDERING: ", this.tween);
 
     // Set up the arrays of points
     {
@@ -235,17 +234,15 @@ var renderer = new function() {
         var x1, y1, x2, y2;
 
         if (moves[i]) {
-          tMove = moves[i];
           const dx = moves[i].point2.x - moves[i].point1.x;
           const dy = moves[i].point2.y - moves[i].point1.y;
-
-          tMove.point2.x = tMove.point1.x + dx * this.tween;
-          tMove.point2.y = tMove.point1.y + dy * this.tween;
+          tMove.x = moves[i].point2.x + dx * this.tween.val;
+          tMove.y = moves[i].point2.y + dy * this.tween.val;
 
           x1 = moves[i].point1.x;
           y1 = moves[i].point1.y;
-          x2 = tMove.point2.x;
-          y2 = tMove.point2.y;
+          x2 = tMove.x;
+          y2 = tMove.y;
         } else {
           x1 = 1;
           y1 = 1;
@@ -494,19 +491,24 @@ function main(imagePath, anchors, vectors, boundingRect) {
 
       startPreview();
     }
-  }, 1000);
+  }, 500);
 }
 
 const startPreview = () => {
-  renderer.tween = 0.0;
-  let tween = new TWEEN.Tween(renderer.tween).to(1.0, 1000).start();
+  renderer.tween = { val: 0.0 };
+  let tween = new TWEEN.Tween(renderer.tween)
+    .to({ val: 1.0 }, 5000)
+    .delay(500)
+    .repeat(5)
+    .start();
   window.requestAnimationFrame(renderAnimationFrame);
 };
 
-const renderAnimationFrame = () => {
+const renderAnimationFrame = time => {
+  TWEEN.update(time);
   renderer.render();
   window.requestAnimationFrame(renderAnimationFrame);
-}
+};
 
 // Resets the current distortion to 0
 function reset(point) {
