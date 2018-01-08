@@ -22,6 +22,7 @@
     "electron": "~1.7.8"
   },
   "dependencies": {
+    "@tweenjs/tween.js": "^17.1.1",
     "apollo-client-preset": "^1.0.5",
     "d3": "^4.12.2",
     "electron-builder": "^19.49.0",

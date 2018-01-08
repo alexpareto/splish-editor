@@ -1,6 +1,7 @@
 import vertexShader from "../shaders/previewVertexShader";
 import gridFragShader from "../shaders/gridFragShader";
 import imageFragShader from "../shaders/imageFragShader";
+import TWEEN from "@tweenjs/tween.js";
 import fs from "fs";
 
 ("use strict");
@@ -37,8 +38,10 @@ var renderer = new function() {
 
   this.texCoordBuffer; // The buffer for the texture for the picture fragment shader.
   this.texCoordBuffer2; // The buffer for the texture for the line fragment shader.
+  this.tween = 0.0;
 
   var moves = new Array();
+  var tMove = {};
   var MAXMOVES = 30;
   var currentMove = 0;
 
@@ -217,12 +220,12 @@ var renderer = new function() {
   };
 
   this.render = function() {
-    console.log("RENDERING WITH MOVES:", moves);
     var gl = this.gl;
 
     // Create two arrays to hold start and end point uniforms
     var p1 = new Float32Array(MAXMOVES * 2); //x and y
     var p2 = new Float32Array(MAXMOVES * 2); //x and y
+    console.log("RENDERING: ", this.tween);
 
     // Set up the arrays of points
     {
@@ -232,10 +235,17 @@ var renderer = new function() {
         var x1, y1, x2, y2;
 
         if (moves[i]) {
+          tMove = moves[i];
+          const dx = moves[i].point2.x - moves[i].point1.x;
+          const dy = moves[i].point2.y - moves[i].point1.y;
+
+          tMove.point2.x = tMove.point1.x + dx * this.tween;
+          tMove.point2.y = tMove.point1.y + dy * this.tween;
+
           x1 = moves[i].point1.x;
           y1 = moves[i].point1.y;
-          x2 = moves[i].point2.x;
-          y2 = moves[i].point2.y;
+          x2 = tMove.point2.x;
+          y2 = tMove.point2.y;
         } else {
           x1 = 1;
           y1 = 1;
@@ -481,9 +491,21 @@ function main(imagePath, anchors, vectors, boundingRect) {
         boundingRect.width,
         boundingRect.height
       );
-      renderer.render();
+
+      startPreview();
     }
-  }, 500);
+  }, 1000);
+}
+
+const startPreview = () => {
+  renderer.tween = 0.0;
+  let tween = new TWEEN.Tween(renderer.tween).to(1.0, 1000).start();
+  window.requestAnimationFrame(renderAnimationFrame);
+};
+
+const renderAnimationFrame = () => {
+  renderer.render();
+  window.requestAnimationFrame(renderAnimationFrame);
 }
 
 // Resets the current distortion to 0
