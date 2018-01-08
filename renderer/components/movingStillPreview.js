@@ -19,14 +19,14 @@ class MovingStillPreview extends React.Component {
 				<canvas
 					style={{ position: "absolute" }}
 					id="webglcanvas"
-					width="600"
-					height="600"
+					width="1000"
+					height="1000"
 				/>
 				<canvas
 					style={{ position: "absolute" }}
 					id="2dcanvas"
-					width="600"
-					height="600"
+					width="1000"
+					height="1000"
 				/>
 				<label>
 					<input
