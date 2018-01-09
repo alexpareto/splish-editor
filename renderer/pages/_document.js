@@ -1,5 +1,5 @@
 import React from 'react'
-import Document, { Head, Main, NextScript } from 'next/document'
+import Document, { Main, NextScript } from 'next/document'
 
 export default class MyDocument extends Document {
   static getInitialProps ({ renderPage }) {
@@ -10,9 +10,6 @@ export default class MyDocument extends Document {
   render () {
     return (
       <html>
-        <Head>
-          <link rel='stylesheet' href='/static/css/bundle.css' />
-        </Head>
         <body style={{overflow: 'hidden', height: '100vh'}}>
           {this.props.customValue}
           <Main />

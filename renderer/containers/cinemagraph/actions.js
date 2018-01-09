@@ -16,6 +16,7 @@ export const initializeCinemagraphCanvas = () => {
 }
 
 export const selectCinemagraphVideo = (files) => {
+	console.log("IN THE ACTION: ", files);
 	return { type: actionTypes.SELECT_CINEMAGRAPH_VIDEO, files: files };
 }
 

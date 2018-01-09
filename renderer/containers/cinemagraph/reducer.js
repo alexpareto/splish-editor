@@ -1,10 +1,13 @@
 import { actionTypes } from "./actions";
-import renderMovingStill from "../../lib/cv/renderCinemagraph";
+import renderCinemagraph from "../../lib/cv/renderCinemagraph";
+import * as globalStyles from "../../globalStyles";
+import getOverlayMask from "../../lib/cv/getOverlayMask";
 
 const initialState = {
   undoStack: [],
   redoStack: [],
-  imgPath: "",
+  videoPath: "",
+  overlayPath: "",
   lc: null,
   tools: {},
   boundingRect: {},
@@ -20,7 +23,6 @@ export const cinemagraphReducer = (state = initialState, action) => {
       const videoHeight = 80 / aspect;
       vid.parentElement.setAttribute("style", `height: ${videoHeight}vw;`);
       var imageSize = { width: vid.videoWidth, height: vid.videoHeight };
-
       lc = LC.init(document.getElementsByClassName("literally core")[0], {
         imageSize: imageSize
       });
@@ -57,12 +59,12 @@ export const cinemagraphReducer = (state = initialState, action) => {
         videoHeight,
         boundingRect
       };
-    case actionTypes.SELECT_MOVING_STILL_IMAGE:
-      const imgPath = "file://" + action.files[0];
+    case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
+      const videoPath = "file://" + action.files[0];
       console.log("VIDEOPATH: ", videoPath);
       return {
         ...state,
-        imgPath
+        videoPath
       };
     case actionTypes.ATTEMPT_PREVIEW_CINEMAGRAPH:
       // use cv to render an image mask to place over the video
