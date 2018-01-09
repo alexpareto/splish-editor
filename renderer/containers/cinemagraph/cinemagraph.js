@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "../../components/navBar";
+import NavBar from "../../components/cinemagraphToolBar";
 import DrawingCanvas from "../../components/drawingCanvas";
 import Trimmer from "../../components/trimmer";
 import { connect } from "react-redux";

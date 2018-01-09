@@ -15,30 +15,18 @@ class MovingStillPreview extends React.Component {
 	render() {
 		return (
 			<div>
-				Hello Preview!
 				<canvas
 					style={{ position: "absolute" }}
 					id="webglcanvas"
 					width="1000"
-					height="1000"
+					height="800"
 				/>
 				<canvas
 					style={{ position: "absolute" }}
 					id="2dcanvas"
 					width="1000"
-					height="1000"
+					height="800"
 				/>
-				<label>
-					<input
-						type="checkbox"
-						name="showUniforms"
-						id="showUniforms"
-					/>
-				</label>
-				<label><input type="radio" name="rendertype" id="renderLines" /></label>
-				<label>
-					<input type="radio" name="rendertype" id="renderTriangles" />
-				</label>
 			</div>
 		);
 	}
