@@ -6,7 +6,7 @@ import Logo from "../../components/logo.js";
 class MainMenu extends React.Component {
 	render() {
 		return (
-			<div>
+			<div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh"}}>
 				<div>
 					<Link href="/cinemagraph" prefetch>
 						<a>Create new Cinemagraph</a>
