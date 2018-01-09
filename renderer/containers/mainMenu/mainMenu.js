@@ -7,6 +7,7 @@ class MainMenu extends React.Component {
 	render() {
 		return (
 			<div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh"}}>
+				<Logo size={150} />
 				<div>
 					<Link href="/cinemagraph" prefetch>
 						<a>Create new Cinemagraph</a>
@@ -17,7 +18,6 @@ class MainMenu extends React.Component {
 						<a>Create new Moving Still</a>
 					</Link>
 				</div>
-				<Logo size={150} />
 			</div>
 		);
 	}

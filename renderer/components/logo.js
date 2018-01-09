@@ -135,7 +135,7 @@ const Logo = props => {
 	    			cy: ${size}; 
 	    			rx: ${strokeW*1}; 
 	    			ry: ${strokeW*1};
-	    			fill: ${globalStyles.accent};
+	    			fill: ${globalStyles.background};
 	    		}
 	    	}
 
