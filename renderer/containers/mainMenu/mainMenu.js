@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Link from "next/link";
+import Logo from "../../components/logo.js";
 
 class MainMenu extends React.Component {
 	render() {
@@ -15,7 +16,8 @@ class MainMenu extends React.Component {
 					<Link href="/movingStill" prefetch>
 						<a>Create new Moving Still</a>
 					</Link>
-					</div>
+				</div>
+				<Logo size={150} />
 			</div>
 		);
 	}

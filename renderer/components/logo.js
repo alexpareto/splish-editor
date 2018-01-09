@@ -7,8 +7,6 @@ const Logo = props => {
 	const duration = 1.4;
 	const contrast = size < 80 ? 6:7;
 
-	console.log("STROKEW", strokeW);
-
   return (
   	<div className="container">
 	    <svg 
@@ -78,7 +76,7 @@ const Logo = props => {
 	    	}; 
 
 	    	.svg { 
-	    		border-bottom: 1px solid ${globalStyles.primary}
+	    		
 	    	}; 
 
 	    	.boundingCircle { 
@@ -137,7 +135,7 @@ const Logo = props => {
 	    			cy: ${size}; 
 	    			rx: ${strokeW*1}; 
 	    			ry: ${strokeW*1};
-	    			fill: ${globalStyles.background};
+	    			fill: ${globalStyles.accent};
 	    		}
 	    	}
 
