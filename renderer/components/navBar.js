@@ -4,12 +4,22 @@ import FileSelection from "./fileSelection";
 import FileSaver from "./fileSaver";
 import IconButton from "./iconButton";
 import PreviewToggle from "./previewToggle";
+import Link from "next/link";
 
 class NavBar extends React.Component {
 	render() {
 		return (
 			<div className="container">
 				<div className="flex">
+					<Link href="/mainMenu" prefetch>
+						<a>
+							<IconButton
+								stroke={globalStyles.background}
+								name="leftChevron"
+								backgroundColor={globalStyles.secondary}
+							/>
+						</a>
+					</Link>
 					<FileSelection
 						type="video"
 						filesHandler={this.props.selectCinemagraphVideo}

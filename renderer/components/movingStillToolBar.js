@@ -4,12 +4,11 @@ import FileSelection from "./fileSelection";
 import FileSaver from "./fileSaver";
 import IconButton from "./iconButton";
 import PreviewToggle from "./previewToggle";
+import Link from "next/link";
 
 class NavBar extends React.Component {
-
 	anchorClicked = () => {
-		if(this.props.isInitialized)
-		{
+		if (this.props.isInitialized) {
 			this.props.selectAnchorTool();
 		} else {
 			this.props.initializeMovingStillCanvas("anchor");
@@ -17,8 +16,7 @@ class NavBar extends React.Component {
 	};
 
 	vectorClicked = () => {
-		if(this.props.isInitialized)
-		{
+		if (this.props.isInitialized) {
 			this.props.selectVectorTool();
 		} else {
 			this.props.initializeMovingStillCanvas("vector");
@@ -29,6 +27,15 @@ class NavBar extends React.Component {
 		return (
 			<div className="container">
 				<div className="flex">
+					<Link href="/mainMenu" prefetch>
+						<a>
+							<IconButton
+								stroke={globalStyles.background}
+								name="leftChevron"
+								backgroundColor={globalStyles.secondary}
+							/>
+						</a>
+					</Link>
 					<FileSelection
 						type="img"
 						filesHandler={this.props.selectMovingStillImage}

@@ -518,6 +518,22 @@ const Icon = props => {
           <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
         </svg>
       );
+    case "leftChevron":
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke={props.stroke}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      );
     default:
       return null;
   }
