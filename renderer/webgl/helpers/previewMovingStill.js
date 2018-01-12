@@ -1,5 +1,4 @@
 import vertexShader from "../shaders/previewVertexShader";
-import gridFragShader from "../shaders/gridFragShader";
 import imageFragShader from "../shaders/imageFragShader";
 import TWEEN from "@tweenjs/tween.js";
 import fs from "fs";
@@ -206,6 +205,7 @@ var renderer = new function() {
 
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p1"), p1);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p2"), p2);
+    gl.uniform
 
     gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
