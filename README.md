@@ -1,6 +1,16 @@
 # Splish-Desktop
 
 
+Setup:
+
+- Install opencv and electron
+
+```
+> yarn install # installs node packages
+> yarn run electron-rebuild # builds opencv node bindings
+> yarn start # runs electron
+```
+
 ## Style guidelines:
 
 Official colors:
