@@ -171,15 +171,10 @@ var renderer = new function() {
         var x1, y1, x2, y2;
 
         if (moves[i]) {
-          const dx = moves[i].point2.x - moves[i].point1.x;
-          const dy = moves[i].point2.y - moves[i].point1.y;
-          tMove.x = moves[i].point2.x + dx * this.tween.val;
-          tMove.y = moves[i].point2.y + dy * this.tween.val;
-
           x1 = moves[i].point1.x;
           y1 = moves[i].point1.y;
-          x2 = tMove.x;
-          y2 = tMove.y;
+          x2 = moves[i].point2.x;
+          y2 = moves[i].point2.y;
         } else {
           x1 = 1;
           y1 = 1;
@@ -205,7 +200,8 @@ var renderer = new function() {
 
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p1"), p1);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p2"), p2);
-    gl.uniform
+    gl.uniform1f(gl.getUniformLocation(this.pictureprogram, "tween0"), this.tween.val);
+    gl.uniform1f(gl.getUniformLocation(this.pictureprogram, "tween1"), this.tween.val);
 
     gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
@@ -290,9 +286,8 @@ function main(imagePath, anchors, vectors, boundingRect) {
 const startPreview = () => {
   renderer.tween = { val: 0.0 };
   let tween = new TWEEN.Tween(renderer.tween)
-    .to({ val: 1.0 }, 5000)
-    .delay(500)
-    .repeat(5)
+    .to({ val: 1.0 }, 3000)
+    .repeat(20)
     .start();
   window.requestAnimationFrame(renderAnimationFrame);
 };
