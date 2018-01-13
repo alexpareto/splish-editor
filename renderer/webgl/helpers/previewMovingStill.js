@@ -190,7 +190,7 @@ var renderer = new function() {
       }
     }
 
-    var anchors = new Float32Array(this.anchors.length * 2);
+    var a = new Float32Array(MAXMOVES);
     // Set up the anchor points
     {
       var index = 0;
@@ -198,7 +198,7 @@ var renderer = new function() {
         // Working values
         var x, y;
 
-        if (this.anchors[i]) {
+        if (anchors[i]) {
           x = anchors[i].x;
           y = anchors[i].y;
         } else {
@@ -206,8 +206,8 @@ var renderer = new function() {
           y = 0.9999999;
         }
 
-        anchors[index] = x;
-        anchors[index + 1] = y;
+        a[index] = x;
+        a[index + 1] = y;
         index += 2;
       }
     }
@@ -255,8 +255,8 @@ var renderer = new function() {
   this.newAnchor = function(
     point
   ) {
-    anchors.unshift(anchor);
-    return anchor;
+    anchors.unshift(point);
+    return point;
   }
 
   function createImageGrid() {
@@ -298,7 +298,6 @@ var renderer = new function() {
 // Program starts here
 function main(imagePath, anchors, vectors, boundingRect) {
   renderer.init(); // Initialize WebGL shapes and image
-  renderer.anchors = anchors;
   setImage(imagePath);
   setTimeout(() => {
     let i, move;
