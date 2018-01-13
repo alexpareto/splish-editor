@@ -11,6 +11,7 @@ attribute vec2 a_texCoord;
 
 uniform vec2 p1[MAXPOINTS];    // Where the drag started
 uniform vec2 p2[MAXPOINTS];    // Where the drag ended
+uniform vec2 anchor[MAXPOINTS];
 uniform float tween0;
 
 void main() { 
@@ -28,15 +29,17 @@ void main() {
   {
     dx = p1[i].x - p2[i].x;
     dy = p1[i].y - p2[i].y;
-    pt2.x = p1[i].x + dx * tween * 24.0;
-    pt2.y = p1[i].y + dy * tween * 24.0;
+    pt2.x = p1[i].x + dx * tween * 400.0;
+    pt2.y = p1[i].y + dy * tween * 400.0;
 
-    float dragdistance = distance(p1[i], p2[i]); // Calculate the distance between two start and end of mouse drag for each of the drags
-    float mydistance = distance(p1[i], position);  // Calculate the distance between the start of the mouse drag and the last position  
-    if (mydistance < dragdistance && position.x < 0.99 && position.x > -0.99) 
+    float dragdistance = distance(p1[i], p2[i]);
+    float mydistance = distance(p1[i], position);
+    bool isMasked = false;
+
+    if (mydistance < dragdistance * 4.0 && position.x < 0.99 && position.x > -0.99) 
     {
-      vec2 maxdistort = (p2[i] - pt2) / 175.0;    // only affect vertices within 4 x the drag distance ( 
-      float normalizeddistance = mydistance / dragdistance;                
+      vec2 maxdistort = (p2[i] - pt2) / 800.0;
+      float normalizeddistance = mydistance / (dragdistance * 4.0);                
       float normalizedimpact = (cos(normalizeddistance*3.14159265359)+1.0)/2.0;
       v_texCoord -= (maxdistort * normalizedimpact);  
     }
@@ -48,15 +51,15 @@ void main() {
   {
     dx = p1[i].x - p2[i].x;
     dy = p1[i].y - p2[i].y;
-    pt2.x = p1[i].x + dx * tween * 24.0;
-    pt2.y = p1[i].y + dy * tween * 24.0;
+    pt2.x = p1[i].x + dx * tween * 400.0;
+    pt2.y = p1[i].y + dy * tween * 400.0;
 
     float dragdistance = distance(p1[i], p2[i]); // Calculate the distance between two start and end of mouse drag for each of the drags
     float mydistance = distance(p1[i], position);  // Calculate the distance between the start of the mouse drag and the last position  
-    if (mydistance < dragdistance && position.x < 0.99 && position.x > -0.99) 
+    if (mydistance < dragdistance * 4.0 && position.x < 0.99 && position.x > -0.99) 
     {
-      vec2 maxdistort = (p2[i] - pt2) / 175.0;    // only affect vertices within 4 x the drag distance ( 
-      float normalizeddistance = mydistance / dragdistance;                
+      vec2 maxdistort = (p2[i] - pt2) / 800.0;    // only affect vertices within 4 x the drag distance ( 
+      float normalizeddistance = mydistance / (dragdistance * 4.0);                
       float normalizedimpact = (cos(normalizeddistance*3.14159265359)+1.0)/2.0;
       v_texCoord2 += (maxdistort * normalizedimpact);  
     }

@@ -39,6 +39,7 @@ var renderer = new function() {
   this.texCoordBuffer2; // The buffer for the texture for the line fragment shader.
   this.tween = { val: 0.0 };
 
+  var anchors = new Array();
   var moves = new Array();
   var tMove = {};
   var MAXMOVES = 30;
@@ -153,7 +154,6 @@ var renderer = new function() {
     //    Note: a canvas is used here but can be replaced by an image object.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
     ctx.clearRect(0, 0, canvHeight, canvHeight);
-
   };
 
   this.render = function() {
@@ -190,6 +190,28 @@ var renderer = new function() {
       }
     }
 
+    var anchors = new Float32Array(this.anchors.length * 2);
+    // Set up the anchor points
+    {
+      var index = 0;
+      for (var i = 0; i < MAXMOVES; i++) {
+        // Working values
+        var x, y;
+
+        if (this.anchors[i]) {
+          x = anchors[i].x;
+          y = anchors[i].y;
+        } else {
+          x = 1;
+          y = 0.9999999;
+        }
+
+        anchors[index] = x;
+        anchors[index + 1] = y;
+        index += 2;
+      }
+    }
+
     //  Clear color buffer and set it to light gray
     gl.clearColor(1.0, 1.0, 1.0, 0.5);
     gl.clear(this.gl.COLOR_BUFFER_BIT);
@@ -200,8 +222,18 @@ var renderer = new function() {
 
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p1"), p1);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p2"), p2);
-    gl.uniform1f(gl.getUniformLocation(this.pictureprogram, "tween0"), this.tween.val);
-    gl.uniform1f(gl.getUniformLocation(this.pictureprogram, "tween1"), this.tween.val);
+    gl.uniform2fv(
+      gl.getUniformLocation(this.pictureprogram, "anchors"),
+      anchors
+    );
+    gl.uniform1f(
+      gl.getUniformLocation(this.pictureprogram, "tween0"),
+      this.tween.val
+    );
+    gl.uniform1f(
+      gl.getUniformLocation(this.pictureprogram, "tween1"),
+      this.tween.val
+    );
 
     gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
@@ -219,6 +251,13 @@ var renderer = new function() {
 
     return move;
   };
+
+  this.newAnchor = function(
+    point
+  ) {
+    anchors.unshift(anchor);
+    return anchor;
+  }
 
   function createImageGrid() {
     var q = 0.000000001;
@@ -259,6 +298,7 @@ var renderer = new function() {
 // Program starts here
 function main(imagePath, anchors, vectors, boundingRect) {
   renderer.init(); // Initialize WebGL shapes and image
+  renderer.anchors = anchors;
   setImage(imagePath);
   setTimeout(() => {
     let i, move;
@@ -277,17 +317,28 @@ function main(imagePath, anchors, vectors, boundingRect) {
         boundingRect.width,
         boundingRect.height
       );
-
-      startPreview();
     }
-  }, 500);
+
+    for (i in anchors) {
+      renderer.newAnchor(
+        normalizedPoint(
+          anchors[i].x,
+          anchors[i].y,
+          boundingRect.width,
+          boundingRect.height,
+        )
+      );
+    }
+
+    startPreview();
+  }, 100);
 }
 
 const startPreview = () => {
   renderer.tween = { val: 0.0 };
   let tween = new TWEEN.Tween(renderer.tween)
     .to({ val: 1.0 }, 3000)
-    .repeat(20)
+    .repeat(101)
     .start();
   window.requestAnimationFrame(renderAnimationFrame);
 };
