@@ -224,7 +224,7 @@ var renderer = new function() {
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p2"), p2);
     gl.uniform2fv(
       gl.getUniformLocation(this.pictureprogram, "anchors"),
-      anchors
+      a
     );
     gl.uniform1f(
       gl.getUniformLocation(this.pictureprogram, "tween0"),
@@ -255,6 +255,9 @@ var renderer = new function() {
   this.newAnchor = function(
     point
   ) {
+    point.x = (point.x + 1.0) / 2.0;
+    point.y = (point.y + 1.0) / 2.0;
+
     anchors.unshift(point);
     return point;
   }
