@@ -48,13 +48,15 @@ void main() {
 
       float normalizedimpact = (cos(normalizeddistance*3.14159265359)+1.0)/2.0;
       v_texCoord -= (maxdistortAhead * normalizedimpact);
-      // v_texCoord2 += (maxdistortBehind * normalizedimpact);
+      v_texCoord2 += (maxdistortBehind * normalizedimpact);
 
       // draw a line through each anchor perpendicular to the vector point
       // normalize impact based off of distance to that line
       vec2 pt1 = (p1[i] + 1.0) / 2.0;
       vec2 intersect;
-      for(int j = 0; j < 2; j++)
+      float min = 2.0;
+
+      for(int j = 0; j < MAXPOINTS; j++)
       {
         float dist = distance(anchors[j], a_texCoord);
         float dy = anchors[j].y - pt1.y;
@@ -71,17 +73,19 @@ void main() {
         intersect.y = slope * intersect.x + yIntercept;
         float intersectDistance = distance(intersect, a_texCoord);
 
-        bool isSameSide = 
-          (a_texCoord.y > (a_texCoord.x * slope + yIntercept)) ==
+        bool isDifSide = 
+          (a_texCoord.y > (a_texCoord.x * slope + yIntercept)) !=
           (pt1.y > (pt1.x * slope + yIntercept));
 
-        if(isSameSide) {
+        if(isDifSide) {
           v_texCoord = a_texCoord;
-          v_texCoord -= (maxdistortAhead * normalizedimpact * intersectDistance) / 2.0;
+          v_texCoord2 = a_texCoord;
           break;
-        } else {
-          v_texCoord += (maxdistortAhead * normalizedimpact);
         }
+
+        // v_texCoord -= (maxdistortAhead * normalizedimpact * intersectDistance) / (30.0 * 2.0);
+        // v_texCoord2 += (maxdistortAhead * normalizedimpact * intersectDistance) / (30.0 * 2.0);
+
       } 
     }
   }
