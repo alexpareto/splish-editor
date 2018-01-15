@@ -45,7 +45,7 @@ var renderer = new function() {
   var MAXMOVES = 30;
   var currentMove = 0;
 
-  var resolution = 20; // Resolution of the mesh.
+  var resolution = 50; // Resolution of the mesh.
 
   this.init = function() {
     // Get a context from our canvas object with id = "webglcanvas".
