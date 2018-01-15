@@ -202,8 +202,8 @@ var renderer = new function() {
           x = anchors[i].x;
           y = anchors[i].y;
         } else {
-          x = 1;
-          y = 0.9999999;
+          x = 1.0;
+          y = 1.0;
         }
 
         a[index] = x;

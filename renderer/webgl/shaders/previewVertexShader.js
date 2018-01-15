@@ -37,76 +37,54 @@ void main() {
 
     if (mydistance < dragdistance * 4.0) 
     {
-      vec2 maxdistort = (p2[i] - pt2) / 800.0;
+      vec2 maxdistort = (p1[i] - pt2) / 800.0;
       float normalizeddistance = mydistance / (dragdistance * 4.0);                
       float normalizedimpact = (cos(normalizeddistance*3.14159265359)+1.0)/2.0;
       v_texCoord -= (maxdistort * normalizedimpact);  
 
-      // draw a line between the anchor and the texture point
-      // if there the output texture point is on the opposite side of the line
-      // it should be masked
-      // for(int j = 0; j < MAXPOINTS; j++)
-      // {
-      //   float dy = anchors[j].y - a_texCoord.y;
-      //   float dx = anchors[j].x - a_texCoord.x;
-      //   float slope = 1.0/(dy/dx);
-      //   float yIntercept = anchors[j].y - slope * anchors[j].x;
-
-      //   bool isCurrentAboveLine = a_texCoord.y > (a_texCoord.x * slope + yIntercept);
-      //   bool isNextAboveLine = v_texCoord.y > (v_texCoord.x * slope + yIntercept);
-
-      //   if(
-      //     (isCurrentAboveLine && !isNextAboveLine) || 
-      //     (!isCurrentAboveLine && isNextAboveLine) 
-      //     ) {
-
-      //     v_texCoord += (maxdistort * normalizedimpact);
-      //   }
-      // } 
+      // draw a line through each anchor perpendicular to the vector point
+      // normalize impact based off of distance to that line
+      vec2 pt1 = (p1[i] + 1.0) / 2.0;
+      for(int j = 0; j < 1; j++)
+      {
+        float dist = distance(anchors[j], a_texCoord);
+        float dy = anchors[j].y - pt1.y;
+        float dx = anchors[j].x - pt1.x;
+        float slope = 1.0 / (-dy/dx);
+        float yIntercept = anchors[j].y - (slope * anchors[j].x);
+        float yInterceptTex = a_texCoord.y - (1.0 / slope) * a_texCoord.x;
+        vec2 intersect;
+        intersect.x = (yIntercept - yInterceptTex) / ((1.0/slope) - slope);
+        intersect.y = slope * intersect.x + yIntercept;
+        float intersectDistance = distance(intersect, a_texCoord);
+        
+        if(intersectDistance < 0.2) {
+          v_texCoord = a_texCoord;
+        }
+      } 
     }
   }
 
   tween = 1.0 - tween0;
 
-  for (int i = 0; i < MAXPOINTS; i++) // loop through 
-  {
-    dx = p1[i].x - p2[i].x;
-    dy = p1[i].y - p2[i].y;
-    pt2.x = p1[i].x + dx * tween * 400.0;
-    pt2.y = p1[i].y + dy * tween * 400.0;
+  // for (int i = 0; i < MAXPOINTS; i++) // loop through 
+  // {
+  //   dx = p1[i].x - p2[i].x;
+  //   dy = p1[i].y - p2[i].y;
+  //   pt2.x = p1[i].x + dx * tween * 400.0;
+  //   pt2.y = p1[i].y + dy * tween * 400.0;
 
-    float dragdistance = distance(p1[i], p2[i]); // Calculate the distance between two start and end of mouse drag for each of the drags
-    float mydistance = distance(p1[i], position);  // Calculate the distance between the start of the mouse drag and the last position  
-    if (mydistance < dragdistance * 4.0) 
-    {
-      vec2 maxdistort = (p2[i] - pt2) / 800.0;    // only affect vertices within 4 x the drag distance ( 
-      float normalizeddistance = mydistance / (dragdistance * 4.0);                
-      float normalizedimpact = (cos(normalizeddistance*3.14159265359)+1.0)/2.0;
-      v_texCoord2 += (maxdistort * normalizedimpact);
+  //   float dragdistance = distance(p1[i], p2[i]); // Calculate the distance between two start and end of mouse drag for each of the drags
+  //   float mydistance = distance(p1[i], position);  // Calculate the distance between the start of the mouse drag and the last position  
+  //   if (mydistance < dragdistance * 4.0) 
+  //   {
+  //     vec2 maxdistort = (p1[i] - pt2) / 800.0;    // only affect vertices within 4 x the drag distance ( 
+  //     float normalizeddistance = mydistance / (dragdistance * 4.0);                
+  //     float normalizedimpact = (cos(normalizeddistance*3.14159265359)+1.0)/2.0;
+  //     v_texCoord2 += (maxdistort * normalizedimpact);
 
-      // draw a line between the anchor and the texture point
-      // if there the output texture point is on the opposite side of the line
-      // it should be masked
-      // for(int j = 0; j < MAXPOINTS; j++)
-      // {
-      //   float dy = anchors[j].y - a_texCoord.y;
-      //   float dx = anchors[j].x - a_texCoord.x;
-      //   float slope = 1.0/(dy/dx);
-      //   float yIntercept = anchors[j].y - slope * anchors[j].x;
-
-      //   bool isCurrentAboveLine = a_texCoord.y > (a_texCoord.x * slope + yIntercept);
-      //   bool isNextAboveLine = v_texCoord2.y > (v_texCoord2.x * slope + yIntercept);
-
-      //   if(
-      //     (isCurrentAboveLine && !isNextAboveLine) || 
-      //     (!isCurrentAboveLine && isNextAboveLine) 
-      //     ) {
-
-      //     v_texCoord2 -= (maxdistort * normalizedimpact);
-      //   }
-      // } 
-    }
-  }
+  //   }
+  // }
 
 // gl_Position always specifies where to render this vector 
 gl_Position = vec4(position, 0.0, 1.0);     // x,y,z,
