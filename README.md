@@ -11,6 +11,13 @@ Setup:
 > yarn start # runs electron
 ```
 
+Installing NPM Packages:
+
+```
+> yarn add package-name
+> yarn run electorn-rebuild # remember this part!
+```
+
 ## Style guidelines:
 
 Official colors:
