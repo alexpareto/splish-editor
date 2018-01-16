@@ -55,18 +55,59 @@ class AnimationDebugger extends React.Component {
 	render() {
 		const sliders = this.state.isShown
 			? <div className="sliders">
-					hey hey
-					<Slider />
+					<span>Drag Distance:</span>
+					<span>{this.state.dragDistance}</span>
+					<Slider
+						min={0.0}
+						step={0.5}
+						max={200.0}
+						defaultValue={this.props.animationParams.dragDistance}
+						onChange={this.updateDragDistance}
+					/>
+					<span>Anchor Impact:</span>
+					{this.state.anchorImpact}
+					<Slider 
+						min={0.0}
+						step={0.2}
+						max={20.0}
+						defaultValue={this.props.animationParams.anchorImpact}
+						onChange={this.updateAnchorImpact}
+					/>
+					<span> Flow Multiplier: </span>
+					{this.state.flowMultiplier}
+					<Slider 
+						min={0.0}
+						step={0.5}
+						max={3000.0}
+						defaultValue={this.props.animationParams.flowMultiplier}
+						onChange={this.updateFlowMultiplier}/>
+					<span>Flow Divisor: </span>
+					{this.state.flowDivisor}
+					<Slider 
+						min={0.0}
+						step={1.0}
+						max={6000.0}
+						defaultValue={this.props.animationParams.flowDivisor}
+						onChange={this.updateFlowDivisor}/>
+					<span>Impact Divisor:</span>
+					{this.state.impactDivisor}
+
+					<Slider 
+						min={0.0}
+						step={0.5}
+						max={30.0}
+						defaultValue={this.props.animationParams.impactDivisor}
+						onChange={this.updateImpactDivisor}/>
 					<style jsx>
 						{`
-						.sliders {
-							padding-top: 10vh;
-							height: 100vh;
-							display: flex;
-							align-items: center;
-							width: 70vw;
-							flex-direction: column;
-						}
+							.sliders {
+								padding-top: 10vh;
+								height: 100vh;
+								display: flex;
+								align-items: center;
+								width: 70vw;
+								flex-direction: column;
+							}
 						`}
 					</style>
 				</div>
@@ -107,8 +148,8 @@ class AnimationDebugger extends React.Component {
 						align-items: center;
 						z-index: 3000000;
 						top: 15vh;
+						background-color: rgba(255, 255, 255, 0.7);
 						width: 100vw;
-						background-color: ${globalStyles.background};
 					};`}
 				</style>
 			</div>
