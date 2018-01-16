@@ -1,26 +1,26 @@
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { createStore, applyMiddleware } from 'redux'
-import createSagaMiddleware from 'redux-saga'
-import nextReduxWrapper from 'next-redux-wrapper'
-import nextReduxSaga from 'next-redux-saga'
-import logger from "redux-logger"
+import { createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import nextReduxWrapper from 'next-redux-wrapper';
+import nextReduxSaga from 'next-redux-saga';
+import logger from 'redux-logger';
 
-import rootReducer from './rootReducer'
-import rootSaga from './rootSaga'
+import rootReducer from './rootReducer';
+import rootSaga from './rootSaga';
 
-const sagaMiddleware = createSagaMiddleware()
+const sagaMiddleware = createSagaMiddleware();
 
 export function configureStore(initialState = {}) {
   const store = createStore(
     rootReducer,
     initialState,
-    composeWithDevTools(applyMiddleware(sagaMiddleware, logger))
-  )
-  store.sagaTask = sagaMiddleware.run(rootSaga)
-  return store
+    composeWithDevTools(applyMiddleware(sagaMiddleware, logger)),
+  );
+  store.sagaTask = sagaMiddleware.run(rootSaga);
+  return store;
 }
 
-export default function (BaseComponent) {
-  return nextReduxWrapper(configureStore)(nextReduxSaga(BaseComponent))
+export default function(BaseComponent) {
+  return nextReduxWrapper(configureStore)(nextReduxSaga(BaseComponent));
 }

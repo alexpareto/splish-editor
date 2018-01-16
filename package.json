@@ -7,19 +7,21 @@
     "start": "electron .",
     "rebuild": "electron-rebuild -w opencv4nodejs",
     "build": "next build renderer && next export renderer",
-    "dist": "npm run build && build"
+    "dist": "npm run build && build",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json,css}": ["prettier --write", "git add"]
   },
   "repository": "https://github.com/zdenham/splish-desktop",
-  "keywords": [
-    "Splish",
-    "Micro-video",
-    "Editor",
-    "Moving Photos"
-  ],
+  "keywords": ["Splish", "Micro-video", "Editor", "Moving Photos"],
   "author": "Zac Denham",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "~1.7.8"
+    "electron": "~1.7.8",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.0",
+    "prettier": "^1.10.2"
   },
   "dependencies": {
     "@tweenjs/tween.js": "^17.1.1",
@@ -49,10 +51,6 @@
     "redux-saga": "^0.16.0"
   },
   "build": {
-    "files": [
-      "**/*",
-      "!renderer",
-      "renderer/out"
-    ]
+    "files": ["**/*", "!renderer", "renderer/out"]
   }
 }

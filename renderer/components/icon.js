@@ -8,12 +8,12 @@
 * 5. this is a lot but it will make our icons dope
 */
 
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Icon = props => {
   switch (props.name) {
-    case "home":
+    case 'home':
       return (
         <svg
           stroke={props.stroke}
@@ -30,7 +30,7 @@ const Icon = props => {
           <polyline points="9 22 9 12 15 12 15 22" />
         </svg>
       );
-    case "lock":
+    case 'lock':
       return (
         <svg
           stroke={props.stroke}
@@ -47,7 +47,7 @@ const Icon = props => {
           <path d="M7 11V7a5 5 0 0 1 10 0v4" />
         </svg>
       );
-    case "user":
+    case 'user':
       return (
         <svg
           stroke={props.stroke}
@@ -74,7 +74,7 @@ const Icon = props => {
           />
         </svg>
       );
-    case "check":
+    case 'check':
       return (
         <svg
           stroke={props.stroke}
@@ -90,7 +90,7 @@ const Icon = props => {
           <polyline points="20 6 9 17 4 12" />
         </svg>
       );
-    case "info":
+    case 'info':
       return (
         <svg
           stroke={props.stroke}
@@ -108,7 +108,7 @@ const Icon = props => {
           <line x1="12" y1="8" x2="12" y2="8" />
         </svg>
       );
-    case "alert":
+    case 'alert':
       return (
         <svg
           stroke={props.stroke}
@@ -126,7 +126,7 @@ const Icon = props => {
           <line x1="12" y1="17" x2="12" y2="17" />
         </svg>
       );
-    case "watch":
+    case 'watch':
       return (
         <svg
           stroke={props.stroke}
@@ -144,7 +144,7 @@ const Icon = props => {
           <path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83" />
         </svg>
       );
-    case "composer":
+    case 'composer':
       return (
         <svg
           stroke={props.stroke}
@@ -160,7 +160,7 @@ const Icon = props => {
           <polygon points="16 3 21 8 8 21 3 21 3 16 16 3" />
         </svg>
       );
-    case "alert":
+    case 'alert':
       return (
         <svg
           stroke={props.stroke}
@@ -178,7 +178,7 @@ const Icon = props => {
           <line x1="12" y1="17" x2="12" y2="17" />
         </svg>
       );
-    case "zap":
+    case 'zap':
       return (
         <svg
           stroke={props.stroke}
@@ -194,7 +194,7 @@ const Icon = props => {
           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
         </svg>
       );
-    case "clock":
+    case 'clock':
       return (
         <svg
           stroke={props.stroke}
@@ -211,7 +211,7 @@ const Icon = props => {
           <polyline points="12 6 12 12 15 15" />
         </svg>
       );
-    case "plus":
+    case 'plus':
       return (
         <svg
           stroke={props.stroke}
@@ -229,7 +229,7 @@ const Icon = props => {
           <line x1="5" y1="12" x2="19" y2="12" />
         </svg>
       );
-    case "box":
+    case 'box':
       return (
         <svg
           stroke={props.stroke}
@@ -247,7 +247,7 @@ const Icon = props => {
           <line x1="12" y1="22.76" x2="12" y2="11" />
         </svg>
       );
-    case "upload":
+    case 'upload':
       return (
         <svg
           stroke={props.stroke}
@@ -265,7 +265,7 @@ const Icon = props => {
           <line x1="12" y1="2" x2="12" y2="16" />
         </svg>
       );
-    case "arrowDownLeft":
+    case 'arrowDownLeft':
       return (
         <svg
           stroke={props.stroke}
@@ -282,7 +282,7 @@ const Icon = props => {
           <polyline points="15 18 6 18 6 9" />
         </svg>
       );
-    case "disk":
+    case 'disk':
       return (
         <svg
           stroke={props.stroke}
@@ -299,7 +299,7 @@ const Icon = props => {
           <circle cx="12" cy="12" r="3" />
         </svg>
       );
-    case "image":
+    case 'image':
       return (
         <svg
           stroke={props.stroke}
@@ -317,7 +317,7 @@ const Icon = props => {
           <polyline points="21 15 16 10 5 21" />
         </svg>
       );
-    case "selector":
+    case 'selector':
       return (
         <svg
           stroke={props.stroke}
@@ -333,7 +333,7 @@ const Icon = props => {
           <polygon points="12 2 19 21 12 17 5 21 12 2" />
         </svg>
       );
-    case "save":
+    case 'save':
       return (
         <svg
           stroke={props.stroke}
@@ -351,7 +351,7 @@ const Icon = props => {
           <polyline points="7 3 7 8 15 8" />
         </svg>
       );
-    case "deploy":
+    case 'deploy':
       return (
         <svg
           stroke={props.stroke}
@@ -370,7 +370,7 @@ const Icon = props => {
           <polyline points="16 16 12 12 8 16" />
         </svg>
       );
-    case "x":
+    case 'x':
       return (
         <svg
           stroke={props.stroke}
@@ -387,7 +387,7 @@ const Icon = props => {
           <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
       );
-    case "film":
+    case 'film':
       return (
         <svg
           stroke={props.stroke}
@@ -410,7 +410,7 @@ const Icon = props => {
           <line x1="17" y1="7" x2="22" y2="7" />
         </svg>
       );
-    case "pic":
+    case 'pic':
       return (
         <svg
           stroke={props.stroke}
@@ -428,7 +428,7 @@ const Icon = props => {
           <polyline points="21 15 16 10 5 21" />
         </svg>
       );
-    case "layers":
+    case 'layers':
       return (
         <svg
           stroke={props.stroke}
@@ -447,7 +447,7 @@ const Icon = props => {
           <polyline points="2 12 12 17 22 12" />
         </svg>
       );
-    case "crosshair":
+    case 'crosshair':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -467,7 +467,7 @@ const Icon = props => {
           <line x1="12" y1="22" x2="12" y2="18" />
         </svg>
       );
-    case "play":
+    case 'play':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -483,7 +483,7 @@ const Icon = props => {
           <polygon points="5 3 19 12 5 21 5 3" />
         </svg>
       );
-    case "share":
+    case 'share':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -501,7 +501,7 @@ const Icon = props => {
           <line x1="12" y1="2" x2="12" y2="15" />
         </svg>
       );
-    case "anchor":
+    case 'anchor':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -514,11 +514,12 @@ const Icon = props => {
           strokeLinecap="round"
           strokeLinejoin="round"
         >
-          <circle cx="12" cy="5" r="3" /><line x1="12" y1="22" x2="12" y2="8" />
+          <circle cx="12" cy="5" r="3" />
+          <line x1="12" y1="22" x2="12" y2="8" />
           <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
         </svg>
       );
-    case "leftChevron":
+    case 'leftChevron':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
