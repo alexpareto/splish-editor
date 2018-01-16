@@ -16,8 +16,8 @@ const initialState = {
   animationParams: {
     dragDistance: 4.0,
     anchorImpact: 1.0,
-    flowMultiplier: 400.0,
-    flowDivisor: 800.0,
+    flowMultiplier: 20.0,
+    flowDivisor: 40.0,
     impactDivisor: 3.0
   }
 };

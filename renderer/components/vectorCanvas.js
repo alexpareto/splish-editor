@@ -111,8 +111,7 @@ class DrawingCanvas extends React.Component {
 			? <img
 					id="movingStillImage"
 					style={{
-						width: "80vw",
-						left: "10vw",
+						width: "800px",
 						position: "absolute"
 					}}
 					src={this.props.imgSrc}
@@ -131,11 +130,10 @@ class DrawingCanvas extends React.Component {
 						}
 						.container {
 							stroke: 2;
-							width: 80vw;
-							margin-left: calc(10vw - 8px);
+							width: 800px;
 						}
 						.d3SVG {
-							width: 80vw;
+							width: 800px;
 							height: ${this.props.imageHeight}px;
 							z-index: 30000;
 							position: absolute;

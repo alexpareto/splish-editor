@@ -5,7 +5,7 @@ import fs from "fs";
 
 ("use strict");
 
-// Point object - converts incoming values to a -1 to 1 range).
+// Point object - converts incoming values to a -1 to 1 range)
 function Point(x, y) {
   if (x < -1) x = -1;
   if (y < -1) y = -1;
@@ -128,25 +128,26 @@ var renderer = new function() {
     var canvas = document.getElementById("2dcanvas");
     var ctx = canvas.getContext("2d");
     var canvHeight = document.getElementById("2dcanvas").height;
+    var canvWidth = document.getElementById("2dcanvas").width;
 
     var x = 0;
     var y = 0;
-    var xx = canvHeight;
+    var xx = canvWidth;
     var yy = canvHeight;
 
-    ctx.clearRect(0, 0, canvHeight, canvHeight);
+    ctx.clearRect(0, 0, canvWidth, canvHeight);
     // If image isn't square, adjust width, height, and origin so it's centered.
-    if (image.width < image.height) {
-      // Change origin and dimensions if the image isn't square.
-      // Change x, xx
-      xx = image.width / image.height * canvHeight;
-      x = (canvHeight - xx) / 2;
-    }
-    if (image.width > image.height) {
-      // Change y, yy
-      yy = image.height / image.width * canvHeight;
-      y = (canvHeight - yy) / 2;
-    }
+    // if (image.width < image.height) {
+    //   // Change origin and dimensions if the image isn't square.
+    //   // Change x, xx
+    //   xx = image.width / image.height * canvHeight;
+    //   x = (canvHeight - xx) / 2;
+    // }
+    // if (image.width > image.height) {
+    //   // Change y, yy
+    //   yy = image.height / image.width * canvHeight;
+    //   y = (canvHeight - yy) / 2;
+    // }
 
     // Put the image on the canvas, scaled using xx & yy.
     ctx.drawImage(image, 0, 0, image.width, image.height, x, y, xx, yy);
@@ -167,10 +168,9 @@ var renderer = new function() {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
-    // Upload the resized canvas image into the texture.
     //    Note: a canvas is used here but can be replaced by an image object.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
-    ctx.clearRect(0, 0, canvHeight, canvHeight);
+    ctx.clearRect(0, 0, canvWidth, canvHeight);
   };
 
   this.render = function() {
@@ -351,6 +351,7 @@ function main(imagePath, anchors, vectors, boundingRect, animationParams) {
 
 const startPreview = () => {
   renderer.tween = { val: 0.0 };
+  TWEEN.removeAll();
   let tween = new TWEEN.Tween(renderer.tween)
     .to({ val: 1.0 }, 3000)
     .repeat(101)
