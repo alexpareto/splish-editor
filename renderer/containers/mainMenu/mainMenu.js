@@ -9,12 +9,18 @@ import Router from 'next/router';
 import { logoutUser } from '../login/actions.js';
 
 class MainMenu extends React.Component {
-	static async getInitialProps(ctx) {}
-
+	constructor(props) {
+		super(props);
+		this.state = {
+			loading: true,
+		};
+	}
 	async componentDidMount() {
-		const user = await checkLoggedIn();
-		if (!user) {
-			Router.push('/mainMenu');
+		const data = await checkLoggedIn();
+		if (!data) {
+			Router.push('/login');
+		} else {
+			this.setState({ loading: false });
 		}
 	}
 
@@ -24,6 +30,9 @@ class MainMenu extends React.Component {
 	};
 
 	render() {
+		if (this.state.loading) {
+			return <div> loading </div>;
+		}
 		return (
 			<div
 				style={{

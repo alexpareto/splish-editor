@@ -10,8 +10,8 @@ import * as Actions from './actions.js';
 
 class Login extends React.Component {
   async componentDidMount() {
-    const user = await checkLoggedIn({});
-    if (user) {
+    const data = await checkLoggedIn();
+    if (data) {
       Router.push('/mainMenu');
     }
   }

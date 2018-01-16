@@ -1,7 +1,7 @@
 /* api helper library */
 import cookie from 'cookie';
 
-export const call = (endpoint, method, body, context = {}) => {
+export const call = (endpoint, method, body = null, context = {}) => {
   const token = window.localStorage.getItem('token');
   let headers = {
     ContentType: 'multipart/form-data',

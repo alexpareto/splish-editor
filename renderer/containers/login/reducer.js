@@ -18,9 +18,7 @@ export const authReducer = (state = initialState, action) => {
         hasError: false,
       };
     case actionTypes.LOGIN_USER_SUCCESS:
-      if (process.browser) {
-        window.localStorage.setItem('token', action.token);
-      }
+      window.localStorage.setItem('token', action.token);
       return {
         ...state,
         requestSent: false,
@@ -43,9 +41,7 @@ export const authReducer = (state = initialState, action) => {
         hasError: false,
       };
     case actionTypes.SIGN_UP_USER_SUCCESS:
-      if (process.browser) {
-        window.localStorage.setItem('token', action.token);
-      }
+      window.localStorage.setItem('token', action.token);
       return {
         ...state,
         requestSent: false,
