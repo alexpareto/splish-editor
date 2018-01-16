@@ -13,6 +13,7 @@ const initialState = {
   anchors: [],
   vectors: [],
   boundingRect: {},
+  animationParams: {}
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -49,7 +50,7 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         viewMode: "preview",
-        boundingRect,
+        boundingRect
       };
     case actionTypes.START_MOVING_STILL_EDIT_MODE:
       return {
@@ -74,6 +75,12 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         vectors
+      };
+    case actionTypes.UPDATE_ANIMATION_PARAMS:
+      let animationParams = action.params;
+      return {
+        ...state,
+        animationParams
       };
     default:
       return state;

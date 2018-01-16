@@ -20,6 +20,8 @@ class MovingStill extends React.Component {
 					imgSrc={this.props.movingStill.imgPath}
 					anchors={this.props.movingStill.anchors}
 					vectors={this.props.movingStill.vectors}
+					animationParams={this.props.movingStill.animationParams}
+					updateAnimationParams={this.props.updateAnimationParams}
 					boundingRect={this.props.movingStill.boundingRect}
 				/>;
 		return (
@@ -54,7 +56,9 @@ const mapDispatchToProps = dispatch => {
 		selectVectorTool: () => dispatch(Actions.selectVectorTool()),
 		selectAnchorTool: () => dispatch(Actions.selectAnchorTool()),
 		addVector: vector => dispatch(Actions.addVector(vector)),
-		addAnchor: anchor => dispatch(Actions.addAnchor(anchor))
+		addAnchor: anchor => dispatch(Actions.addAnchor(anchor)),
+		updateAnimationParams: params =>
+			dispatch(Actions.updateAnimationParams(params))
 	};
 };
 

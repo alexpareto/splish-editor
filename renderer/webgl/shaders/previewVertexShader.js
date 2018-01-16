@@ -1,4 +1,4 @@
-export default `
+export default () => { return `
 // outgoing coordinate
 varying vec2 v_texCoord;
 varying vec2 v_texCoord2;
@@ -102,4 +102,4 @@ void main() {
 // gl_Position always specifies where to render this vector 
 gl_Position = vec4(position, 0.0, 1.0);     // x,y,z,
 }
-`;
+`};
