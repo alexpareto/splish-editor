@@ -1,4 +1,4 @@
-export default (dragDistance, anchorImpact, flowMultiplier, flowDivisor, impactDivisor, numVectors, numAnchors) => { return `
+export default `
 // outgoing coordinate
 varying vec2 v_texCoord;
 varying vec2 v_texCoord2;
@@ -7,12 +7,11 @@ varying vec2 v_texCoord2;
 attribute vec2 a_texCoord;  
 
 // maximum number of changes to grid
-#define NUM_VECTORS ${numVectors}
-#define NUM_ANCHORS ${numAnchors}  
+#define MAXPOINTS 30 
 
-uniform vec2 p1[NUM_VECTORS];    // Where the drag started
-uniform vec2 p2[NUM_VECTORS];    // Where the drag ended
-uniform vec2 anchors[NUM_ANCHORS];
+uniform vec2 p1[MAXPOINTS];    // Where the drag started
+uniform vec2 p2[MAXPOINTS];    // Where the drag ended
+uniform vec2 anchors[MAXPOINTS];
 uniform float tween0;
 
 void main() { 
@@ -28,26 +27,26 @@ void main() {
   float tweenAhead = tween0;
   float tweenBehind = 1.0 - tween0;
 
-  for (int i = 0; i < NUM_VECTORS; i++) // loop through 
+  for (int i = 0; i < MAXPOINTS; i++) // loop through 
   {
     dx = p1[i].x - p2[i].x;
     dy = p1[i].y - p2[i].y;
-    ptAhead.x = p1[i].x + dx * tweenAhead * ${flowMultiplier};
-    ptAhead.y = p1[i].y + dy * tweenAhead * ${flowMultiplier};
-    ptBehind.x = p1[i].x + dx * tweenBehind * ${flowMultiplier};
-    ptBehind.y = p1[i].y + dy * tweenBehind * ${flowMultiplier};
+    ptAhead.x = p1[i].x + dx * tweenAhead * 400.0;
+    ptAhead.y = p1[i].y + dy * tweenAhead * 400.0;
+    ptBehind.x = p1[i].x + dx * tweenBehind * 400.0;
+    ptBehind.y = p1[i].y + dy * tweenBehind * 400.0;
 
 
     float dragdistance = distance(p1[i], p2[i]);
     float mydistance = distance(p1[i], position);
 
-    if (mydistance < dragdistance * ${dragDistance}) 
+    if (mydistance < dragdistance * 4.0) 
     {
-      vec2 maxdistortAhead = (p1[i] - ptAhead) / ${flowDivisor};
-      vec2 maxdistortBehind = (p1[i] - ptBehind) / ${flowDivisor};
-      float normalizeddistance = mydistance / (dragdistance * ${dragDistance});
+      vec2 maxdistortAhead = (p1[i] - ptAhead) / 800.0;
+      vec2 maxdistortBehind = (p1[i] - ptBehind) / 800.0;
+      float normalizeddistance = mydistance / (dragdistance * 4.0);
 
-      float normalizedimpact = (cos(normalizeddistance*3.14159265359)+1.0)/${impactDivisor};
+      float normalizedimpact = (cos(normalizeddistance*3.14159265359)+1.0)/2.0;
       // v_texCoord -= (maxdistortAhead * normalizedimpact);
       // v_texCoord2 += (maxdistortBehind * normalizedimpact);
 
@@ -58,7 +57,7 @@ void main() {
       float min = 2.0;
       bool isDifSide;
 
-      for(int j = 0; j < NUM_ANCHORS; j++)
+      for(int j = 0; j < MAXPOINTS; j++)
       {
         float dist = distance(anchors[j], a_texCoord);
         float dy = anchors[j].y - pt1.y;
@@ -93,8 +92,8 @@ void main() {
         v_texCoord = a_texCoord;
         v_texCoord2 = a_texCoord;
       } else {
-        v_texCoord -= (maxdistortAhead * normalizedimpact * min * ${anchorImpact});
-        v_texCoord2 += (maxdistortBehind * normalizedimpact * min * ${anchorImpact});
+        v_texCoord -= (maxdistortAhead * normalizedimpact * min);
+        v_texCoord2 += (maxdistortBehind * normalizedimpact * min);
       }
 
     }
@@ -103,4 +102,4 @@ void main() {
 // gl_Position always specifies where to render this vector 
 gl_Position = vec4(position, 0.0, 1.0);     // x,y,z,
 }
-`};
+`;
