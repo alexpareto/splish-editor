@@ -1,4 +1,3 @@
-import cookie from 'cookie';
 import * as api from './api';
 
 export default () => {
