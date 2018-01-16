@@ -10,6 +10,7 @@ export const actionTypes = {
   RENDER_MOVING_STILL: 'RENDER_MOVING_STILL',
   ADD_ANCHOR: 'ADD_ANCHOR',
   ADD_VECTOR: 'ADD_VECTOR',
+  UPDATE_ANIMATION_PARAMS: 'UPDATE_ANIMATION_PARAMS',
 };
 
 // ACTIONS
@@ -47,4 +48,8 @@ export const addAnchor = anchor => {
 
 export const addVector = vector => {
   return { type: actionTypes.ADD_VECTOR, vector };
+};
+
+export const updateAnimationParams = params => {
+  return { type: actionTypes.UPDATE_ANIMATION_PARAMS, params };
 };

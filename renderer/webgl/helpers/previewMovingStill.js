@@ -5,7 +5,7 @@ import fs from 'fs';
 
 ('use strict');
 
-// Point object - converts incoming values to a -1 to 1 range).
+// Point object - converts incoming values to a -1 to 1 range)
 function Point(x, y) {
   if (x < -1) x = -1;
   if (y < -1) y = -1;
@@ -38,22 +38,38 @@ var renderer = new function() {
   this.texCoordBuffer; // The buffer for the texture for the picture fragment shader.
   this.texCoordBuffer2; // The buffer for the texture for the line fragment shader.
   this.tween = { val: 0.0 };
+  this.numVectors;
+  this.numAnchors;
 
   var anchors = new Array();
   var moves = new Array();
   var tMove = {};
-  var MAXMOVES = 30;
   var currentMove = 0;
 
   var resolution = 50; // Resolution of the mesh.
 
-  this.init = function() {
+  this.init = function(animationParams, numVectors, numAnchors) {
+    this.numVectors = numVectors;
+    this.numAnchors = numAnchors;
+
     // Get a context from our canvas object with id = "webglcanvas".
     var canvas = document.getElementById('webglcanvas');
     var gl = (this.gl = canvas.getContext('webgl'));
 
     try {
-      var vertexshader = getShader(gl, vertexShader, 'vertex');
+      var vertexshader = getShader(
+        gl,
+        vertexShader(
+          animationParams.dragDistance.toFixed(5).toString(),
+          animationParams.anchorImpact.toFixed(5).toString(),
+          animationParams.flowMultiplier.toFixed(5).toString(),
+          animationParams.flowDivisor.toFixed(5).toString(),
+          animationParams.impactDivisor.toFixed(5).toString(),
+          this.numVectors.toString(),
+          this.numAnchors.toString(),
+        ),
+        'vertex',
+      );
       var fragmentshader = getShader(gl, imageFragShader, 'frag');
 
       this.pictureprogram = loadProgram(gl, vertexshader, fragmentshader);
@@ -111,25 +127,26 @@ var renderer = new function() {
     var canvas = document.getElementById('2dcanvas');
     var ctx = canvas.getContext('2d');
     var canvHeight = document.getElementById('2dcanvas').height;
+    var canvWidth = document.getElementById('2dcanvas').width;
 
     var x = 0;
     var y = 0;
-    var xx = canvHeight;
+    var xx = canvWidth;
     var yy = canvHeight;
 
-    ctx.clearRect(0, 0, canvHeight, canvHeight);
+    ctx.clearRect(0, 0, canvWidth, canvHeight);
     // If image isn't square, adjust width, height, and origin so it's centered.
-    if (image.width < image.height) {
-      // Change origin and dimensions if the image isn't square.
-      // Change x, xx
-      xx = image.width / image.height * canvHeight;
-      x = (canvHeight - xx) / 2;
-    }
-    if (image.width > image.height) {
-      // Change y, yy
-      yy = image.height / image.width * canvHeight;
-      y = (canvHeight - yy) / 2;
-    }
+    // if (image.width < image.height) {
+    //   // Change origin and dimensions if the image isn't square.
+    //   // Change x, xx
+    //   xx = image.width / image.height * canvHeight;
+    //   x = (canvHeight - xx) / 2;
+    // }
+    // if (image.width > image.height) {
+    //   // Change y, yy
+    //   yy = image.height / image.width * canvHeight;
+    //   y = (canvHeight - yy) / 2;
+    // }
 
     // Put the image on the canvas, scaled using xx & yy.
     ctx.drawImage(image, 0, 0, image.width, image.height, x, y, xx, yy);
@@ -150,23 +167,22 @@ var renderer = new function() {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
-    // Upload the resized canvas image into the texture.
     //    Note: a canvas is used here but can be replaced by an image object.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
-    ctx.clearRect(0, 0, canvHeight, canvHeight);
+    ctx.clearRect(0, 0, canvWidth, canvHeight);
   };
 
   this.render = function() {
     var gl = this.gl;
 
     // Create two arrays to hold start and end point uniforms
-    var p1 = new Float32Array(MAXMOVES * 2); //x and y
-    var p2 = new Float32Array(MAXMOVES * 2); //x and y
+    var p1 = new Float32Array(this.numVectors * 2); //x and y
+    var p2 = new Float32Array(this.numVectors * 2); //x and y
 
     // Set up the arrays of points
     {
       var index = 0;
-      for (var i = 0; i < MAXMOVES; i++) {
+      for (var i = 0; i < this.numVectors; i++) {
         // Working values
         var x1, y1, x2, y2;
 
@@ -190,11 +206,11 @@ var renderer = new function() {
       }
     }
 
-    var a = new Float32Array(MAXMOVES);
+    var a = new Float32Array(this.numAnchors * 2);
     // Set up the anchor points
     {
       var index = 0;
-      for (var i = 0; i < MAXMOVES; i++) {
+      for (var i = 0; i < this.numAnchors; i++) {
         // Working values
         var x, y;
 
@@ -220,6 +236,7 @@ var renderer = new function() {
 
     gl.useProgram(this.pictureprogram);
 
+    // console.log("RENDERING WITH: ", p1, p2);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'p1'), p1);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'p2'), p2);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'anchors'), a);
@@ -294,8 +311,8 @@ var renderer = new function() {
 }();
 
 // Program starts here
-function main(imagePath, anchors, vectors, boundingRect) {
-  renderer.init(); // Initialize WebGL shapes and image
+function main(imagePath, anchors, vectors, boundingRect, animationParams) {
+  renderer.init(animationParams, vectors.length || 1, anchors.length || 1); // Initialize WebGL shapes and image
   setImage(imagePath);
   setTimeout(() => {
     let i, move;
@@ -333,6 +350,7 @@ function main(imagePath, anchors, vectors, boundingRect) {
 
 const startPreview = () => {
   renderer.tween = { val: 0.0 };
+  TWEEN.removeAll();
   let tween = new TWEEN.Tween(renderer.tween)
     .to({ val: 1.0 }, 3000)
     .repeat(101)
