@@ -68,7 +68,7 @@ class AnimationDebugger extends React.Component {
         {this.state.anchorImpact}
         <Slider
           min={0.0}
-          step={0.2}
+          step={0.001}
           max={20.0}
           defaultValue={this.props.animationParams.anchorImpact}
           onChange={this.updateAnchorImpact}
@@ -96,7 +96,7 @@ class AnimationDebugger extends React.Component {
 
         <Slider
           min={0.0}
-          step={0.5}
+          step={0.001}
           max={30.0}
           defaultValue={this.props.animationParams.impactDivisor}
           onChange={this.updateImpactDivisor}
