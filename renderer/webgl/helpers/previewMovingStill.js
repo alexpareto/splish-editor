@@ -47,13 +47,23 @@ var renderer = new function() {
 
   var resolution = 50; // Resolution of the mesh.
 
-  this.init = function() {
+  this.init = function(animationParams) {
     // Get a context from our canvas object with id = "webglcanvas".
     var canvas = document.getElementById("webglcanvas");
     var gl = (this.gl = canvas.getContext("webgl"));
 
     try {
-      var vertexshader = getShader(gl, vertexShader("4.0", "1.0", "400.0", "800.0", "3.0"), "vertex");
+      var vertexshader = getShader(
+        gl,
+        vertexShader(
+          animationParams.dragDistance.toFixed(5).toString(),
+          animationParams.anchorImpact.toFixed(5).toString(),
+          animationParams.flowMultiplier.toFixed(5).toString(),
+          animationParams.flowDivisor.toFixed(5).toString(),
+          animationParams.impactDivisor.toFixed(5).toString()
+        ),
+        "vertex"
+      );
       var fragmentshader = getShader(gl, imageFragShader, "frag");
 
       this.pictureprogram = loadProgram(gl, vertexshader, fragmentshader);
@@ -222,10 +232,7 @@ var renderer = new function() {
 
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p1"), p1);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p2"), p2);
-    gl.uniform2fv(
-      gl.getUniformLocation(this.pictureprogram, "anchors"),
-      a
-    );
+    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "anchors"), a);
     gl.uniform1f(
       gl.getUniformLocation(this.pictureprogram, "tween0"),
       this.tween.val
@@ -252,15 +259,13 @@ var renderer = new function() {
     return move;
   };
 
-  this.newAnchor = function(
-    point
-  ) {
+  this.newAnchor = function(point) {
     point.x = (point.x + 1.0) / 2.0;
     point.y = (point.y + 1.0) / 2.0;
 
     anchors.unshift(point);
     return point;
-  }
+  };
 
   function createImageGrid() {
     var q = 0.000000001;
@@ -299,8 +304,8 @@ var renderer = new function() {
 }();
 
 // Program starts here
-function main(imagePath, anchors, vectors, boundingRect) {
-  renderer.init(); // Initialize WebGL shapes and image
+function main(imagePath, anchors, vectors, boundingRect, animationParams) {
+  renderer.init(animationParams); // Initialize WebGL shapes and image
   setImage(imagePath);
   setTimeout(() => {
     let i, move;
@@ -327,7 +332,7 @@ function main(imagePath, anchors, vectors, boundingRect) {
           anchors[i].x,
           anchors[i].y,
           boundingRect.width,
-          boundingRect.height,
+          boundingRect.height
         )
       );
     }

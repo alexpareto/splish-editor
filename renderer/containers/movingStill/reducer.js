@@ -13,7 +13,13 @@ const initialState = {
   anchors: [],
   vectors: [],
   boundingRect: {},
-  animationParams: {}
+  animationParams: {
+    dragDistance: 4.0,
+    anchorImpact: 1.0,
+    flowMultiplier: 400.0,
+    flowDivisor: 800.0,
+    impactDivisor: 3.0
+  }
 };
 
 export const movingStillReducer = (state = initialState, action) => {

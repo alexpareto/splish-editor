@@ -5,7 +5,6 @@ import AnimationDebugger from "./animationDebugger";
 
 class MovingStillPreview extends React.Component {
 	componentDidMount() {
-		console.log("PROPS FOR MOVING STILL PREVIEW: ", this.props);
 		preview(
 			this.props.imgSrc,
 			this.props.anchors,

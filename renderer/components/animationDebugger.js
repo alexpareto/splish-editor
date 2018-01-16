@@ -2,31 +2,87 @@ import React from "react";
 import * as globalStyles from "../globalStyles";
 import IconButton from "./iconButton";
 import Slider from "rc-slider";
+import Head from "next/head";
 
 class AnimationDebugger extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isShown: false
+			isShown: false,
+			dragDistance: props.animationParams.dragDistance,
+			anchorImpact: props.animationParams.anchorImpact,
+			flowMultiplier: props.animationParams.flowMultiplier,
+			flowDivisor: props.animationParams.flowDivisor,
+			impactDivisor: props.animationParams.impactDivisor
 		};
 	}
 
 	updateParams = () => {
-		if(this.state.isShown){
-			let params = {};
+		if (this.state.isShown) {
+			let params = {
+				dragDistance: this.state.dragDistance,
+				anchorImpact: this.state.anchorImpact,
+				flowMultiplier: this.state.flowMultiplier,
+				flowDivisor: this.state.flowDivisor,
+				impactDivisor: this.state.impactDivisor
+			};
+
 			this.props.updateAnimationParams(params);
 		}
 		this.setState({ isShown: !this.state.isShown });
 	};
 
-	render() {
-		const sliders = this.state.isShown ? <div> 
+	updateDragDistance = newVal => {
+		this.setState({ dragDistance: newVal });
+	};
 
-		</div> : null;
+	updateAnchorImpact = newVal => {
+		this.setState({ anchorImpact: newVal });
+	};
+
+	updateFlowMultiplier = newVal => {
+		this.setState({ flowMultiplier: newVal });
+	};
+
+	updateFlowDivisor = newVal => {
+		this.setState({ flowDivisor: newVal });
+	};
+
+	updateImpactDivisor = newVal => {
+		this.setState({ impactDivisor: newVal });
+	};
+
+	render() {
+		const sliders = this.state.isShown
+			? <div className="sliders">
+					hey hey
+					<Slider />
+					<style jsx>
+						{`
+						.sliders {
+							padding-top: 10vh;
+							height: 100vh;
+							display: flex;
+							align-items: center;
+							width: 70vw;
+							flex-direction: column;
+						}
+						`}
+					</style>
+				</div>
+			: null;
+
 		const icon = this.state.isShown ? "x" : "zap";
 
 		return (
 			<div className="container">
+				<Head>
+					<link
+						rel="stylesheet"
+						type="text/css"
+						href="/static/css/rcSlider.css"
+					/>
+				</Head>
 				<div className="button">
 					<IconButton
 						stroke={globalStyles.background}
@@ -50,7 +106,7 @@ class AnimationDebugger extends React.Component {
 						margin-left: -8px;
 						align-items: center;
 						z-index: 3000000;
-						top: 5vh;
+						top: 15vh;
 						width: 100vw;
 						background-color: ${globalStyles.background};
 					};`}
