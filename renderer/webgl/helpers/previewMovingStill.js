@@ -53,7 +53,7 @@ var renderer = new function() {
     var gl = (this.gl = canvas.getContext("webgl"));
 
     try {
-      var vertexshader = getShader(gl, vertexShader(), "vertex");
+      var vertexshader = getShader(gl, vertexShader("4.0", "1.0", "400.0", "800.0", "3.0"), "vertex");
       var fragmentshader = getShader(gl, imageFragShader, "frag");
 
       this.pictureprogram = loadProgram(gl, vertexshader, fragmentshader);

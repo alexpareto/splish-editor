@@ -1,4 +1,4 @@
-export default () => { return `
+export default (dragDistance, anchorImpact, flowMultiplier, flowDivisor, impactDivisor) => { return `
 // outgoing coordinate
 varying vec2 v_texCoord;
 varying vec2 v_texCoord2;
@@ -31,22 +31,22 @@ void main() {
   {
     dx = p1[i].x - p2[i].x;
     dy = p1[i].y - p2[i].y;
-    ptAhead.x = p1[i].x + dx * tweenAhead * 400.0;
-    ptAhead.y = p1[i].y + dy * tweenAhead * 400.0;
-    ptBehind.x = p1[i].x + dx * tweenBehind * 400.0;
-    ptBehind.y = p1[i].y + dy * tweenBehind * 400.0;
+    ptAhead.x = p1[i].x + dx * tweenAhead * ${flowMultiplier};
+    ptAhead.y = p1[i].y + dy * tweenAhead * ${flowMultiplier};
+    ptBehind.x = p1[i].x + dx * tweenBehind * ${flowMultiplier};
+    ptBehind.y = p1[i].y + dy * tweenBehind * ${flowMultiplier};
 
 
     float dragdistance = distance(p1[i], p2[i]);
     float mydistance = distance(p1[i], position);
 
-    if (mydistance < dragdistance * 4.0) 
+    if (mydistance < dragdistance * ${dragDistance}) 
     {
-      vec2 maxdistortAhead = (p1[i] - ptAhead) / 800.0;
-      vec2 maxdistortBehind = (p1[i] - ptBehind) / 800.0;
-      float normalizeddistance = mydistance / (dragdistance * 4.0);
+      vec2 maxdistortAhead = (p1[i] - ptAhead) / ${flowDivisor};
+      vec2 maxdistortBehind = (p1[i] - ptBehind) / ${flowDivisor};
+      float normalizeddistance = mydistance / (dragdistance * ${dragDistance});
 
-      float normalizedimpact = (cos(normalizeddistance*3.14159265359)+1.0)/2.0;
+      float normalizedimpact = (cos(normalizeddistance*3.14159265359)+1.0)/${impactDivisor};
       // v_texCoord -= (maxdistortAhead * normalizedimpact);
       // v_texCoord2 += (maxdistortBehind * normalizedimpact);
 
@@ -92,8 +92,8 @@ void main() {
         v_texCoord = a_texCoord;
         v_texCoord2 = a_texCoord;
       } else {
-        v_texCoord -= (maxdistortAhead * normalizedimpact * min);
-        v_texCoord2 += (maxdistortBehind * normalizedimpact * min);
+        v_texCoord -= (maxdistortAhead * normalizedimpact * min * ${anchorImpact});
+        v_texCoord2 += (maxdistortBehind * normalizedimpact * min * ${anchorImpact});
       }
 
     }

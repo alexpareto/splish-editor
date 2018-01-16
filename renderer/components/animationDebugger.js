@@ -1,6 +1,7 @@
 import React from "react";
 import * as globalStyles from "../globalStyles";
 import IconButton from "./iconButton";
+import Slider from "rc-slider";
 
 class AnimationDebugger extends React.Component {
 	constructor(props) {
@@ -11,13 +12,17 @@ class AnimationDebugger extends React.Component {
 	}
 
 	updateParams = () => {
-		let params = {};
-		this.props.updateAnimationParams(params);
+		if(this.state.isShown){
+			let params = {};
+			this.props.updateAnimationParams(params);
+		}
 		this.setState({ isShown: !this.state.isShown });
 	};
 
 	render() {
-		const sliders = this.state.isShown ? <div> hey hey </div> : null;
+		const sliders = this.state.isShown ? <div> 
+
+		</div> : null;
 		const icon = this.state.isShown ? "x" : "zap";
 
 		return (
@@ -40,11 +45,13 @@ class AnimationDebugger extends React.Component {
 					.container { 
 						position: absolute;
 						display: flex;
-						justify-content: right;
-						right: 0;
-						top: 10vh;
-						height: 45px;
-						width: 300px;
+						flex-direction: column;
+						justify-content: center;
+						margin-left: -8px;
+						align-items: center;
+						z-index: 3000000;
+						top: 5vh;
+						width: 100vw;
 						background-color: ${globalStyles.background};
 					};`}
 				</style>
