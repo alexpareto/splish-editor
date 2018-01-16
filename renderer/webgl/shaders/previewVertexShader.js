@@ -1,4 +1,4 @@
-export default (dragDistance, anchorImpact, flowMultiplier, flowDivisor, impactDivisor) => { return `
+export default (dragDistance, anchorImpact, flowMultiplier, flowDivisor, impactDivisor, numVectors, numAnchors) => { return `
 // outgoing coordinate
 varying vec2 v_texCoord;
 varying vec2 v_texCoord2;
@@ -7,11 +7,12 @@ varying vec2 v_texCoord2;
 attribute vec2 a_texCoord;  
 
 // maximum number of changes to grid
-#define MAXPOINTS 30 
+#define NUM_VECTORS ${numVectors}
+#define NUM_ANCHORS ${numAnchors}  
 
-uniform vec2 p1[MAXPOINTS];    // Where the drag started
-uniform vec2 p2[MAXPOINTS];    // Where the drag ended
-uniform vec2 anchors[MAXPOINTS];
+uniform vec2 p1[NUM_VECTORS];    // Where the drag started
+uniform vec2 p2[NUM_VECTORS];    // Where the drag ended
+uniform vec2 anchors[NUM_ANCHORS];
 uniform float tween0;
 
 void main() { 
@@ -27,7 +28,7 @@ void main() {
   float tweenAhead = tween0;
   float tweenBehind = 1.0 - tween0;
 
-  for (int i = 0; i < MAXPOINTS; i++) // loop through 
+  for (int i = 0; i < NUM_VECTORS; i++) // loop through 
   {
     dx = p1[i].x - p2[i].x;
     dy = p1[i].y - p2[i].y;
@@ -57,7 +58,7 @@ void main() {
       float min = 2.0;
       bool isDifSide;
 
-      for(int j = 0; j < MAXPOINTS; j++)
+      for(int j = 0; j < NUM_ANCHORS; j++)
       {
         float dist = distance(anchors[j], a_texCoord);
         float dy = anchors[j].y - pt1.y;

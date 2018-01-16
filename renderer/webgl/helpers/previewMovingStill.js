@@ -38,16 +38,21 @@ var renderer = new function() {
   this.texCoordBuffer; // The buffer for the texture for the picture fragment shader.
   this.texCoordBuffer2; // The buffer for the texture for the line fragment shader.
   this.tween = { val: 0.0 };
+  this.numVectors;
+  this.numAnchors;
 
   var anchors = new Array();
   var moves = new Array();
   var tMove = {};
-  var MAXMOVES = 30;
   var currentMove = 0;
 
   var resolution = 50; // Resolution of the mesh.
 
-  this.init = function(animationParams) {
+  this.init = function(animationParams, numVectors, numAnchors) {
+
+    this.numVectors = numVectors;
+    this.numAnchors = numAnchors;
+
     // Get a context from our canvas object with id = "webglcanvas".
     var canvas = document.getElementById("webglcanvas");
     var gl = (this.gl = canvas.getContext("webgl"));
@@ -60,7 +65,9 @@ var renderer = new function() {
           animationParams.anchorImpact.toFixed(5).toString(),
           animationParams.flowMultiplier.toFixed(5).toString(),
           animationParams.flowDivisor.toFixed(5).toString(),
-          animationParams.impactDivisor.toFixed(5).toString()
+          animationParams.impactDivisor.toFixed(5).toString(),
+          this.numVectors.toString(),
+          this.numAnchors.toString()
         ),
         "vertex"
       );
@@ -170,13 +177,13 @@ var renderer = new function() {
     var gl = this.gl;
 
     // Create two arrays to hold start and end point uniforms
-    var p1 = new Float32Array(MAXMOVES * 2); //x and y
-    var p2 = new Float32Array(MAXMOVES * 2); //x and y
+    var p1 = new Float32Array(this.numVectors * 2); //x and y
+    var p2 = new Float32Array(this.numVectors * 2); //x and y
 
     // Set up the arrays of points
     {
       var index = 0;
-      for (var i = 0; i < MAXMOVES; i++) {
+      for (var i = 0; i < this.numVectors; i++) {
         // Working values
         var x1, y1, x2, y2;
 
@@ -200,11 +207,11 @@ var renderer = new function() {
       }
     }
 
-    var a = new Float32Array(MAXMOVES);
+    var a = new Float32Array(this.numAnchors * 2);
     // Set up the anchor points
     {
       var index = 0;
-      for (var i = 0; i < MAXMOVES; i++) {
+      for (var i = 0; i < this.numAnchors; i++) {
         // Working values
         var x, y;
 
@@ -230,6 +237,7 @@ var renderer = new function() {
 
     gl.useProgram(this.pictureprogram);
 
+    // console.log("RENDERING WITH: ", p1, p2);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p1"), p1);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p2"), p2);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "anchors"), a);
@@ -305,7 +313,7 @@ var renderer = new function() {
 
 // Program starts here
 function main(imagePath, anchors, vectors, boundingRect, animationParams) {
-  renderer.init(animationParams); // Initialize WebGL shapes and image
+  renderer.init(animationParams, vectors.length || 1, anchors.length || 1); // Initialize WebGL shapes and image
   setImage(imagePath);
   setTimeout(() => {
     let i, move;
