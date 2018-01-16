@@ -13,6 +13,13 @@ const initialState = {
   anchors: [],
   vectors: [],
   boundingRect: {},
+  animationParams: {
+    dragDistance: 4.0,
+    anchorImpact: 1.0,
+    flowMultiplier: 20.0,
+    flowDivisor: 40.0,
+    impactDivisor: 3.0
+  }
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -49,7 +56,7 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         viewMode: "preview",
-        boundingRect,
+        boundingRect
       };
     case actionTypes.START_MOVING_STILL_EDIT_MODE:
       return {
@@ -74,6 +81,12 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         vectors
+      };
+    case actionTypes.UPDATE_ANIMATION_PARAMS:
+      let animationParams = action.params;
+      return {
+        ...state,
+        animationParams
       };
     default:
       return state;
