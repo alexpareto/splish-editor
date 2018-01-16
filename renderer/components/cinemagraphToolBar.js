@@ -1,44 +1,44 @@
-import React from "react";
-import * as globalStyles from "../globalStyles";
-import FileSelection from "./fileSelection";
-import FileSaver from "./fileSaver";
-import IconButton from "./iconButton";
-import PreviewToggle from "./previewToggle";
-import Link from "next/link";
+import React from 'react';
+import * as globalStyles from '../globalStyles';
+import FileSelection from './fileSelection';
+import FileSaver from './fileSaver';
+import IconButton from './iconButton';
+import PreviewToggle from './previewToggle';
+import Link from 'next/link';
 
 class NavBar extends React.Component {
-	render() {
-		return (
-			<div className="container">
-				<div className="flex">
-					<Link href="/mainMenu" prefetch>
-						<a>
-							<IconButton
-								stroke={globalStyles.background}
-								name="leftChevron"
-								backgroundColor={globalStyles.secondary}
-							/>
-						</a>
-					</Link>
-					<FileSelection
-						type="video"
-						filesHandler={this.props.selectCinemagraphVideo}
-					/>
-					<IconButton
-						onClick={this.props.initializeCinemagraphCanvas}
-						stroke={globalStyles.background}
-						name="crosshair"
-						backgroundColor={globalStyles.secondary}
-					/>
-					<PreviewToggle
-						viewMode={this.props.viewMode}
-						startPreview={this.props.attemptPreviewCinemagraph}
-						startEdit={this.props.startCinemagraphEditMode}
-					/>
-					<FileSaver type="video" fileHandler={this.props.renderCinemagraph} />
-				</div>
-				<style jsx>
-					{`
+  render() {
+    return (
+      <div className="container">
+        <div className="flex">
+          <Link href="/mainMenu" prefetch>
+            <a>
+              <IconButton
+                stroke={globalStyles.background}
+                name="leftChevron"
+                backgroundColor={globalStyles.secondary}
+              />
+            </a>
+          </Link>
+          <FileSelection
+            type="video"
+            filesHandler={this.props.selectCinemagraphVideo}
+          />
+          <IconButton
+            onClick={this.props.initializeCinemagraphCanvas}
+            stroke={globalStyles.background}
+            name="crosshair"
+            backgroundColor={globalStyles.secondary}
+          />
+          <PreviewToggle
+            viewMode={this.props.viewMode}
+            startPreview={this.props.attemptPreviewCinemagraph}
+            startEdit={this.props.startCinemagraphEditMode}
+          />
+          <FileSaver type="video" fileHandler={this.props.renderCinemagraph} />
+        </div>
+        <style jsx>
+          {`
 					.flex {
 						display:flex;
 						align-items: center;
@@ -56,10 +56,10 @@ class NavBar extends React.Component {
 						border-bottom: 1px solid ${globalStyles.primary};
 						background-color: ${globalStyles.background};
 					};`}
-				</style>
-			</div>
-		);
-	}
+        </style>
+      </div>
+    );
+  }
 }
 
 export default NavBar;

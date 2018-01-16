@@ -1,9 +1,9 @@
-import vertexShader from "../shaders/previewVertexShader";
-import imageFragShader from "../shaders/imageFragShader";
-import TWEEN from "@tweenjs/tween.js";
-import fs from "fs";
+import vertexShader from '../shaders/previewVertexShader';
+import imageFragShader from '../shaders/imageFragShader';
+import TWEEN from '@tweenjs/tween.js';
+import fs from 'fs';
 
-("use strict");
+('use strict');
 
 // Point object - converts incoming values to a -1 to 1 range).
 function Point(x, y) {
@@ -49,12 +49,12 @@ var renderer = new function() {
 
   this.init = function() {
     // Get a context from our canvas object with id = "webglcanvas".
-    var canvas = document.getElementById("webglcanvas");
-    var gl = (this.gl = canvas.getContext("webgl"));
+    var canvas = document.getElementById('webglcanvas');
+    var gl = (this.gl = canvas.getContext('webgl'));
 
     try {
-      var vertexshader = getShader(gl, vertexShader, "vertex");
-      var fragmentshader = getShader(gl, imageFragShader, "frag");
+      var vertexshader = getShader(gl, vertexShader, 'vertex');
+      var fragmentshader = getShader(gl, imageFragShader, 'frag');
 
       this.pictureprogram = loadProgram(gl, vertexshader, fragmentshader);
       gl.useProgram(this.pictureprogram);
@@ -62,7 +62,7 @@ var renderer = new function() {
       // Look up where the vertex data needs to go.
       this.texCoordLocation = gl.getAttribLocation(
         this.pictureprogram,
-        "a_texCoord"
+        'a_texCoord',
       );
 
       // Provide texture coordinates for the rectangle.
@@ -76,13 +76,13 @@ var renderer = new function() {
       // Set up uniforms variables (image).
       this.pictureprogram.u_image = gl.getUniformLocation(
         this.pictureprogram,
-        "u_image"
+        'u_image',
       );
 
       // Set the texture to use.
       gl.uniform1i(this.pictureprogram.u_image, 0);
     } catch (e) {
-      console.log("ERROR MAKING SHADERS: ", e);
+      console.log('ERROR MAKING SHADERS: ', e);
       return;
     }
   };
@@ -108,9 +108,9 @@ var renderer = new function() {
   // This function does the heavy lifting of creating the texture from the image.
   this.loadImage2 = function(image) {
     // Convert the image to a square image via the temporary 2d canvas.
-    var canvas = document.getElementById("2dcanvas");
-    var ctx = canvas.getContext("2d");
-    var canvHeight = document.getElementById("2dcanvas").height;
+    var canvas = document.getElementById('2dcanvas');
+    var ctx = canvas.getContext('2d');
+    var canvHeight = document.getElementById('2dcanvas').height;
 
     var x = 0;
     var y = 0;
@@ -220,19 +220,16 @@ var renderer = new function() {
 
     gl.useProgram(this.pictureprogram);
 
-    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p1"), p1);
-    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, "p2"), p2);
-    gl.uniform2fv(
-      gl.getUniformLocation(this.pictureprogram, "anchors"),
-      a
+    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'p1'), p1);
+    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'p2'), p2);
+    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'anchors'), a);
+    gl.uniform1f(
+      gl.getUniformLocation(this.pictureprogram, 'tween0'),
+      this.tween.val,
     );
     gl.uniform1f(
-      gl.getUniformLocation(this.pictureprogram, "tween0"),
-      this.tween.val
-    );
-    gl.uniform1f(
-      gl.getUniformLocation(this.pictureprogram, "tween1"),
-      this.tween.val
+      gl.getUniformLocation(this.pictureprogram, 'tween1'),
+      this.tween.val,
     );
 
     gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
@@ -243,7 +240,7 @@ var renderer = new function() {
   };
 
   this.newMove = function(
-    point // Where the warp starts (-1 to 1 range)
+    point, // Where the warp starts (-1 to 1 range)
   ) {
     var move = new Move(point);
     // Adds move to beginning of moves array (pushes onto array)
@@ -252,15 +249,13 @@ var renderer = new function() {
     return move;
   };
 
-  this.newAnchor = function(
-    point
-  ) {
+  this.newAnchor = function(point) {
     point.x = (point.x + 1.0) / 2.0;
     point.y = (point.y + 1.0) / 2.0;
 
     anchors.unshift(point);
     return point;
-  }
+  };
 
   function createImageGrid() {
     var q = 0.000000001;
@@ -310,14 +305,14 @@ function main(imagePath, anchors, vectors, boundingRect) {
           vectors[i][0].x,
           vectors[i][0].y,
           boundingRect.width,
-          boundingRect.height
-        )
+          boundingRect.height,
+        ),
       );
       move.point2 = normalizedPoint(
         vectors[i][1].x,
         vectors[i][1].y,
         boundingRect.width,
-        boundingRect.height
+        boundingRect.height,
       );
     }
 
@@ -328,7 +323,7 @@ function main(imagePath, anchors, vectors, boundingRect) {
           anchors[i].y,
           boundingRect.width,
           boundingRect.height,
-        )
+        ),
       );
     }
 
@@ -371,9 +366,9 @@ function getShader(gl, str, type) {
 
   // Create shaders based on the type we set
   //   note: these types are commonly used, but not required
-  if (type == "frag") {
+  if (type == 'frag') {
     shader = gl.createShader(gl.FRAGMENT_SHADER);
-  } else if (type == "vertex") {
+  } else if (type == 'vertex') {
     shader = gl.createShader(gl.VERTEX_SHADER);
   } else {
     return null;
@@ -384,7 +379,7 @@ function getShader(gl, str, type) {
 
   // Check the compile status, return an error if failed
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.log("SHADER FAILED TO COMPILE: ", gl.getShaderInfoLog(shader));
+    console.log('SHADER FAILED TO COMPILE: ', gl.getShaderInfoLog(shader));
     return null;
   }
 
@@ -407,7 +402,7 @@ function loadProgram(gl, vertexShader, fragmentShader) {
   if (!linked) {
     // An error occurred while linking
     var lastError = gl.getProgramInfoLog(program);
-    console.warn("Error in program linking:" + lastError);
+    console.warn('Error in program linking:' + lastError);
 
     gl.deleteProgram(program);
     return null;
@@ -418,11 +413,11 @@ function loadProgram(gl, vertexShader, fragmentShader) {
 }
 
 function setImage(imagePath) {
-  imagePath = imagePath.split("file://")[1];
+  imagePath = imagePath.split('file://')[1];
 
   var bitmap = fs.readFileSync(imagePath);
   const base64str = `data:image/jpeg;base64,${new Buffer(bitmap).toString(
-    "base64"
+    'base64',
   )}`;
 
   renderer.loadImageX(base64str);
