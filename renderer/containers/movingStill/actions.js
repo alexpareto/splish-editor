@@ -9,8 +9,7 @@ export const actionTypes = {
 	SELECT_ANCHOR_TOOL: "SELECT_ANCHOR_TOOL",
 	RENDER_MOVING_STILL: "RENDER_MOVING_STILL",
 	ADD_ANCHOR: "ADD_ANCHOR",
-	ADD_VECTOR: "ADD_VECTOR",
-	UPDATE_ANIMATION_PARAMS: "UPDATE_ANIMATION_PARAMS",
+	ADD_VECTOR: "ADD_VECTOR"
 };
 
 // ACTIONS
@@ -49,7 +48,3 @@ export const addAnchor = anchor => {
 export const addVector = vector => {
 	return { type: actionTypes.ADD_VECTOR, vector };
 };
-
-export const updateAnimationParams = params => {
-	return { type: actionTypes.UPDATE_ANIMATION_PARAMS, params };
-}
