@@ -57,7 +57,7 @@ void main() {
 
     float mydistanceline = distance(interceptPoint, position);
 
-    float mydistance = (mydistancePoint*19.0 + mydistanceline) / 20.0;
+    float mydistance = (mydistancePoint*2.0 + mydistanceline) / 3.0;
 
     if (mydistance < dragdistance * ${dragDistance}) 
     {
