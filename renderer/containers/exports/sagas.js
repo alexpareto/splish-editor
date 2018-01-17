@@ -48,7 +48,8 @@ function* uploadExport(action) {
       );
     }
     // nice all is well
-    yield put(Actions.uploadExportSuccess());
+    const verifyWithDbJson = yield verifyWithDbRes.json();
+    yield put(Actions.uploadExportSuccess(verifyWithDbJson));
     yield put(Actions.getExportsRequest());
   } catch (e) {
     console.log(e);
