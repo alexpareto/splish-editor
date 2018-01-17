@@ -65,7 +65,7 @@ class Exports extends React.Component {
             .holder {
               display: flex;
               flex-direction: column;
-              overflow: scroll;
+              overflow: auto;
             }
           `}
         </style>
