@@ -41,6 +41,11 @@ class Exports extends React.Component {
   render() {
     return (
       <div className="holder">
+        <div>
+          <Link href="/mainMenu" prefetch>
+            <a>Back to main menu</a>
+          </Link>
+        </div>
         <div>Upload some cool stuff</div>
         <input
           type="file"
