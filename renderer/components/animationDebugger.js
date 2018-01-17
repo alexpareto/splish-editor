@@ -40,14 +40,6 @@ class AnimationDebugger extends React.Component {
     this.setState({ anchorImpact: newVal });
   };
 
-  updateFlowMultiplier = newVal => {
-    this.setState({ flowMultiplier: newVal });
-  };
-
-  updateFlowDivisor = newVal => {
-    this.setState({ flowDivisor: newVal });
-  };
-
   updateImpactDivisor = newVal => {
     this.setState({ impactDivisor: newVal });
   };
@@ -60,44 +52,25 @@ class AnimationDebugger extends React.Component {
         <Slider
           min={0.0}
           step={0.5}
-          max={200.0}
+          max={500.0}
           defaultValue={this.props.animationParams.dragDistance}
           onChange={this.updateDragDistance}
         />
-        <span>Anchor Impact:</span>
+        <span>Anchor Impact Multiplier:</span>
         {this.state.anchorImpact}
         <Slider
-          min={0.0}
-          step={0.001}
-          max={20.0}
+          min={0.5}
+          step={0.1}
+          max={10.0}
           defaultValue={this.props.animationParams.anchorImpact}
           onChange={this.updateAnchorImpact}
         />
-        <span> Flow Multiplier: </span>
-        {this.state.flowMultiplier}
+        <span>Impact Divisor:</span>
+        {this.state.impactDivisor}
         <Slider
           min={0.0}
           step={0.5}
-          max={3000.0}
-          defaultValue={this.props.animationParams.flowMultiplier}
-          onChange={this.updateFlowMultiplier}
-        />
-        <span>Flow Divisor: </span>
-        {this.state.flowDivisor}
-        <Slider
-          min={0.0}
-          step={1.0}
-          max={6000.0}
-          defaultValue={this.props.animationParams.flowDivisor}
-          onChange={this.updateFlowDivisor}
-        />
-        <span>Impact Divisor:</span>
-        {this.state.impactDivisor}
-
-        <Slider
-          min={0.0}
-          step={0.001}
-          max={30.0}
+          max={10.0}
           defaultValue={this.props.animationParams.impactDivisor}
           onChange={this.updateImpactDivisor}
         />

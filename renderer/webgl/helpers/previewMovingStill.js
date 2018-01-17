@@ -62,8 +62,6 @@ var renderer = new function() {
         vertexShader(
           animationParams.dragDistance.toFixed(5).toString(),
           animationParams.anchorImpact.toFixed(5).toString(),
-          animationParams.flowMultiplier.toFixed(5).toString(),
-          animationParams.flowDivisor.toFixed(5).toString(),
           animationParams.impactDivisor.toFixed(5).toString(),
           this.numVectors.toString(),
           this.numAnchors.toString(),
@@ -135,18 +133,6 @@ var renderer = new function() {
     var yy = canvHeight;
 
     ctx.clearRect(0, 0, canvWidth, canvHeight);
-    // If image isn't square, adjust width, height, and origin so it's centered.
-    // if (image.width < image.height) {
-    //   // Change origin and dimensions if the image isn't square.
-    //   // Change x, xx
-    //   xx = image.width / image.height * canvHeight;
-    //   x = (canvHeight - xx) / 2;
-    // }
-    // if (image.width > image.height) {
-    //   // Change y, yy
-    //   yy = image.height / image.width * canvHeight;
-    //   y = (canvHeight - yy) / 2;
-    // }
 
     // Put the image on the canvas, scaled using xx & yy.
     ctx.drawImage(image, 0, 0, image.width, image.height, x, y, xx, yy);
@@ -312,7 +298,7 @@ var renderer = new function() {
 
 // Program starts here
 function main(imagePath, anchors, vectors, boundingRect, animationParams) {
-  renderer.init(animationParams, vectors.length || 1, anchors.length || 1); // Initialize WebGL shapes and image
+  renderer.init(animationParams, vectors.length + 1, anchors.length + 1); // Initialize WebGL shapes and image
   setImage(imagePath);
   setTimeout(() => {
     let i, move;
@@ -369,10 +355,6 @@ function normalizedPoint(x, y, width, height) {
   y = (1 - y / height) * 2 - 1;
 
   return new Point(x, y);
-}
-
-function setVec2(id, a, b) {
-  gl.uniform2f(gl.getUniformLocation(program, id), a, b);
 }
 
 // Loads a shader from a script tag

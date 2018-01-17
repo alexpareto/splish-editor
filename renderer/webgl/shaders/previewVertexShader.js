@@ -1,8 +1,6 @@
 export default (
   dragDistance,
   anchorImpact,
-  flowMultiplier,
-  flowDivisor,
   impactDivisor,
   numVectors,
   numAnchors,
@@ -37,37 +35,46 @@ void main() {
   float tweenAhead = tween0;
   float tweenBehind = 1.0 - tween0;
 
-  for (int i = 0; i < NUM_VECTORS; i++) // loop through 
+  for (int i = 0; i < NUM_VECTORS - 1; i++) // loop through 
   {
     dx = p1[i].x - p2[i].x;
     dy = p1[i].y - p2[i].y;
-    ptAhead.x = p1[i].x + dx * tweenAhead * ${flowMultiplier};
-    ptAhead.y = p1[i].y + dy * tweenAhead * ${flowMultiplier};
-    ptBehind.x = p1[i].x + dx * tweenBehind * ${flowMultiplier};
-    ptBehind.y = p1[i].y + dy * tweenBehind * ${flowMultiplier};
+    ptAhead.x = p1[i].x + dx * tweenAhead;
+    ptAhead.y = p1[i].y + dy * tweenAhead;
+    ptBehind.x = p1[i].x + dx * tweenBehind;
+    ptBehind.y = p1[i].y + dy * tweenBehind;
 
 
     float dragdistance = distance(p1[i], p2[i]);
-    float mydistance = distance(p1[i], position);
+    float mydistancePoint = distance(p1[i], position);
+
+    float vectorSlope = (p2[i].y - p1[i].y) / (p2[i].x - p1[i].x);
+    float vectorIntercept = (p1[i].y - vectorSlope*p1[i].x);
+    float normalIntercept = (position.y - (1.0/vectorSlope)*position.x);
+    vec2 interceptPoint;
+    interceptPoint.x = (vectorIntercept - normalIntercept) / (1.0/vectorSlope - vectorSlope);
+    interceptPoint.y = interceptPoint.x * vectorSlope + vectorIntercept;
+
+    float mydistanceline = distance(interceptPoint, position);
+
+    float mydistance = (mydistancePoint*19.0 + mydistanceline) / 20.0;
 
     if (mydistance < dragdistance * ${dragDistance}) 
     {
-      vec2 maxdistortAhead = (p1[i] - ptAhead) / ${flowDivisor};
-      vec2 maxdistortBehind = (p1[i] - ptBehind) / ${flowDivisor};
+      vec2 maxdistortAhead = (p1[i] - ptAhead);
+      vec2 maxdistortBehind = (p1[i] - ptBehind);
       float normalizeddistance = mydistance / (dragdistance * ${dragDistance});
 
       float normalizedimpact = (cos(normalizeddistance*3.14159265359)+1.0)/${impactDivisor};
-      // v_texCoord -= (maxdistortAhead * normalizedimpact);
-      // v_texCoord2 += (maxdistortBehind * normalizedimpact);
 
       // draw a line through each anchor perpendicular to the vector point
       // normalize impact based off of distance to that line
       vec2 pt1 = (p1[i] + 1.0) / 2.0;
       vec2 intersect;
-      float min = 2.0;
+      float min = 1.0 / ${anchorImpact};
       bool isDifSide;
 
-      for(int j = 0; j < NUM_ANCHORS; j++)
+      for(int j = 0; j < NUM_ANCHORS - 1; j++)
       {
         float dist = distance(anchors[j], a_texCoord);
         float dy = anchors[j].y - pt1.y;

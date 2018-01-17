@@ -15,10 +15,8 @@ const initialState = {
   boundingRect: {},
   animationParams: {
     dragDistance: 4.0,
-    anchorImpact: 1.0,
-    flowMultiplier: 20.0,
-    flowDivisor: 40.0,
-    impactDivisor: 3.0,
+    anchorImpact: 2.5,
+    impactDivisor: 4.0,
   },
 };
 
@@ -30,6 +28,8 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         imgPath,
+        anchors: [],
+        vectors: [],
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       const img = document.getElementById('movingStillImage');
