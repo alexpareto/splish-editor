@@ -4,7 +4,7 @@ export const call = (endpoint, method, body = null, context = {}) => {
   let headers = {
     ContentType: 'multipart/form-data',
   };
-  if (token) {
+  if (token && endpoint !== 'auth/login' && endpoint !== 'auth/sign-up') {
     headers = {
       ...headers,
       Authorization: 'Token ' + token,
@@ -18,5 +18,5 @@ export const call = (endpoint, method, body = null, context = {}) => {
     credentials: 'include',
   };
 
-  return fetch('http://127.0.0.1:8000/api/0.1/' + endpoint, options);
+  return fetch('http://dev-api.splish.io/api/0.1/' + endpoint, options);
 };
