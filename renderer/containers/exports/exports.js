@@ -9,11 +9,8 @@ import redirect from '../../lib/redirect.js';
 import * as Actions from './actions.js';
 
 class Exports extends React.Component {
-  async componentDidMount() {
-    const data = await checkLoggedIn();
-    if (!data) {
-      Router.push('/login');
-    }
+  async getInitialProps(ctx) {
+    ctx.store.dispatch(Actions.getExportsRequest());
   }
 
   constructor(props) {
@@ -22,29 +19,67 @@ class Exports extends React.Component {
     this.state = {};
   }
 
+  async componentDidMount() {
+    const data = await checkLoggedIn();
+    if (!data) {
+      Router.push('/login');
+    }
+    this.props.getExports();
+
+    //this.getExportInterval = setInterval(this.props.getExports, 3000);
+  }
+
+  componentWillUnmount() {
+    //clearInterval(this.getExportInterval);
+  }
+
+  handleInputChange = files => {
+    console.log(files);
+    this.props.uploadExport(files[0]);
+  };
+
   render() {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-        }}
-      >
-        <div>Upload some cool shit man!</div>
+      <div className="holder">
+        <div>Upload some cool stuff</div>
+        <input
+          type="file"
+          onChange={e => this.handleInputChange(e.target.files)}
+        />
+        {this.props.exports.map(exportObject => {
+          return (
+            <div key={exportObject.id}>
+              <video autoPlay="true" loop="true" height="200px">
+                <source src={exportObject.video_url} />
+              </video>
+            </div>
+          );
+        })}
+        <style jsx>
+          {`
+            .holder {
+              display: flex;
+              flex-direction: column;
+              overflow: scroll;
+            }
+          `}
+        </style>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    exports: state.exports.exports,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    uploadExport: file => dispatch(Actions.uploadExportRequest(file)),
+    getExports: () => dispatch(Actions.getExportsRequest()),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Exports);
