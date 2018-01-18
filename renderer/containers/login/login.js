@@ -5,8 +5,9 @@ import Router from 'next/router';
 import Logo from '../../components/logo.js';
 import checkLoggedIn from '../../lib/checkLoggedIn.js';
 import redirect from '../../lib/redirect.js';
-
 import * as Actions from './actions.js';
+
+const appVersion = window.require('electron').remote.app.getVersion();
 
 class Login extends React.Component {
   async componentDidMount() {
@@ -155,7 +156,7 @@ class Login extends React.Component {
         }}
       >
         <Logo size={150} />
-        <div>Version 0.2.1</div>
+        <div>{appVersion}</div>
         {this.renderLogin()}
         {this.renderSignUp()}
         {this.renderError()}
