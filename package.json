@@ -1,6 +1,6 @@
 {
   "name": "splish-desktop",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Desktop Micro-Video Editor",
   "main": "main/main.js",
   "scripts": {
@@ -65,7 +65,8 @@
   "build": {
     "appId": "io.splish.desktop",
     "mac": {
-      "category": "images"
+      "category": "public.app-category.video",
+      "type": "distribution"
     },
     "files": ["**/*", "!renderer", "renderer/out"],
     "publish": {

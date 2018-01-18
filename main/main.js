@@ -6,8 +6,9 @@ const { resolve } = require('app-root-path');
 // Module to control application life.
 const app = electron.app;
 
-// auto update module
+// auto update modules
 const autoUpdater = electron.autoUpdater;
+const dialog = electron.dialog;
 
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
@@ -46,7 +47,7 @@ function createWindow() {
 
   // check for updates on start
   if (!isDev) {
-    const server = 'https://desktop-update.splish.io/';
+    const server = 'https://desktop-update.splish.io';
     const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
     autoUpdater.setFeedURL(feed);
     setInterval(() => {

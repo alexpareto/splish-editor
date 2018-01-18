@@ -50,4 +50,4 @@ This will create a bundle for the application and push the binaries as a new rel
 
 Before users recieve a notifcation with an update you must go to the [releases page](https://github.com/barooapp/splish-desktop/releases) and publish the release. Our update server polls about every 15 minutes. Users will recieve a notification after our update server updates.
 
-You can view our update server [here](https://desktop-update.splish.io/).
+You can view our update server [here](https://desktop-update.splish.io/). It's built on [hazel](https://github.com/zeit/hazel).
