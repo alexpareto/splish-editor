@@ -43,17 +43,7 @@ function createWindow() {
   mainWindow.loadURL(entry);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
-
-  // check for updates on start
-  if (!isDev) {
-    const server = 'https://desktop-update.splish.io';
-    const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
-    autoUpdater.setFeedURL(feed);
-    setInterval(() => {
-      autoUpdater.checkForUpdates();
-    }, 60000);
-  }
+  //mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
@@ -82,6 +72,17 @@ autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
 autoUpdater.on('error', message => {
   console.error('There was a problem updating the application');
   console.error(message);
+
+  // TODO: HANDLE THIS FOR PRODUCTION
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Ok'],
+    title: 'There was a problem updating the application',
+    message: 'Update Error',
+    detail: '' + message,
+  };
+
+  dialog.showMessageBox(dialogOpts, response => {});
 });
 
 // This method will be called when Electron has finished
@@ -90,6 +91,7 @@ autoUpdater.on('error', message => {
 app.on('ready', async () => {
   await prepareNext('./renderer');
   createWindow();
+  listenForUpdates();
 });
 
 // Quit when all windows are closed.
@@ -109,5 +111,14 @@ app.on('activate', function() {
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+// check for updates on start
+function listenForUpdates() {
+  if (!isDev) {
+    const server = 'https://desktop-update.splish.io';
+    const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
+    autoUpdater.setFeedURL(feed);
+    setInterval(() => {
+      autoUpdater.checkForUpdates();
+    }, 60000);
+  }
+}
