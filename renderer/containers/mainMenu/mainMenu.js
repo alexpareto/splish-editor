@@ -54,6 +54,11 @@ class MainMenu extends React.Component {
             <a>Create new Moving Still</a>
           </Link>
         </div>
+        <div>
+          <Link href="/exports" prefetch>
+            <a>View your exports</a>
+          </Link>
+        </div>
         <button onClick={this.logout}>Logout</button>
       </div>
     );
