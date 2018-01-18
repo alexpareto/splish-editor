@@ -24,6 +24,7 @@
     "electron": "~1.7.8",
     "electron-builder": "^19.54.0",
     "electron-publisher-s3": "^19.54.0",
+    "electron-rebuild": "^1.7.3",
     "eslint": "^4.15.0",
     "eslint-config-fbjs": "^2.0.1",
     "eslint-plugin-babel": "^4.1.2",
