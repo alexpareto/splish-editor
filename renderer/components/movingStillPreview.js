@@ -1,27 +1,28 @@
 import React from 'react';
 import * as globalStyles from '../globalStyles';
-import preview from '../webgl/helpers/previewMovingStill';
+import Preview from '../webgl/helpers/previewMovingStill';
 import AnimationDebugger from './animationDebugger';
 
 class MovingStillPreview extends React.Component {
   componentDidMount() {
-    preview(
+    this.preview = new Preview(
       this.props.imgSrc,
       this.props.anchors,
       this.props.vectors,
       this.props.boundingRect,
       this.props.animationParams,
     );
+    this.preview.start();
   }
 
   componentWillReceiveProps(props) {
-    preview(
-      props.imgSrc,
-      props.anchors,
-      props.vectors,
-      props.boundingRect,
-      props.animationParams,
-    );
+    // preview(
+    //   props.imgSrc,
+    //   props.anchors,
+    //   props.vectors,
+    //   props.boundingRect,
+    //   props.animationParams,
+    // );
   }
 
   render() {

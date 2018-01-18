@@ -11,7 +11,8 @@ class Preview {
     this.anchors = anchors;
     this.vectors = vectors;
     this.boundingRect = boundingRect;
-    this.animationParams = animiationParams;
+    this.animationParams = animationParams;
+    this.duration = 3000;
 
     this.gl;
     this.texCoordLocation; // Location of the texture for the picture fragment shader.
@@ -38,9 +39,9 @@ class Preview {
       let vertexshader = getShader(
         gl,
         vertexShader(
-          animationParams.dragDistance.toFixed(5).toString(),
-          animationParams.anchorImpact.toFixed(5).toString(),
-          animationParams.impactDivisor.toFixed(5).toString(),
+          this.animationParams.dragDistance.toFixed(5).toString(),
+          this.animationParams.anchorImpact.toFixed(5).toString(),
+          this.animationParams.impactDivisor.toFixed(5).toString(),
           this.numVectors.toString(),
           this.numAnchors.toString(),
         ),
@@ -62,7 +63,7 @@ class Preview {
       gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);
 
       // createImageGrid sets up the vector array itself
-      gl.bufferData(gl.ARRAY_BUFFER, createImageGrid(), gl.STATIC_DRAW); // Fill buffer data
+      gl.bufferData(gl.ARRAY_BUFFER, this.createImageGrid(), gl.STATIC_DRAW); // Fill buffer data
       gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(this.texCoordLocation);
       // Set up uniforms variables (image).
@@ -79,17 +80,21 @@ class Preview {
     }
 
     // normalize vectors and anchors
-    let i, vector, anchor, normalizedVectors, normalizedAnchors;
+    let i,
+      vector = {},
+      anchor = {},
+      normalizedVectors = [],
+      normalizedAnchors = [];
 
     for (i in this.vectors) {
-      vector.point1 = normalizedPoint(
+      vector.point1 = this.normalizedPoint(
         this.vectors[i][0].x,
         this.vectors[i][0].y,
         this.boundingRect.width,
         this.boundingRect.height,
       );
 
-      vector.point2 = normalizedPoint(
+      vector.point2 = this.normalizedPoint(
         this.vectors[i][1].x,
         this.vectors[i][1].y,
         this.boundingRect.width,
@@ -99,18 +104,25 @@ class Preview {
       normalizedVectors.push(vector);
     }
 
-    for (i in anchors) {
-      anchor = normalizedPoint(
-        anchors[i].x,
-        anchors[i].y,
-        boundingRect.width,
-        boundingRect.height,
+    for (i in this.anchors) {
+      anchor = this.normalizedPoint(
+        this.anchors[i].x,
+        this.anchors[i].y,
+        this.boundingRect.width,
+        this.boundingRect.height,
       );
-    }
-  };
 
-  start = () => {
-    startPreview();
+      // texture space goes from 0 - 1 not -1 - 1
+      anchor.x = (anchor.x + 1.0) / 2.0;
+      anchor.y = (anchor.y + 1.0) / 2.0;
+
+      normalizedAnchors.push(anchor);
+    }
+
+    this.vectors = normalizedVectors;
+    this.anchors = normalizedAnchors;
+
+    this.setImage(this.imagePath);
   };
 
   boundedPoint = (x, y) => {
@@ -124,6 +136,7 @@ class Preview {
 
   createImageGrid = () => {
     var q = 0.000000001;
+    const resolution = this.resolution;
 
     var r = (1 - q * 2) / resolution;
     //2 numbers per coord; three coords per triangle; 2 triagles per square; resolution * resolution squares.
@@ -162,7 +175,7 @@ class Preview {
   loadImageX = dataURL => {
     var image = new Image();
 
-    image.onload = function() {
+    image.onload = () => {
       this.loadImage2(image);
     };
 
@@ -171,7 +184,6 @@ class Preview {
 
   // This function does the heavy lifting of creating the texture from the image.
   loadImage2 = image => {
-    // Convert the image to a square image via the temporary 2d canvas.
     var canvas = document.getElementById('2dcanvas');
     var ctx = canvas.getContext('2d');
     var canvHeight = document.getElementById('2dcanvas').height;
@@ -210,59 +222,57 @@ class Preview {
 
   render = () => {
     var gl = this.gl;
+    const resolution = this.resolution;
 
     // Create two arrays to hold start and end point uniforms
     var p1 = new Float32Array(this.numVectors * 2); //x and y
     var p2 = new Float32Array(this.numVectors * 2); //x and y
 
-    // Set up the arrays of points
-    {
-      var index = 0;
-      for (var i = 0; i < this.numVectors; i++) {
-        // Working values
-        var x1, y1, x2, y2;
+    var index = 0;
+    for (var i = 0; i < this.numVectors; i++) {
+      // Working values
+      var x1, y1, x2, y2;
 
-        if (moves[i]) {
-          x1 = moves[i].point1.x;
-          y1 = moves[i].point1.y;
-          x2 = moves[i].point2.x;
-          y2 = moves[i].point2.y;
-        } else {
-          x1 = 1;
-          y1 = 1;
-          x2 = 0.9999999;
-          y2 = 0.9999999;
-        }
-
-        p1[index] = x1;
-        p1[index + 1] = y1;
-        p2[index] = x2;
-        p2[index + 1] = y2;
-        index += 2;
+      if (this.vectors[i]) {
+        x1 = this.vectors[i].point1.x;
+        y1 = this.vectors[i].point1.y;
+        x2 = this.vectors[i].point2.x;
+        y2 = this.vectors[i].point2.y;
+      } else {
+        x1 = 1;
+        y1 = 1;
+        x2 = 0.9999999;
+        y2 = 0.9999999;
       }
+
+      p1[index] = x1;
+      p1[index + 1] = y1;
+      p2[index] = x2;
+      p2[index + 1] = y2;
+      index += 2;
     }
 
     var a = new Float32Array(this.numAnchors * 2);
-    // Set up the anchor points
-    {
-      var index = 0;
-      for (var i = 0; i < this.numAnchors; i++) {
-        // Working values
-        var x, y;
 
-        if (anchors[i]) {
-          x = anchors[i].x;
-          y = anchors[i].y;
-        } else {
-          x = 1.0;
-          y = 1.0;
-        }
+    var index = 0;
+    for (var i = 0; i < this.numAnchors; i++) {
+      // Working values
+      var x, y;
 
-        a[index] = x;
-        a[index + 1] = y;
-        index += 2;
+      if (this.anchors[i]) {
+        x = this.anchors[i].x;
+        y = this.anchors[i].y;
+      } else {
+        x = 1.0;
+        y = 1.0;
       }
+
+      a[index] = x;
+      a[index + 1] = y;
+      index += 2;
     }
+
+    console.log('RENDERING WITH POINTS: ', p1, p2);
 
     //  Clear color buffer and set it to light gray
     gl.clearColor(1.0, 1.0, 1.0, 0.5);
@@ -292,27 +302,28 @@ class Preview {
     gl.drawArrays(gl.TRIANGLES, 0, resolution * resolution * 2 * 3);
   };
 
-  startPreview = () => {
-    renderer.tween = { val: 0.0 };
+  start = () => {
+    this.tween = { val: 0.0 };
+
     TWEEN.removeAll();
-    let tween = new TWEEN.Tween(renderer.tween)
-      .to({ val: 1.0 }, 500)
+    let tween = new TWEEN.Tween(this.tween)
+      .to({ val: 1.0 }, this.duration)
       .repeat(101)
       .start();
-    window.requestAnimationFrame(renderAnimationFrame);
+    window.requestAnimationFrame(this.renderAnimationFrame);
   };
 
   renderAnimationFrame = time => {
     TWEEN.update(time);
     this.render();
-    window.requestAnimationFrame(renderAnimationFrame);
+    window.requestAnimationFrame(this.renderAnimationFrame);
   };
 
   normalizedPoint = (x, y, width, height) => {
     x = x / width * 2 - 1;
     y = (1 - y / height) * 2 - 1;
 
-    return new Point(x, y);
+    return { x, y };
   };
 
   setImage = imagePath => {
@@ -323,7 +334,7 @@ class Preview {
       'base64',
     )}`;
 
-    renderer.loadImageX(base64str);
+    this.loadImageX(base64str);
   };
 }
 

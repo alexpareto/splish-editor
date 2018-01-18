@@ -28,8 +28,6 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         imgPath,
-        anchors: [],
-        vectors: [],
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       const img = document.getElementById('movingStillImage');
