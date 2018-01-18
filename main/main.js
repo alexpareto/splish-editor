@@ -1,6 +1,9 @@
 const isDev = require('electron-is-dev');
 const electron = require('electron');
 const prepareNext = require('electron-next');
+const { resolve } = require('app-root-path');
+const autoUpdater = require('electron-updater').autoUpdater;
+
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.
@@ -25,13 +28,21 @@ function createWindow() {
 
   // and load the index.html of the app.
   const devPath = 'http://localhost:8000/mainMenu';
-  const prodPath = path.resolve('renderer/out/start/index.html');
-  const entry = isDev ? devPath : 'file://' + prodPath;
+  const prodPath = url.format({
+    pathname: resolve('renderer/out/mainMenu/index.html'),
+    protocol: 'file:',
+    slashes: true,
+  });
+
+  const entry = isDev ? devPath : prodPath;
 
   mainWindow.loadURL(entry);
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+
+  // check for updates on start
+  autoUpdater.checkForUpdatesAndNotify();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
