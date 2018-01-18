@@ -24,8 +24,6 @@ class Preview {
     this.tween = 0.0;
     this.numVectors = vectors.length + 1;
     this.numAnchors = anchors.length + 1;
-    console.log('NUMVECTORS: ', this.numVectors);
-    console.log('NUMANCHORS: ', this.numAnchors);
     this.resolution = 50; // Resolution of the mesh.
 
     this.canvas = document.getElementById('webglcanvas');
@@ -83,14 +81,16 @@ class Preview {
 
     // normalize vectors and anchors
     let i,
-      vector = {},
       anchor = {},
       normalizedVectors = [],
       normalizedAnchors = [];
 
     this.setImage(this.imagePath);
+    console.log('VECTORS BEFORE: ', this.vectors);
+
     setTimeout(() => {
       for (i in this.vectors) {
+        let vector = {};
         vector.point1 = this.normalizedPoint(
           this.vectors[i][0].x,
           this.vectors[i][0].y,
@@ -105,7 +105,10 @@ class Preview {
           this.boundingRect.height,
         );
 
-        normalizedVectors.push(vector);
+        console.log();
+        console.log('VECTOR: ', vector);
+
+        normalizedVectors.unshift(vector);
       }
 
       for (i in this.anchors) {
@@ -120,13 +123,13 @@ class Preview {
         anchor.x = (anchor.x + 1.0) / 2.0;
         anchor.y = (anchor.y + 1.0) / 2.0;
 
-        normalizedAnchors.push(anchor);
+        normalizedAnchors.unshift(anchor);
       }
 
       this.vectors = normalizedVectors;
       this.anchors = normalizedAnchors;
 
-      console.log('VECTORS:', this.vectors);
+      console.log('VECTORS AFTER:', this.vectors);
       this.start();
     }, 100);
   };
