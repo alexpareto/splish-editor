@@ -22,19 +22,21 @@ class Preview {
     this.texCoordBuffer2; // The buffer for the texture for the line fragment shader.
 
     this.tween = 0.0;
-    this.numVectors = vectors.length || 1;
-    this.numAnchors = anchors.length || 1;
-
+    this.numVectors = vectors.length + 1;
+    this.numAnchors = anchors.length + 1;
+    console.log('NUMVECTORS: ', this.numVectors);
+    console.log('NUMANCHORS: ', this.numAnchors);
     this.resolution = 50; // Resolution of the mesh.
+
+    this.canvas = document.getElementById('webglcanvas');
+    this.gl = this.canvas.getContext('webgl');
 
     this.init();
   }
 
   init = () => {
-    // Get a context from our canvas object with id = "webglcanvas".
-    let canvas = document.getElementById('webglcanvas');
-    let gl = (this.gl = canvas.getContext('webgl'));
-
+    let canvas = this.canvas;
+    let gl = this.gl;
     try {
       let vertexshader = getShader(
         gl,
@@ -86,43 +88,53 @@ class Preview {
       normalizedVectors = [],
       normalizedAnchors = [];
 
-    for (i in this.vectors) {
-      vector.point1 = this.normalizedPoint(
-        this.vectors[i][0].x,
-        this.vectors[i][0].y,
-        this.boundingRect.width,
-        this.boundingRect.height,
-      );
-
-      vector.point2 = this.normalizedPoint(
-        this.vectors[i][1].x,
-        this.vectors[i][1].y,
-        this.boundingRect.width,
-        this.boundingRect.height,
-      );
-
-      normalizedVectors.push(vector);
-    }
-
-    for (i in this.anchors) {
-      anchor = this.normalizedPoint(
-        this.anchors[i].x,
-        this.anchors[i].y,
-        this.boundingRect.width,
-        this.boundingRect.height,
-      );
-
-      // texture space goes from 0 - 1 not -1 - 1
-      anchor.x = (anchor.x + 1.0) / 2.0;
-      anchor.y = (anchor.y + 1.0) / 2.0;
-
-      normalizedAnchors.push(anchor);
-    }
-
-    this.vectors = normalizedVectors;
-    this.anchors = normalizedAnchors;
-
     this.setImage(this.imagePath);
+    setTimeout(() => {
+      for (i in this.vectors) {
+        vector.point1 = this.normalizedPoint(
+          this.vectors[i][0].x,
+          this.vectors[i][0].y,
+          this.boundingRect.width,
+          this.boundingRect.height,
+        );
+
+        vector.point2 = this.normalizedPoint(
+          this.vectors[i][1].x,
+          this.vectors[i][1].y,
+          this.boundingRect.width,
+          this.boundingRect.height,
+        );
+
+        normalizedVectors.push(vector);
+      }
+
+      for (i in this.anchors) {
+        anchor = this.normalizedPoint(
+          this.anchors[i].x,
+          this.anchors[i].y,
+          this.boundingRect.width,
+          this.boundingRect.height,
+        );
+
+        // texture space goes from 0 - 1 not -1 - 1
+        anchor.x = (anchor.x + 1.0) / 2.0;
+        anchor.y = (anchor.y + 1.0) / 2.0;
+
+        normalizedAnchors.push(anchor);
+      }
+
+      this.vectors = normalizedVectors;
+      this.anchors = normalizedAnchors;
+
+      console.log('VECTORS:', this.vectors);
+      this.start();
+    }, 100);
+  };
+
+  update = (anchors, vectors) => {
+    this.anchors = anchors;
+    this.vectors = vectors;
+    this.init();
   };
 
   boundedPoint = (x, y) => {
@@ -232,7 +244,6 @@ class Preview {
     for (var i = 0; i < this.numVectors; i++) {
       // Working values
       var x1, y1, x2, y2;
-
       if (this.vectors[i]) {
         x1 = this.vectors[i].point1.x;
         y1 = this.vectors[i].point1.y;
@@ -272,8 +283,6 @@ class Preview {
       index += 2;
     }
 
-    console.log('RENDERING WITH POINTS: ', p1, p2);
-
     //  Clear color buffer and set it to light gray
     gl.clearColor(1.0, 1.0, 1.0, 0.5);
     gl.clear(this.gl.COLOR_BUFFER_BIT);
@@ -282,7 +291,6 @@ class Preview {
 
     gl.useProgram(this.pictureprogram);
 
-    // console.log("RENDERING WITH: ", p1, p2);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'p1'), p1);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'p2'), p2);
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'anchors'), a);
@@ -323,7 +331,7 @@ class Preview {
     x = x / width * 2 - 1;
     y = (1 - y / height) * 2 - 1;
 
-    return { x, y };
+    return this.boundedPoint(x, y);
   };
 
   setImage = imagePath => {

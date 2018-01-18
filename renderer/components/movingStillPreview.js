@@ -12,17 +12,10 @@ class MovingStillPreview extends React.Component {
       this.props.boundingRect,
       this.props.animationParams,
     );
-    this.preview.start();
   }
 
   componentWillReceiveProps(props) {
-    // preview(
-    //   props.imgSrc,
-    //   props.anchors,
-    //   props.vectors,
-    //   props.boundingRect,
-    //   props.animationParams,
-    // );
+    this.preview.update(this.props.anchors, this.props.vectors);
   }
 
   render() {
