@@ -2,10 +2,13 @@ const isDev = require('electron-is-dev');
 const electron = require('electron');
 const prepareNext = require('electron-next');
 const { resolve } = require('app-root-path');
-const autoUpdater = require('electron-updater').autoUpdater;
 
 // Module to control application life.
 const app = electron.app;
+
+// auto update module
+const autoUpdater = electron.autoUpdater;
+
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
@@ -42,7 +45,14 @@ function createWindow() {
   // mainWindow.webContents.openDevTools()
 
   // check for updates on start
-  autoUpdater.checkForUpdatesAndNotify();
+  if (!isDev) {
+    const server = 'https://desktop-update.splish.io/';
+    const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
+    autoUpdater.setFeedURL(feed);
+    setInterval(() => {
+      autoUpdater.checkForUpdates();
+    }, 60000);
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
@@ -52,6 +62,26 @@ function createWindow() {
     mainWindow = null;
   });
 }
+
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Application Update',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail:
+      'A new version has been downloaded. Restart the application to apply the updates.',
+  };
+
+  dialog.showMessageBox(dialogOpts, response => {
+    if (response === 0) autoUpdater.quitAndInstall();
+  });
+});
+
+autoUpdater.on('error', message => {
+  console.error('There was a problem updating the application');
+  console.error(message);
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

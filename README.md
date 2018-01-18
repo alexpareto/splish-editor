@@ -27,16 +27,27 @@ Official colors:
 | #6369D1 | <img src="https://dummyimage.com/30/6369D1/6369D1"> |
 | #EF233C | <img src="https://dummyimage.com/30/EF233C/EF233C"> |
 
-# Deployment
+# Testing Production Apps
 
-We use electron-builder for deployment and keep our deployments in an s3 bucket. Want to make a new deployment?
+If you want to generate a production .app for testing run:
 
-1. Update the version in package.json to a new value
-2. Run `yarn run dist`. This will make a distribution and upload it to s3.
-3. Done! Users will be notified of the new version.
-   _side note: you will need to have aws credentials configured to make a deployment_
+```
+yarn run pack
+```
 
-Notes on deployment:
+# Releases
 
-* When we are working on a new release (that is not public yet) it is marked in the package.json with a version-snapshot (e.g. `0.1.0-snapshot`). This indicates it is not a public release, but rather an internal release (for the future 0.1.0 public release).
-* In order to release a new real version we remove the -snapshot (e.g. `0.1.0`). Run `yarn run dist`. Then we increment the said package.json version for future development (`0.2.0-snapshot`).
+To create a release first obtain a github token from [here](https://github.com/settings/tokens/new) and make sure that it has the `repo` permission.
+
+then run:
+
+```
+export GH_TOKEN=yourtokenhere
+yarn run dist
+```
+
+This will create a bundle for the application and push the binaries as a new release to github if the version number is new (as a draft). If the version number is the same then it will update the release of that version.
+
+Before users recieve a notifcation with an update you must go to the [releases page](https://github.com/barooapp/splish-desktop/releases) and publish the release. Our update server polls about every 15 minutes. Users will recieve a notification after our update server updates.
+
+You can view our update server [here](https://desktop-update.splish.io/).
