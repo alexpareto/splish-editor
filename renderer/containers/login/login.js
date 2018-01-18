@@ -155,6 +155,7 @@ class Login extends React.Component {
         }}
       >
         <Logo size={150} />
+        <div>Version 0.2.1</div>
         {this.renderLogin()}
         {this.renderSignUp()}
         {this.renderError()}
