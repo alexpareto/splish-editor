@@ -22,6 +22,7 @@ class MovingStill extends React.Component {
           imgSrc={this.props.movingStill.imgPath}
           anchors={this.props.movingStill.anchors}
           vectors={this.props.movingStill.vectors}
+          imgDimensions={this.props.movingStill.imgDimensions}
           animationParams={this.props.movingStill.animationParams}
           updateAnimationParams={this.props.updateAnimationParams}
           boundingRect={this.props.movingStill.boundingRect}

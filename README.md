@@ -10,6 +10,15 @@ Setup:
 > yarn start # runs electron
 ```
 
+- Install ffmpeg video encoder
+
+note: its a dependency of Opencv so if opencv is installed you need to run:
+
+```
+> brew uninstall ffmpeg --ignore-dependencies
+> brew install ffmpeg --with-libvpx
+```
+
 Installing NPM Packages:
 
 ```

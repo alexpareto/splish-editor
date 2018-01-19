@@ -12,6 +12,8 @@ class MovingStillPreview extends React.Component {
       this.props.boundingRect,
       this.props.animationParams,
     );
+
+    console.log('MOUNTED WITH IMAGE DIMENSIONS: ', this.props);
   }
 
   componentWillReceiveProps(props) {
@@ -19,25 +21,42 @@ class MovingStillPreview extends React.Component {
   }
 
   render() {
-    const height =
+    let height =
       800 * this.props.boundingRect.height / this.props.boundingRect.width;
+
     return (
       <div>
+        <div
+          onClick={() => {
+            console.log('CAPTURE CLICKED');
+            this.preview.capture();
+          }}
+        >
+          CAPTURE
+        </div>
         <AnimationDebugger
           animationParams={this.props.animationParams}
           updateAnimationParams={this.props.updateAnimationParams}
         />
         <canvas
-          style={{ position: 'absolute' }}
+          style={{
+            width: '800px',
+            height: `${height}px`,
+            position: 'absolute',
+          }}
+          width={this.props.imgDimensions.width}
+          height={this.props.imgDimensions.height}
           id="webglcanvas"
-          width="800"
-          height={height}
         />
         <canvas
-          style={{ position: 'absolute' }}
+          style={{
+            width: '800px',
+            height: `${height}px`,
+            position: 'absolute',
+          }}
           id="2dcanvas"
-          width="800"
-          height={height}
+          width={this.props.imgDimensions.width}
+          height={this.props.imgDimensions.height}
         />
       </div>
     );

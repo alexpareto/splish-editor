@@ -1,9 +1,9 @@
 import vertexShader from '../shaders/previewVertexShader';
 import imageFragShader from '../shaders/imageFragShader';
-import TWEEN from '@tweenjs/tween.js';
 import fs from 'fs';
 import getShader from './getShader';
 import loadProgram from './loadProgram';
+import webmToMp4 from './webmToMp4';
 
 class Preview {
   constructor(imagePath, anchors, vectors, boundingRect, animationParams) {
@@ -12,7 +12,7 @@ class Preview {
     this.vectors = vectors;
     this.boundingRect = boundingRect;
     this.animationParams = animationParams;
-    this.duration = 3000;
+    this.duration = 3.0;
 
     this.gl;
     this.texCoordLocation; // Location of the texture for the picture fragment shader.
@@ -29,8 +29,33 @@ class Preview {
     this.canvas = document.getElementById('webglcanvas');
     this.gl = this.canvas.getContext('webgl');
 
+    this.isCapturing = false;
+    this.captureProgress = 0;
+    this.framerate = 24;
+
+    // video capturing
+    let CCapture;
+    if (window) {
+      CCapture = require('zcapture.js');
+    }
+
+    this.capturer = new CCapture({
+      format: 'webm',
+      framerate: this.framerate,
+      verbose: true,
+      display: false,
+      quality: 96,
+    });
+
     this.init();
   }
+
+  capture = () => {
+    this.captureProgress = 0;
+    this.tween = 0;
+    this.capturer.start();
+    this.isCapturing = true;
+  };
 
   init = () => {
     let canvas = this.canvas;
@@ -104,9 +129,6 @@ class Preview {
           this.boundingRect.width,
           this.boundingRect.height,
         );
-
-        console.log();
-        console.log('VECTOR: ', vector);
 
         normalizedVectors.unshift(vector);
       }
@@ -299,11 +321,11 @@ class Preview {
     gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'anchors'), a);
     gl.uniform1f(
       gl.getUniformLocation(this.pictureprogram, 'tween0'),
-      this.tween.val,
+      this.tween,
     );
     gl.uniform1f(
       gl.getUniformLocation(this.pictureprogram, 'tween1'),
-      this.tween.val,
+      this.tween,
     );
 
     gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
@@ -314,19 +336,33 @@ class Preview {
   };
 
   start = () => {
-    this.tween = { val: 0.0 };
-
-    TWEEN.removeAll();
-    let tween = new TWEEN.Tween(this.tween)
-      .to({ val: 1.0 }, this.duration)
-      .repeat(101)
-      .start();
     window.requestAnimationFrame(this.renderAnimationFrame);
   };
 
   renderAnimationFrame = time => {
-    TWEEN.update(time);
+    this.tween += 1.0 / (this.framerate * this.duration);
+
+    if (this.tween > 1.0) {
+      this.tween = 0.0;
+    }
     this.render();
+
+    this.capturer.capture(this.canvas);
+
+    if (this.isCapturing) {
+      this.captureProgress++;
+      if (this.captureProgress > this.framerate * this.duration) {
+        this.capturer.stop();
+        this.capturer
+          .save
+          // (blob) => {
+          //   webmToMp4(blob);
+          // }
+          ();
+        this.isCapturing = false;
+      }
+    }
+
     window.requestAnimationFrame(this.renderAnimationFrame);
   };
 

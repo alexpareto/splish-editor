@@ -8,6 +8,7 @@ const initialState = {
   imgPath: '',
   isInitialized: false,
   imageHeight: 0,
+  imageDimensions: {},
   currentTool: '',
   viewMode: 'edit',
   anchors: [],
@@ -35,6 +36,10 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         imageHeight,
+        imgDimensions: {
+          height: img.height,
+          width: img.width,
+        },
         isInitialized: true,
         currentTool: action.tool,
       };
