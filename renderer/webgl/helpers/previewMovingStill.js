@@ -3,7 +3,7 @@ import imageFragShader from '../shaders/imageFragShader';
 import fs from 'fs';
 import getShader from './getShader';
 import loadProgram from './loadProgram';
-import webmToMp4 from './webmToMp4';
+import tarToMp4 from './tarToMp4';
 
 class Preview {
   constructor(imagePath, anchors, vectors, boundingRect, animationParams) {
@@ -40,11 +40,10 @@ class Preview {
     }
 
     this.capturer = new CCapture({
-      format: 'webm',
-      framerate: this.framerate,
+      format: 'jpg',
       verbose: true,
       display: false,
-      quality: 96,
+      quality: 99,
     });
 
     this.init();
@@ -353,12 +352,9 @@ class Preview {
       this.captureProgress++;
       if (this.captureProgress > this.framerate * this.duration) {
         this.capturer.stop();
-        this.capturer
-          .save
-          // (blob) => {
-          //   webmToMp4(blob);
-          // }
-          ();
+        this.capturer.save(blob => {
+          tarToMp4(blob);
+        });
         this.isCapturing = false;
       }
     }

@@ -32,13 +32,21 @@ export const movingStillReducer = (state = initialState, action) => {
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       const img = document.getElementById('movingStillImage');
+
       const imageHeight = img.clientHeight;
+
+      const naturalWidth =
+        img.naturalWidth % 2 == 0 ? img.naturalWidth : img.naturalWidth + 1;
+
+      const naturalHeight =
+        img.naturalHeight % 2 == 0 ? img.naturalHeight : img.naturalHeight + 1;
+
       return {
         ...state,
         imageHeight,
         imgDimensions: {
-          height: img.height,
-          width: img.width,
+          height: naturalHeight,
+          width: naturalWidth,
         },
         isInitialized: true,
         currentTool: action.tool,
