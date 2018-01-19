@@ -6986,9 +6986,9 @@ yauzl@2.4.1:
   dependencies:
     fd-slicer "~1.0.1"
 
-zcapture.js@^0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/zcapture.js/-/zcapture.js-0.0.0.tgz#4460b126097354a639187717b7bc0e7fbfb01d4a"
+zcapture.js@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/zcapture.js/-/zcapture.js-0.0.1.tgz#6d158f9dae272f1372f80e4a502224d204b60827"
 
 zen-observable@^0.6.0:
   version "0.6.1"
