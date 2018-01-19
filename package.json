@@ -1,25 +1,30 @@
 {
   "name": "splish-desktop",
-  "version": "1.0.0",
+  "version": "0.3.0",
   "description": "Desktop Micro-Video Editor",
   "main": "main/main.js",
   "scripts": {
     "start": "electron .",
     "rebuild": "electron-rebuild -w opencv4nodejs",
     "build": "next build renderer && next export renderer",
-    "dist": "npm run build && build",
-    "precommit": "lint-staged"
+    "dist": "yarn run build && electron-builder --publish always",
+    "precommit": "lint-staged",
+    "postinstall": "electron-builder install-app-deps",
+    "pack": "yarn run build && electron-builder --dir"
   },
   "lint-staged": {
     "*.{js,json,css}": ["prettier --write", "git add"]
   },
-  "repository": "https://github.com/zdenham/splish-desktop",
+  "repository": "https://github.com/barooapp/splish-desktop",
   "keywords": ["Splish", "Micro-video", "Editor", "Moving Photos"],
   "author": "Zac Denham",
   "license": "CC0-1.0",
   "devDependencies": {
     "babel-eslint": "^8.2.1",
     "electron": "~1.7.8",
+    "electron-builder": "^19.54.0",
+    "electron-publisher-s3": "^19.54.0",
+    "electron-rebuild": "^1.7.3",
     "eslint": "^4.15.0",
     "eslint-config-fbjs": "^2.0.1",
     "eslint-plugin-babel": "^4.1.2",
@@ -34,11 +39,10 @@
   "dependencies": {
     "@tweenjs/tween.js": "^17.1.1",
     "apollo-client-preset": "^1.0.5",
+    "app-root-path": "^2.0.1",
     "d3": "^4.12.2",
-    "electron-builder": "^19.49.0",
     "electron-is-dev": "^0.3.0",
     "electron-next": "^3.1.3",
-    "electron-rebuild": "^1.6.0",
     "es6-promise": "^4.2.1",
     "graphql": "^0.12.3",
     "graphql-anywhere": "^4.1.0",
@@ -60,6 +64,16 @@
     "redux-saga": "^0.16.0"
   },
   "build": {
-    "files": ["**/*", "!renderer", "renderer/out"]
+    "appId": "io.splish.desktop",
+    "mac": {
+      "category": "public.app-category.video",
+      "type": "distribution"
+    },
+    "files": ["**/*", "!renderer", "renderer/out"],
+    "publish": {
+      "provider": "github",
+      "repo": "splish-desktop",
+      "owner": "barooapp"
+    }
   }
 }

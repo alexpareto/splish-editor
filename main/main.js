@@ -1,8 +1,15 @@
 const isDev = require('electron-is-dev');
 const electron = require('electron');
 const prepareNext = require('electron-next');
+const { resolve } = require('app-root-path');
+
 // Module to control application life.
 const app = electron.app;
+
+// auto update modules
+const autoUpdater = electron.autoUpdater;
+const dialog = electron.dialog;
+
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
@@ -25,13 +32,18 @@ function createWindow() {
 
   // and load the index.html of the app.
   const devPath = 'http://localhost:8000/mainMenu';
-  const prodPath = path.resolve('renderer/out/start/index.html');
-  const entry = isDev ? devPath : 'file://' + prodPath;
+  const prodPath = url.format({
+    pathname: resolve('renderer/out/mainMenu/index.html'),
+    protocol: 'file:',
+    slashes: true,
+  });
+
+  const entry = isDev ? devPath : prodPath;
 
   mainWindow.loadURL(entry);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
@@ -42,12 +54,44 @@ function createWindow() {
   });
 }
 
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Application Update',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail:
+      'A new version has been downloaded. Restart the application to apply the updates.',
+  };
+
+  dialog.showMessageBox(dialogOpts, response => {
+    if (response === 0) autoUpdater.quitAndInstall();
+  });
+});
+
+autoUpdater.on('error', message => {
+  console.error('There was a problem updating the application');
+  console.error(message);
+
+  // TODO: HANDLE THIS FOR PRODUCTION
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Ok'],
+    title: 'There was a problem updating the application',
+    message: 'Update Error',
+    detail: '' + message,
+  };
+
+  dialog.showMessageBox(dialogOpts, response => {});
+});
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
   await prepareNext('./renderer');
   createWindow();
+  listenForUpdates();
 });
 
 // Quit when all windows are closed.
@@ -67,5 +111,14 @@ app.on('activate', function() {
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+// check for updates on start
+function listenForUpdates() {
+  if (!isDev) {
+    const server = 'https://desktop-update.splish.io';
+    const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
+    autoUpdater.setFeedURL(feed);
+    setInterval(() => {
+      autoUpdater.checkForUpdates();
+    }, 60000);
+  }
+}
