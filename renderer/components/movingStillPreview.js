@@ -12,8 +12,6 @@ class MovingStillPreview extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log('receiving');
-
     if (this.props.display || this.props.isRendering) {
       if (this.state.hasLoaded) {
         this.preview.update(props.anchors, props.vectors);
@@ -24,8 +22,16 @@ class MovingStillPreview extends React.Component {
           this.props.vectors,
           this.props.boundingRect,
           this.props.animationParams,
+          this.props.movingStillExportComplete,
         );
       }
+    }
+
+    if (this.props.isRendering) {
+      setTimeout(() => {
+        this.preview.capture();
+      }, 500);
+      return;
     }
 
     if (!this.props.display && this.preview) {

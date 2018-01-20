@@ -110,6 +110,12 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         isRendering: true,
+        viewMode: 'edit',
+      };
+    case actionTypes.MOVING_STILL_EXPORT_COMPLETE:
+      return {
+        ...state,
+        isRendering: false,
       };
     default:
       return state;

@@ -10,6 +10,7 @@ class TarToMp4 {
     this.exportRequested = false;
     this.bufferStreamCompleted = false;
     this.exportPath = '';
+    this.exportCallback = () => {};
 
     const frameDir = './renderer/static/temp/frames';
 
@@ -23,13 +24,13 @@ class TarToMp4 {
       const bufferStream = new stream.PassThrough();
       bufferStream.end(buffer);
 
-      const stream = bufferStream.pipe(tar.extract(frameDir));
+      const streamer = bufferStream.pipe(tar.extract(frameDir));
 
-      stream.on('finish', () => {
+      streamer.on('finish', () => {
         this.bufferStreamCompleted = true;
 
         if (this.exportRequested) {
-          this.export(this.exportPath);
+          this.export(this.exportPath, this.exportCallback);
         }
       });
     };
@@ -44,17 +45,18 @@ class TarToMp4 {
   };
 
   // export to local file system
-  export = filePath => {
+  export = (filePath, callback) => {
     this.exportPath = filePath;
     this.exportRequested = true;
+    this.exportCallback = callback;
 
     if (this.bufferStreamCompleted) {
       let command = ffmpeg();
       command
         .input('./renderer/static/temp/frames/0000%03d.jpg')
-        .output(this.filePath)
-        .on('end', function() {
-          console.log('EXPORTED MP4 to: ', this.filePath);
+        .output(filePath + 'output.mp4')
+        .on('end', () => {
+          this.exportCallback();
         })
         .run();
     }

@@ -33,6 +33,7 @@ class MovingStill extends React.Component {
           updateAnimationParams={this.props.updateAnimationParams}
           boundingRect={this.props.movingStill.boundingRect}
           isRendering={this.props.movingStill.isRendering}
+          movingStillExportComplete={this.props.movingStillExportComplete}
         />
         <VectorCanvas
           display={!showPreview}
@@ -67,6 +68,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.updateAnimationParams(params)),
     startExportingMovingStill: () =>
       dispatch(Actions.startExportingMovingStill()),
+    movingStillExportComplete: () =>
+      dispatch(Actions.movingStillExportComplete()),
   };
 };
 

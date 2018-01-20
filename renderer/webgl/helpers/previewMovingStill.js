@@ -6,12 +6,20 @@ import loadProgram from './loadProgram';
 import TarToMp4 from './tarToMp4';
 
 class Preview {
-  constructor(imagePath, anchors, vectors, boundingRect, animationParams) {
+  constructor(
+    imagePath,
+    anchors,
+    vectors,
+    boundingRect,
+    animationParams,
+    exportCallback,
+  ) {
     this.imagePath = imagePath;
     this.anchors = anchors;
     this.vectors = vectors;
     this.boundingRect = boundingRect;
     this.animationParams = animationParams;
+    this.exportCallback = exportCallback;
     this.duration = 3.0;
 
     this.gl;
@@ -29,10 +37,11 @@ class Preview {
     this.canvas = document.getElementById('webglcanvas');
     this.gl = this.canvas.getContext('webgl');
 
+    //state
     this.isCapturing = false;
     this.captureProgress = 0;
     this.framerate = 24;
-    this.playRate = 60;
+    this.previewRate = 60;
     this.isPlaying = false;
 
     // video capturing
@@ -298,29 +307,33 @@ class Preview {
   };
 
   stop = () => {
+    console.log('STOPPED PREVIEW');
     this.isPlaying = false;
-    this.tween = 0;
   };
 
   renderAnimationFrame = time => {
-    this.tween += 1.0 / (this.framerate * this.duration);
+    const framerate = this.isCapturing ? this.framerate : this.previewRate;
+
+    this.tween += 1.0 / (framerate * this.duration);
 
     if (this.tween > 1.0) {
       this.tween = 0.0;
     }
+
     this.render();
 
     this.capturer.capture(this.canvas);
 
     if (this.isCapturing) {
       this.captureProgress++;
-      if (this.captureProgress > this.framerate * this.duration) {
+      if (this.captureProgress > framerate * this.duration) {
         this.capturer.stop();
         this.capturer.save(blob => {
           let ttMp4 = new TarToMp4(blob);
 
           // export mp4 to temporary storage (for now)
-          ttMp4.export('./renderer/static/temp/');
+          console.log('IN PREVIEW: ', this.exportCallback);
+          ttMp4.export('./renderer/static/temp/', this.exportCallback);
         });
         this.isCapturing = false;
       }
