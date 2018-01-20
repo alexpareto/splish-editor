@@ -160,6 +160,9 @@ class Login extends React.Component {
         {this.renderLogin()}
         {this.renderSignUp()}
         {this.renderError()}
+        <Link href="/forgotPassword">
+          <a>Forgot your password?</a>
+        </Link>
       </div>
     );
   }
