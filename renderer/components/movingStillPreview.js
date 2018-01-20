@@ -27,10 +27,11 @@ class MovingStillPreview extends React.Component {
       }
     }
 
+    // give time for image upload to GPU
     if (this.props.isRendering) {
       setTimeout(() => {
         this.preview.capture();
-      }, 500);
+      }, 300);
       return;
     }
 
