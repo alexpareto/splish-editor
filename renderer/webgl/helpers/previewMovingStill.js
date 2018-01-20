@@ -7,7 +7,6 @@ import TarToMp4 from './tarToMp4';
 
 class Preview {
   constructor(imagePath, anchors, vectors, boundingRect, animationParams) {
-    console.log('CONSTRUCTED PREVIEW');
     this.imagePath = imagePath;
     this.anchors = anchors;
     this.vectors = vectors;
@@ -33,6 +32,8 @@ class Preview {
     this.isCapturing = false;
     this.captureProgress = 0;
     this.framerate = 24;
+    this.playRate = 60;
+    this.isPlaying = false;
 
     // video capturing
     let CCapture;
@@ -110,50 +111,48 @@ class Preview {
       normalizedVectors = [],
       normalizedAnchors = [];
 
-    this.setImage(this.imagePath);
-    console.log('VECTORS BEFORE: ', this.vectors);
+    for (i in this.vectors) {
+      let vector = {};
+      vector.point1 = this.normalizedPoint(
+        this.vectors[i][0].x,
+        this.vectors[i][0].y,
+        this.boundingRect.width,
+        this.boundingRect.height,
+      );
 
-    setTimeout(() => {
-      for (i in this.vectors) {
-        let vector = {};
-        vector.point1 = this.normalizedPoint(
-          this.vectors[i][0].x,
-          this.vectors[i][0].y,
-          this.boundingRect.width,
-          this.boundingRect.height,
-        );
+      vector.point2 = this.normalizedPoint(
+        this.vectors[i][1].x,
+        this.vectors[i][1].y,
+        this.boundingRect.width,
+        this.boundingRect.height,
+      );
 
-        vector.point2 = this.normalizedPoint(
-          this.vectors[i][1].x,
-          this.vectors[i][1].y,
-          this.boundingRect.width,
-          this.boundingRect.height,
-        );
+      normalizedVectors.unshift(vector);
+    }
 
-        normalizedVectors.unshift(vector);
-      }
+    for (i in this.anchors) {
+      anchor = this.normalizedPoint(
+        this.anchors[i].x,
+        this.anchors[i].y,
+        this.boundingRect.width,
+        this.boundingRect.height,
+      );
 
-      for (i in this.anchors) {
-        anchor = this.normalizedPoint(
-          this.anchors[i].x,
-          this.anchors[i].y,
-          this.boundingRect.width,
-          this.boundingRect.height,
-        );
+      // texture space goes from 0 - 1 not -1 - 1
+      anchor.x = (anchor.x + 1.0) / 2.0;
+      anchor.y = (anchor.y + 1.0) / 2.0;
 
-        // texture space goes from 0 - 1 not -1 - 1
-        anchor.x = (anchor.x + 1.0) / 2.0;
-        anchor.y = (anchor.y + 1.0) / 2.0;
+      normalizedAnchors.unshift(anchor);
+    }
 
-        normalizedAnchors.unshift(anchor);
-      }
+    this.vectors = normalizedVectors;
+    this.anchors = normalizedAnchors;
 
-      this.vectors = normalizedVectors;
-      this.anchors = normalizedAnchors;
+    console.log('VECTORS AFTER:', this.vectors);
 
-      console.log('VECTORS AFTER:', this.vectors);
+    this.setImage(this.imagePath, () => {
       this.start();
-    }, 100);
+    });
   };
 
   update = (anchors, vectors) => {
@@ -208,56 +207,12 @@ class Preview {
     return c;
   };
 
-  // load a the user's image (async).
-  loadImageX = dataURL => {
-    var image = new Image();
-
-    image.onload = () => {
-      this.loadImage2(image);
-    };
-
-    image.src = dataURL;
-  };
-
-  // This function does the heavy lifting of creating the texture from the image.
-  loadImage2 = image => {
-    var canvas = document.getElementById('2dcanvas');
-    var ctx = canvas.getContext('2d');
-    var canvHeight = document.getElementById('2dcanvas').height;
-    var canvWidth = document.getElementById('2dcanvas').width;
-
-    var x = 0;
-    var y = 0;
-    var xx = canvWidth;
-    var yy = canvHeight;
-
-    ctx.clearRect(0, 0, canvWidth, canvHeight);
-
-    // Put the image on the canvas, scaled using xx & yy.
-    ctx.drawImage(image, 0, 0, image.width, image.height, x, y, xx, yy);
-    var gl = this.gl;
-
-    // Create a texture object that will contain the image.
-    var texture = gl.createTexture();
-
-    // Bind the texture the target (TEXTURE_2D) of the active texture unit.
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-
-    // Flip the image's Y axis to match the WebGL texture coordinate space.
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
-    // Set the parameters so we can render any size image.
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-    //    Note: a canvas is used here but can be replaced by an image object.
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
-    ctx.clearRect(0, 0, canvWidth, canvHeight);
-  };
-
   render = () => {
+    // do nothing if there are no vectors
+    if (!this.vectors[0].point1) {
+      return;
+    }
+
     var gl = this.gl;
     const resolution = this.resolution;
 
@@ -266,7 +221,7 @@ class Preview {
     var p2 = new Float32Array(this.numVectors * 2); //x and y
 
     var index = 0;
-    console.log('VECTORS: ', this.vectors);
+
     for (var i = 0; i < this.numVectors; i++) {
       // Working values
       var x1, y1, x2, y2;
@@ -337,8 +292,14 @@ class Preview {
   };
 
   start = () => {
-    console.log('STARTING');
+    console.log('STARTING PREVIEW');
+    this.isPlaying = true;
     window.requestAnimationFrame(this.renderAnimationFrame);
+  };
+
+  stop = () => {
+    this.isPlaying = false;
+    this.tween = 0;
   };
 
   renderAnimationFrame = time => {
@@ -365,7 +326,9 @@ class Preview {
       }
     }
 
-    window.requestAnimationFrame(this.renderAnimationFrame);
+    if (this.isPlaying) {
+      window.requestAnimationFrame(this.renderAnimationFrame);
+    }
   };
 
   normalizedPoint = (x, y, width, height) => {
@@ -375,7 +338,7 @@ class Preview {
     return this.boundedPoint(x, y);
   };
 
-  setImage = imagePath => {
+  setImage = (imagePath, callback) => {
     imagePath = imagePath.split('file://')[1];
 
     var bitmap = fs.readFileSync(imagePath);
@@ -383,7 +346,52 @@ class Preview {
       'base64',
     )}`;
 
-    this.loadImageX(base64str);
+    var image = new Image();
+
+    image.onload = () => {
+      this.loadImage(image);
+      callback();
+    };
+
+    image.src = base64str;
+  };
+
+  // This function does the heavy lifting of creating the texture from the image.
+  loadImage = image => {
+    var canvas = document.getElementById('2dcanvas');
+    var ctx = canvas.getContext('2d');
+    var canvHeight = document.getElementById('2dcanvas').height;
+    var canvWidth = document.getElementById('2dcanvas').width;
+
+    var x = 0;
+    var y = 0;
+    var xx = canvWidth;
+    var yy = canvHeight;
+
+    ctx.clearRect(0, 0, canvWidth, canvHeight);
+
+    // Put the image on the canvas, scaled using xx & yy.
+    ctx.drawImage(image, 0, 0, image.width, image.height, x, y, xx, yy);
+    var gl = this.gl;
+
+    // Create a texture object that will contain the image.
+    var texture = gl.createTexture();
+
+    // Bind the texture the target (TEXTURE_2D) of the active texture unit.
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    // Flip the image's Y axis to match the WebGL texture coordinate space.
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+    // Set the parameters so we can render any size image.
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    //    Note: a canvas is used here but can be replaced by an image object.
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
+    ctx.clearRect(0, 0, canvWidth, canvHeight);
   };
 }
 

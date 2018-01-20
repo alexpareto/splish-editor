@@ -7,27 +7,8 @@ import * as Actions from './actions';
 
 class MovingStill extends React.Component {
   render() {
-    let display =
-      this.props.movingStill.viewMode == 'edit' ? (
-        <VectorCanvas
-          currentTool={this.props.movingStill.currentTool}
-          imgSrc={this.props.movingStill.imgPath}
-          isInitialized={this.props.movingStill.isInitialized}
-          imageHeight={this.props.movingStill.imageHeight}
-          addVector={this.props.addVector}
-          addAnchor={this.props.addAnchor}
-        />
-      ) : (
-        <MovingStillPreview
-          imgSrc={this.props.movingStill.imgPath}
-          anchors={this.props.movingStill.anchors}
-          vectors={this.props.movingStill.vectors}
-          imgDimensions={this.props.movingStill.imgDimensions}
-          animationParams={this.props.movingStill.animationParams}
-          updateAnimationParams={this.props.updateAnimationParams}
-          boundingRect={this.props.movingStill.boundingRect}
-        />
-      );
+    const showPreview = this.props.movingStill.viewMode == 'preview';
+
     return (
       <div>
         <ToolBar
@@ -39,8 +20,29 @@ class MovingStill extends React.Component {
           isInitialized={this.props.movingStill.isInitialized}
           startMovingStillPreviewMode={this.props.startMovingStillPreviewMode}
           startMovingStillEditMode={this.props.startMovingStillEditMode}
+          startExportingMovingStill={this.props.startExportingMovingStill}
         />
-        {display}
+        <MovingStillPreview
+          display={showPreview}
+          isRendering={this.props.movingStill.isRendering}
+          imgSrc={this.props.movingStill.imgPath}
+          anchors={this.props.movingStill.anchors}
+          vectors={this.props.movingStill.vectors}
+          imgDimensions={this.props.movingStill.imgDimensions}
+          animationParams={this.props.movingStill.animationParams}
+          updateAnimationParams={this.props.updateAnimationParams}
+          boundingRect={this.props.movingStill.boundingRect}
+          isRendering={this.props.movingStill.isRendering}
+        />
+        <VectorCanvas
+          display={!showPreview}
+          currentTool={this.props.movingStill.currentTool}
+          imgSrc={this.props.movingStill.imgPath}
+          isInitialized={this.props.movingStill.isInitialized}
+          imageHeight={this.props.movingStill.imageHeight}
+          addVector={this.props.addVector}
+          addAnchor={this.props.addAnchor}
+        />
       </div>
     );
   }
@@ -63,6 +65,8 @@ const mapDispatchToProps = dispatch => {
     addAnchor: anchor => dispatch(Actions.addAnchor(anchor)),
     updateAnimationParams: params =>
       dispatch(Actions.updateAnimationParams(params)),
+    startExportingMovingStill: () =>
+      dispatch(Actions.startExportingMovingStill()),
   };
 };
 

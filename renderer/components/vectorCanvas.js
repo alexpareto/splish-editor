@@ -121,7 +121,7 @@ class VectorCanvas extends React.Component {
       />
     ) : null;
 
-    // const display = this.props.display ? 'block' : 'none';
+    const display = this.props.display ? 'block' : 'none';
 
     return (
       <div className="container" id="movingStillContainer">
@@ -132,6 +132,7 @@ class VectorCanvas extends React.Component {
             .container {
               stroke: 2;
               width: 800px;
+              display: ${display};
             }
             .d3SVG {
               width: 800px;

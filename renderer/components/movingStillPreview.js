@@ -4,18 +4,33 @@ import Preview from '../webgl/helpers/previewMovingStill';
 import AnimationDebugger from './animationDebugger';
 
 class MovingStillPreview extends React.Component {
-  componentDidMount() {
-    this.preview = new Preview(
-      this.props.imgSrc,
-      this.props.anchors,
-      this.props.vectors,
-      this.props.boundingRect,
-      this.props.animationParams,
-    );
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasLoaded: false,
+    };
   }
 
-  componentWillReceiveProps(props) {
-    this.preview.update(this.props.anchors, this.props.vectors);
+  componentDidUpdate() {
+    console.log('receiving');
+
+    if (this.props.display || this.props.isRendering) {
+      if (this.state.hasLoaded) {
+        this.preview.update(props.anchors, props.vectors);
+      } else {
+        this.preview = new Preview(
+          this.props.imgSrc,
+          this.props.anchors,
+          this.props.vectors,
+          this.props.boundingRect,
+          this.props.animationParams,
+        );
+      }
+    }
+
+    if (!this.props.display && this.preview) {
+      this.preview.stop();
+    }
   }
 
   render() {
@@ -24,14 +39,6 @@ class MovingStillPreview extends React.Component {
 
     return (
       <div>
-        <div
-          onClick={() => {
-            console.log('CAPTURE CLICKED');
-            this.preview.capture();
-          }}
-        >
-          CAPTURE
-        </div>
         <AnimationDebugger
           animationParams={this.props.animationParams}
           updateAnimationParams={this.props.updateAnimationParams}

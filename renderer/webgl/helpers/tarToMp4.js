@@ -5,6 +5,7 @@ import stream from 'stream';
 
 class TarToMp4 {
   constructor(tarBlob) {
+    console.log('Converting Tar to MP4');
     // local state
     this.exportRequested = false;
     this.bufferStreamCompleted = false;
