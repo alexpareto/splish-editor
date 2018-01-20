@@ -8,17 +8,24 @@ const initialState = {
   imgPath: '',
   isInitialized: false,
   imageHeight: 0,
-  imageDimensions: {},
+  imgDimensions: {
+    height: 0,
+    width: 0,
+  },
   currentTool: '',
   viewMode: 'edit',
   anchors: [],
   vectors: [],
-  boundingRect: {},
+  boundingRect: {
+    width: 0,
+    height: 0,
+  },
   animationParams: {
     dragDistance: 4.0,
     anchorImpact: 2.5,
     impactDivisor: 4.0,
   },
+  isRendering: false,
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -98,6 +105,11 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         animationParams,
+      };
+    case actionTypes.START_EXPORTING_MOVING_STILL:
+      return {
+        ...state,
+        isRendering: true,
       };
     default:
       return state;

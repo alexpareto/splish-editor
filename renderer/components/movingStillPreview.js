@@ -12,8 +12,6 @@ class MovingStillPreview extends React.Component {
       this.props.boundingRect,
       this.props.animationParams,
     );
-
-    console.log('MOUNTED WITH IMAGE DIMENSIONS: ', this.props);
   }
 
   componentWillReceiveProps(props) {

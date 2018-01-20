@@ -3,10 +3,11 @@ import imageFragShader from '../shaders/imageFragShader';
 import fs from 'fs';
 import getShader from './getShader';
 import loadProgram from './loadProgram';
-import tarToMp4 from './tarToMp4';
+import TarToMp4 from './tarToMp4';
 
 class Preview {
   constructor(imagePath, anchors, vectors, boundingRect, animationParams) {
+    console.log('CONSTRUCTED PREVIEW');
     this.imagePath = imagePath;
     this.anchors = anchors;
     this.vectors = vectors;
@@ -265,6 +266,7 @@ class Preview {
     var p2 = new Float32Array(this.numVectors * 2); //x and y
 
     var index = 0;
+    console.log('VECTORS: ', this.vectors);
     for (var i = 0; i < this.numVectors; i++) {
       // Working values
       var x1, y1, x2, y2;
@@ -335,6 +337,7 @@ class Preview {
   };
 
   start = () => {
+    console.log('STARTING');
     window.requestAnimationFrame(this.renderAnimationFrame);
   };
 
@@ -353,7 +356,10 @@ class Preview {
       if (this.captureProgress > this.framerate * this.duration) {
         this.capturer.stop();
         this.capturer.save(blob => {
-          tarToMp4(blob);
+          let ttMp4 = new TarToMp4(blob);
+
+          // export mp4 to temporary storage (for now)
+          ttMp4.export('./renderer/static/temp/');
         });
         this.isCapturing = false;
       }

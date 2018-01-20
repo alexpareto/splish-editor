@@ -1,47 +1,63 @@
 import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
 import tar from 'tar-fs';
+import stream from 'stream';
 
-const tarToMp4 = (tarBlob, handler) => {
-  console.log('tarBlob', tarBlob);
+class TarToMp4 {
+  constructor(tarBlob) {
+    // local state
+    this.exportRequested = false;
+    this.bufferStreamCompleted = false;
+    this.exportPath = '';
 
-  let url = window.URL.createObjectURL(tarBlob);
+    const frameDir = './renderer/static/temp/frames';
 
-  var reader = new FileReader();
+    let url = window.URL.createObjectURL(tarBlob);
 
-  reader.onload = () => {
-    var buffer = new Buffer(reader.result);
+    const reader = new FileReader();
 
-    fs.writeFile(
-      './renderer/static/assets/temp.tar',
-      buffer,
-      {},
-      (err, res) => {
-        if (err) {
-          console.error(err);
-          return;
+    reader.onload = () => {
+      // exctract .tar to file system
+      const buffer = new Buffer(reader.result);
+      const bufferStream = new stream.PassThrough();
+      bufferStream.end(buffer);
+
+      const stream = bufferStream.pipe(tar.extract(frameDir));
+
+      stream.on('finish', () => {
+        this.bufferStreamCompleted = true;
+
+        if (this.exportRequested) {
+          this.export(this.exportPath);
         }
-        console.log('video saved');
-        fs
-          .createReadStream('./renderer/static/assets/temp.tar')
-          .pipe(tar.extract('./renderer/static/assets/temp'));
+      });
+    };
 
-        let command = ffmpeg();
+    reader.readAsArrayBuffer(tarBlob);
+  }
 
-        setTimeout(() => {
-          command
-            .input('./renderer/static/assets/temp/0000%03d.jpg')
-            .output('./renderer/static/assets/export.mp4')
-            .on('end', function() {
-              console.log('Finished processing');
-            })
-            .run();
-        }, 500);
-      },
-    );
+  reset = () => {
+    this.exportRequested = false;
+    this.bufferStreamCompleted = false;
+    this.exportPath = '';
   };
 
-  reader.readAsArrayBuffer(tarBlob);
-};
+  // export to local file system
+  export = filePath => {
+    this.exportPath = filePath;
+    this.exportRequested = true;
 
-export default tarToMp4;
+    if (this.bufferStreamCompleted) {
+      let command = ffmpeg();
+      command
+        .input('./renderer/static/temp/frames/0000%03d.jpg')
+        .output(this.filePath)
+        .on('end', function() {
+          console.log('EXPORTED MP4 to: ', this.filePath);
+        })
+        .run();
+    }
+  };
+}
+
+export default TarToMp4;

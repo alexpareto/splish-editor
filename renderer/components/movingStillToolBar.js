@@ -57,7 +57,12 @@ class NavBar extends React.Component {
             startPreview={this.props.startMovingStillPreviewMode}
             startEdit={this.props.startMovingStillEditMode}
           />
-          <FileSaver type="video" fileHandler={this.props.renderCinemagraph} />
+          <IconButton
+            onClick={this.props.startExportingMovingStill}
+            stroke={globalStyles.background}
+            name="share"
+            backgroundColor={globalStyles.secondary}
+          />
         </div>
         <style jsx>
           {`

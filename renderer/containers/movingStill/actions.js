@@ -11,6 +11,7 @@ export const actionTypes = {
   ADD_ANCHOR: 'ADD_ANCHOR',
   ADD_VECTOR: 'ADD_VECTOR',
   UPDATE_ANIMATION_PARAMS: 'UPDATE_ANIMATION_PARAMS',
+  START_EXPORTING_MOVING_STILL: 'START_EXPORTING_MOVING_STILL',
 };
 
 // ACTIONS
@@ -52,4 +53,8 @@ export const addVector = vector => {
 
 export const updateAnimationParams = params => {
   return { type: actionTypes.UPDATE_ANIMATION_PARAMS, params };
+};
+
+export const startExportingMovingStill = () => {
+  return { type: actionTypes.START_EXPORTING_MOVING_STILL };
 };
