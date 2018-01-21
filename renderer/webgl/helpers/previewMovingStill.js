@@ -157,8 +157,6 @@ class Preview {
     this.vectors = normalizedVectors;
     this.anchors = normalizedAnchors;
 
-    console.log('VECTORS AFTER:', this.vectors);
-
     this.setImage(this.imagePath, () => {
       this.start();
     });
@@ -301,13 +299,11 @@ class Preview {
   };
 
   start = () => {
-    console.log('STARTING PREVIEW');
     this.isPlaying = true;
     window.requestAnimationFrame(this.renderAnimationFrame);
   };
 
   stop = () => {
-    console.log('STOPPED PREVIEW');
     this.isPlaying = false;
   };
 

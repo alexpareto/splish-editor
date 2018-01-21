@@ -22,6 +22,10 @@ class MovingStill extends React.Component {
           startMovingStillPreviewMode={this.props.startMovingStillPreviewMode}
           startMovingStillEditMode={this.props.startMovingStillEditMode}
           startExportingMovingStill={this.props.startExportingMovingStill}
+          showExportModal={this.props.movingStill.showExportModal}
+          movingStillShareComplete={this.props.movingStillShareComplete}
+          isRendering={this.props.movingStill.isRendering}
+          exports={this.props.exports}
         />
         <MovingStillPreview
           display={showPreview}
@@ -72,10 +76,16 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.startExportingMovingStill()),
     movingStillExportComplete: () =>
       dispatch(Actions.movingStillExportComplete()),
-    uploadExportRequest: file => dispatch(ExportActions.uploadExportRequest()),
+    uploadExportRequest: file =>
+      dispatch(ExportActions.uploadExportRequest(file)),
+    movingStillShareComplete: () =>
+      dispatch(Actions.movingStillShareComplete()),
   };
 };
 
-const mapStateToProps = state => ({ movingStill: state.movingStill });
+const mapStateToProps = state => ({
+  movingStill: state.movingStill,
+  exports: state.exports.exports,
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovingStill);

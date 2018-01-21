@@ -25,7 +25,9 @@ const initialState = {
     anchorImpact: 2.5,
     impactDivisor: 4.0,
   },
+  showExportModal: false,
   isRendering: false,
+  shareLink: '',
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -111,11 +113,17 @@ export const movingStillReducer = (state = initialState, action) => {
         ...state,
         isRendering: true,
         viewMode: 'edit',
+        showExportModal: true,
       };
     case actionTypes.MOVING_STILL_EXPORT_COMPLETE:
       return {
         ...state,
         isRendering: false,
+      };
+    case actionTypes.MOVING_STILL_SHARE_COMPLETE:
+      return {
+        ...state,
+        showExportModal: false,
       };
     default:
       return state;

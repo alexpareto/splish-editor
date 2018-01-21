@@ -13,6 +13,7 @@ export const actionTypes = {
   UPDATE_ANIMATION_PARAMS: 'UPDATE_ANIMATION_PARAMS',
   START_EXPORTING_MOVING_STILL: 'START_EXPORTING_MOVING_STILL',
   MOVING_STILL_EXPORT_COMPLETE: 'MOVING_STILL_EXPORT_COMPLETE',
+  MOVING_STILL_SHARE_COMPLETE: 'MOVING_STILL_SHARE_COMPLETE',
 };
 
 // ACTIONS
@@ -62,4 +63,8 @@ export const startExportingMovingStill = () => {
 
 export const movingStillExportComplete = () => {
   return { type: actionTypes.MOVING_STILL_EXPORT_COMPLETE };
+};
+
+export const movingStillShareComplete = () => {
+  return { type: actionTypes.MOVING_STILL_SHARE_COMPLETE };
 };

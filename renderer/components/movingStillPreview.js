@@ -27,7 +27,13 @@ class MovingStillPreview extends React.Component {
           // Read file and send it to s3, also notify redux
           // to stop capturing the video b/c export is done
           filePath => {
-            this.props.uploadExportRequest(fs.createReadStream(filePath));
+            fs.readFile(filePath, (err, data) => {
+              const file = new File([data], 'output.txt', {
+                type: 'video/mp4',
+              });
+
+              this.props.uploadExportRequest(file);
+            });
             this.props.movingStillExportComplete();
           },
         );
