@@ -59,6 +59,11 @@ class MainMenu extends React.Component {
             <a>View your exports</a>
           </Link>
         </div>
+        <div>
+          <Link href="/profile" prefetch>
+            <a>View your profile</a>
+          </Link>
+        </div>
         <button onClick={this.logout}>Logout</button>
       </div>
     );
