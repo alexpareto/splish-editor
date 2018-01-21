@@ -2,6 +2,7 @@ import React from 'react';
 import * as globalStyles from '../globalStyles';
 import Preview from '../webgl/helpers/previewMovingStill';
 import AnimationDebugger from './animationDebugger';
+import fs from 'fs';
 
 class MovingStillPreview extends React.Component {
   constructor(props) {
@@ -22,7 +23,13 @@ class MovingStillPreview extends React.Component {
           this.props.vectors,
           this.props.boundingRect,
           this.props.animationParams,
-          this.props.movingStillExportComplete,
+          // callback for when the video completes capture
+          // Read file and send it to s3, also notify redux
+          // to stop capturing the video b/c export is done
+          filePath => {
+            this.props.uploadExportRequest(fs.createReadStream(filePath));
+            this.props.movingStillExportComplete();
+          },
         );
       }
     }

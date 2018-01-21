@@ -332,7 +332,6 @@ class Preview {
           let ttMp4 = new TarToMp4(blob);
 
           // export mp4 to temporary storage (for now)
-          console.log('IN PREVIEW: ', this.exportCallback);
           ttMp4.export('./renderer/static/temp/', this.exportCallback);
         });
         this.isCapturing = false;

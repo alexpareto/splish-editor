@@ -56,7 +56,7 @@ class TarToMp4 {
         .input('./renderer/static/temp/frames/0000%03d.jpg')
         .output(filePath + 'output.mp4')
         .on('end', () => {
-          this.exportCallback();
+          this.exportCallback(filePath + 'output.mp4');
         })
         .run();
     }

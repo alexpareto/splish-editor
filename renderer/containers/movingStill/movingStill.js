@@ -4,6 +4,7 @@ import VectorCanvas from '../../components/vectorCanvas';
 import MovingStillPreview from '../../components/movingStillPreview';
 import { connect } from 'react-redux';
 import * as Actions from './actions';
+import * as ExportActions from '../exports/actions';
 
 class MovingStill extends React.Component {
   render() {
@@ -34,6 +35,7 @@ class MovingStill extends React.Component {
           boundingRect={this.props.movingStill.boundingRect}
           isRendering={this.props.movingStill.isRendering}
           movingStillExportComplete={this.props.movingStillExportComplete}
+          uploadExportRequest={this.props.uploadExportRequest}
         />
         <VectorCanvas
           display={!showPreview}
@@ -70,6 +72,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.startExportingMovingStill()),
     movingStillExportComplete: () =>
       dispatch(Actions.movingStillExportComplete()),
+    uploadExportRequest: file => dispatch(ExportActions.uploadExportRequest()),
   };
 };
 
