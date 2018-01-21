@@ -34,8 +34,8 @@ class ExportModal extends React.Component {
     const stage1 =
       this.state.exportStage == 1 ? (
         <div>
-          Choose yoru license from these three options! AKA waste more time
-          while your video renders MUAHAHAHA!{' '}
+          Choose your license from these three options! AKA waste more time
+          while your video renders MUAHAHAHA!
           <button
             onClick={() => {
               this.setState({ exportStage: 2 });
@@ -46,6 +46,9 @@ class ExportModal extends React.Component {
         </div>
       ) : null;
 
+    // get the export link from the first of the exports
+    // TODO (zac/alex) instead get the public ID from the response
+    // of the postExport
     const shareLink = this.props.exports[0]
       ? `https://splish.io/e/${this.props.exports[0].public_id}`
       : null;
