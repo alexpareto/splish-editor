@@ -7,7 +7,7 @@ import checkLoggedIn from '../../lib/checkLoggedIn.js';
 import redirect from '../../lib/redirect.js';
 import * as Actions from './actions.js';
 
-class Login extends React.Component {
+class Profile extends React.Component {
   async componentDidMount() {
     const data = await checkLoggedIn();
     if (!data) {
@@ -146,4 +146,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
