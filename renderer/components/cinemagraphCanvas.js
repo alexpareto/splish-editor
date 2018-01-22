@@ -77,22 +77,12 @@ class MovingStillPreview extends React.Component {
           style={{
             width: '800px',
             height: `${this.props.videoClientHeight}px`,
+            zIndex: 1,
             position: 'absolute',
           }}
           width={this.props.videoDimensions.width}
           height={this.props.videoDimensions.height}
           id="cinemagraphcanvas"
-        />
-        <canvas
-          style={{
-            width: '800px',
-            height: `${this.props.videoClientHeight}px`,
-            position: 'absolute',
-            zIndex: -1,
-          }}
-          id="cinemagraph2d"
-          width={this.props.videoDimensions.width}
-          height={this.props.videoDimensions.height}
         />
         <style jsx>{`
           .overlay {

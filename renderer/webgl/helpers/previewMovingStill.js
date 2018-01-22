@@ -3,6 +3,7 @@ import imageFragShader from '../shaders/imageFragShader';
 import fs from 'fs';
 import getShader from './getShader';
 import loadProgram from './loadProgram';
+import createImageGrid from './createImageGrid';
 import TarToMp4 from './tarToMp4';
 
 class Preview {
@@ -98,7 +99,11 @@ class Preview {
       gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);
 
       // createImageGrid sets up the vector array itself
-      gl.bufferData(gl.ARRAY_BUFFER, this.createImageGrid(), gl.STATIC_DRAW); // Fill buffer data
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        createImageGrid(this.resolution),
+        gl.STATIC_DRAW,
+      ); // Fill buffer data
       gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(this.texCoordLocation);
       // Set up uniforms variables (image).
@@ -175,43 +180,6 @@ class Preview {
     if (y > 1) y = 1;
 
     return { x, y };
-  };
-
-  createImageGrid = () => {
-    var q = 0.000000001;
-    const resolution = this.resolution;
-
-    var r = (1 - q * 2) / resolution;
-    //2 numbers per coord; three coords per triangle; 2 triagles per square; resolution * resolution squares.
-    var c = new Float32Array(resolution * resolution * 12);
-
-    var i = 0;
-
-    for (var xs = 0; xs < resolution; xs++) {
-      for (var ys = 0; ys < resolution; ys++) {
-        var x = r * xs + q;
-        var y = r * ys + q;
-
-        c[i++] = x;
-        c[i++] = y;
-
-        c[i++] = x + r;
-        c[i++] = y;
-
-        c[i++] = x;
-        c[i++] = y + r;
-
-        c[i++] = x + r;
-        c[i++] = y;
-
-        c[i++] = x;
-        c[i++] = y + r;
-
-        c[i++] = x + r;
-        c[i++] = y + r;
-      }
-    }
-    return c;
   };
 
   render = () => {
