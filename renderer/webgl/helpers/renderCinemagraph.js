@@ -22,6 +22,7 @@ class Preview {
     this.captureProgress = 0;
     this.framerate = 24;
     this.resolution = 20;
+    this.hasRendered = false;
 
     // video capturing
     let CCapture;
@@ -38,6 +39,7 @@ class Preview {
 
     this.video = document.getElementById('cinemagraphVideo');
     this.vidTexture = this.gl.createTexture();
+    this.imgTexture = this.gl.createTexture();
     this.init();
   }
 
@@ -77,13 +79,19 @@ class Preview {
       gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(this.texCoordLocation);
       // Set up uniforms variables (image).
-      this.pictureprogram.u_image = gl.getUniformLocation(
+      this.pictureprogram.u_image0 = gl.getUniformLocation(
         this.pictureprogram,
-        'u_image',
+        'u_image0',
+      );
+
+      this.pictureprogram.u_image1 = gl.getUniformLocation(
+        this.pictureprogram,
+        'u_image1',
       );
 
       // Set the texture to use.
-      gl.uniform1i(this.pictureprogram.u_image, 0);
+      gl.uniform1i(this.pictureprogram.u_image0, 0);
+      gl.uniform1i(this.pictureprogram.u_image1, 1);
     } catch (e) {
       console.log('ERROR MAKING SHADERS: ', e);
       return;
@@ -100,6 +108,20 @@ class Preview {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    // do the same for the image texture
+    gl.bindTexture(gl.TEXTURE_2D, this.imgTexture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    // Set each texture unit to use a particular texture.
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, this.vidTexture);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, this.imgTexture);
 
     this.start();
   };
@@ -121,6 +143,8 @@ class Preview {
     const resolution = this.resolution;
     let gl = this.gl;
 
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, this.vidTexture);
     gl.texImage2D(
       gl.TEXTURE_2D,
       0,
@@ -129,6 +153,22 @@ class Preview {
       gl.UNSIGNED_BYTE,
       this.video,
     );
+
+    // for now just take a snapshot of the first frame played
+    // as the still image
+    if (!this.hasRendered) {
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, this.imgTexture);
+      gl.texImage2D(
+        gl.TEXTURE_2D,
+        0,
+        gl.RGBA,
+        gl.RGBA,
+        gl.UNSIGNED_BYTE,
+        this.video,
+      );
+      this.hasRendered = true;
+    }
 
     //  Clear color buffer and set it to light gray
     gl.clearColor(1.0, 1.0, 1.0, 0.5);
