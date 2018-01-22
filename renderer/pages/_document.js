@@ -10,7 +10,9 @@ export default class MyDocument extends Document {
   render() {
     return (
       <html>
-        <body style={{ overflow: 'hidden', height: '100vh' }}>
+        <body
+          style={{ overflow: 'hidden', height: '100vh', userSelect: 'none' }}
+        >
           {this.props.customValue}
           <Main />
           <NextScript />

@@ -11,6 +11,9 @@ export const actionTypes = {
   ADD_ANCHOR: 'ADD_ANCHOR',
   ADD_VECTOR: 'ADD_VECTOR',
   UPDATE_ANIMATION_PARAMS: 'UPDATE_ANIMATION_PARAMS',
+  START_EXPORTING_MOVING_STILL: 'START_EXPORTING_MOVING_STILL',
+  MOVING_STILL_EXPORT_COMPLETE: 'MOVING_STILL_EXPORT_COMPLETE',
+  MOVING_STILL_SHARE_COMPLETE: 'MOVING_STILL_SHARE_COMPLETE',
 };
 
 // ACTIONS
@@ -52,4 +55,16 @@ export const addVector = vector => {
 
 export const updateAnimationParams = params => {
   return { type: actionTypes.UPDATE_ANIMATION_PARAMS, params };
+};
+
+export const startExportingMovingStill = () => {
+  return { type: actionTypes.START_EXPORTING_MOVING_STILL };
+};
+
+export const movingStillExportComplete = () => {
+  return { type: actionTypes.MOVING_STILL_EXPORT_COMPLETE };
+};
+
+export const movingStillShareComplete = () => {
+  return { type: actionTypes.MOVING_STILL_SHARE_COMPLETE };
 };

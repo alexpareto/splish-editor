@@ -1,5 +1,9 @@
 module.exports = {
   webpack(config) {
+    config.resolve.alias = {
+      './lib-cov/fluent-ffmpeg': './lib/fluent-ffmpeg',
+    };
+
     config.node = {
       __dirname: false,
       __filename: false,

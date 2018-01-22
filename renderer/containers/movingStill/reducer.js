@@ -8,18 +8,26 @@ const initialState = {
   imgPath: '',
   isInitialized: false,
   imageHeight: 0,
+  imgDimensions: {
+    height: 0,
+    width: 0,
+  },
   currentTool: '',
   viewMode: 'edit',
   anchors: [],
   vectors: [],
-  boundingRect: {},
+  boundingRect: {
+    width: 0,
+    height: 0,
+  },
   animationParams: {
     dragDistance: 4.0,
-    anchorImpact: 1.0,
-    flowMultiplier: 20.0,
-    flowDivisor: 40.0,
-    impactDivisor: 3.0,
+    anchorImpact: 2.5,
+    impactDivisor: 4.0,
   },
+  showExportModal: false,
+  isRendering: false,
+  shareLink: '',
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -33,10 +41,22 @@ export const movingStillReducer = (state = initialState, action) => {
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       const img = document.getElementById('movingStillImage');
+
       const imageHeight = img.clientHeight;
+
+      const naturalWidth =
+        img.naturalWidth % 2 == 0 ? img.naturalWidth : img.naturalWidth + 1;
+
+      const naturalHeight =
+        img.naturalHeight % 2 == 0 ? img.naturalHeight : img.naturalHeight + 1;
+
       return {
         ...state,
         imageHeight,
+        imgDimensions: {
+          height: naturalHeight,
+          width: naturalWidth,
+        },
         isInitialized: true,
         currentTool: action.tool,
       };
@@ -87,6 +107,23 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         animationParams,
+      };
+    case actionTypes.START_EXPORTING_MOVING_STILL:
+      return {
+        ...state,
+        isRendering: true,
+        viewMode: 'edit',
+        showExportModal: true,
+      };
+    case actionTypes.MOVING_STILL_EXPORT_COMPLETE:
+      return {
+        ...state,
+        isRendering: false,
+      };
+    case actionTypes.MOVING_STILL_SHARE_COMPLETE:
+      return {
+        ...state,
+        showExportModal: false,
       };
     default:
       return state;

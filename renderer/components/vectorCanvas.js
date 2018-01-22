@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { remote } from 'electron';
 import * as d3 from 'd3';
 
-class DrawingCanvas extends React.Component {
+class VectorCanvas extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -121,19 +121,18 @@ class DrawingCanvas extends React.Component {
       />
     ) : null;
 
+    const display = this.props.display ? 'block' : 'none';
+
     return (
       <div className="container" id="movingStillContainer">
         <svg className="d3SVG" id="movingStillSVG" />
         {img}
         <style jsx>
           {`
-            .cinemagraphVideo {
-              width: 80vw;
-              z-index: 0;
-            }
             .container {
               stroke: 2;
               width: 800px;
+              display: ${display};
             }
             .d3SVG {
               width: 800px;
@@ -154,4 +153,4 @@ class DrawingCanvas extends React.Component {
   }
 }
 
-export default DrawingCanvas;
+export default VectorCanvas;

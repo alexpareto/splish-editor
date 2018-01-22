@@ -5,6 +5,7 @@ import FileSaver from './fileSaver';
 import IconButton from './iconButton';
 import PreviewToggle from './previewToggle';
 import Link from 'next/link';
+import ExportModal from './exportModal';
 
 class NavBar extends React.Component {
   anchorClicked = () => {
@@ -24,9 +25,18 @@ class NavBar extends React.Component {
   };
 
   render() {
+    const exportModal = this.props.showExportModal ? (
+      <ExportModal
+        isRendering={this.props.isRendering}
+        exports={this.props.exports}
+        movingStillShareComplete={this.props.movingStillShareComplete}
+      />
+    ) : null;
+
     return (
       <div className="container">
         <div className="flex">
+          {exportModal}
           <Link href="/mainMenu" prefetch>
             <a>
               <IconButton
@@ -57,27 +67,32 @@ class NavBar extends React.Component {
             startPreview={this.props.startMovingStillPreviewMode}
             startEdit={this.props.startMovingStillEditMode}
           />
-          <FileSaver type="video" fileHandler={this.props.renderCinemagraph} />
+          <IconButton
+            onClick={this.props.startExportingMovingStill}
+            stroke={globalStyles.background}
+            name="share"
+            backgroundColor={globalStyles.secondary}
+          />
         </div>
         <style jsx>
           {`
-					.flex {
-						display:flex;
-						align-items: center;
-						justify-content: center;
-						height: 100%;
-					}
+          .flex {
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+          }
 
-					.container { 
-						left; 0; 
-						top: 0;
-						margin-left: -8px;
-						margin-top: -8px;
-						height: 45px;
-						width: 100vw;
-						border-bottom: 1px solid ${globalStyles.primary};
-						background-color: ${globalStyles.background};
-					};`}
+          .container { 
+            left; 0; 
+            top: 0;
+            margin-left: -8px;
+            margin-top: -8px;
+            height: 45px;
+            width: 100vw;
+            border-bottom: 1px solid ${globalStyles.primary};
+            background-color: ${globalStyles.background};
+          };`}
         </style>
       </div>
     );

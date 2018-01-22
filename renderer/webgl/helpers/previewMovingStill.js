@@ -1,76 +1,88 @@
 import vertexShader from '../shaders/previewVertexShader';
 import imageFragShader from '../shaders/imageFragShader';
-import TWEEN from '@tweenjs/tween.js';
 import fs from 'fs';
+import getShader from './getShader';
+import loadProgram from './loadProgram';
+import TarToMp4 from './tarToMp4';
 
-('use strict');
+class Preview {
+  constructor(
+    imagePath,
+    anchors,
+    vectors,
+    boundingRect,
+    animationParams,
+    exportCallback,
+  ) {
+    this.imagePath = imagePath;
+    this.anchors = anchors;
+    this.vectors = vectors;
+    this.boundingRect = boundingRect;
+    this.animationParams = animationParams;
+    this.exportCallback = exportCallback;
+    this.duration = 3.0;
 
-// Point object - converts incoming values to a -1 to 1 range)
-function Point(x, y) {
-  if (x < -1) x = -1;
-  if (y < -1) y = -1;
-  if (x > 1) x = 1;
-  if (y > 1) y = 1;
+    this.gl;
+    this.texCoordLocation; // Location of the texture for the picture fragment shader.
+    this.texCoordLocation2; // Location of the texture for the line fragment shader.
 
-  this.x = x;
-  this.y = y;
-}
+    this.texCoordBuffer; // The buffer for the texture for the picture fragment shader.
+    this.texCoordBuffer2; // The buffer for the texture for the line fragment shader.
 
-// A new mouse manipulation.
-function Move(point) {
-  this.point1 = new Point(point.x, point.y);
-  this.point2 = new Point(point.x, point.y);
+    this.tween = 0.0;
+    this.numVectors = vectors.length + 1;
+    this.numAnchors = anchors.length + 1;
+    this.resolution = 50; // Resolution of the mesh.
 
-  this.move = function(point) {
-    this.point2.x = point.x;
-    this.point2.y = point.y;
+    this.canvas = document.getElementById('webglcanvas');
+    this.gl = this.canvas.getContext('webgl');
+
+    //state
+    this.isCapturing = false;
+    this.captureProgress = 0;
+    this.framerate = 24;
+    this.previewRate = 60;
+    this.isPlaying = false;
+
+    // video capturing
+    let CCapture;
+    if (window) {
+      CCapture = require('zcapture.js');
+    }
+
+    this.capturer = new CCapture({
+      format: 'jpg',
+      verbose: true,
+      display: false,
+      quality: 99,
+    });
+
+    this.init();
+  }
+
+  capture = () => {
+    this.captureProgress = 0;
+    this.tween = 0;
+    this.capturer.start();
+    this.isCapturing = true;
   };
-}
 
-var renderer = new function() {
-  var gl; // Handle to the context.
-  var lineprogram; // Handle to GLSL program that draws lines.
-  var pictureprogram; // Handle to GLSL program that draws a picture.
-
-  this.texCoordLocation; // Location of the texture for the picture fragment shader.
-  this.texCoordLocation2; // Location of the texture for the line fragment shader.
-
-  this.texCoordBuffer; // The buffer for the texture for the picture fragment shader.
-  this.texCoordBuffer2; // The buffer for the texture for the line fragment shader.
-  this.tween = { val: 0.0 };
-  this.numVectors;
-  this.numAnchors;
-
-  var anchors = new Array();
-  var moves = new Array();
-  var tMove = {};
-  var currentMove = 0;
-
-  var resolution = 50; // Resolution of the mesh.
-
-  this.init = function(animationParams, numVectors, numAnchors) {
-    this.numVectors = numVectors;
-    this.numAnchors = numAnchors;
-
-    // Get a context from our canvas object with id = "webglcanvas".
-    var canvas = document.getElementById('webglcanvas');
-    var gl = (this.gl = canvas.getContext('webgl'));
-
+  init = () => {
+    let canvas = this.canvas;
+    let gl = this.gl;
     try {
-      var vertexshader = getShader(
+      let vertexshader = getShader(
         gl,
         vertexShader(
-          animationParams.dragDistance.toFixed(5).toString(),
-          animationParams.anchorImpact.toFixed(5).toString(),
-          animationParams.flowMultiplier.toFixed(5).toString(),
-          animationParams.flowDivisor.toFixed(5).toString(),
-          animationParams.impactDivisor.toFixed(5).toString(),
+          this.animationParams.dragDistance.toFixed(5).toString(),
+          this.animationParams.anchorImpact.toFixed(5).toString(),
+          this.animationParams.impactDivisor.toFixed(5).toString(),
           this.numVectors.toString(),
           this.numAnchors.toString(),
         ),
         'vertex',
       );
-      var fragmentshader = getShader(gl, imageFragShader, 'frag');
+      let fragmentshader = getShader(gl, imageFragShader, 'frag');
 
       this.pictureprogram = loadProgram(gl, vertexshader, fragmentshader);
       gl.useProgram(this.pictureprogram);
@@ -86,7 +98,7 @@ var renderer = new function() {
       gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);
 
       // createImageGrid sets up the vector array itself
-      gl.bufferData(gl.ARRAY_BUFFER, createImageGrid(), gl.STATIC_DRAW); // Fill buffer data
+      gl.bufferData(gl.ARRAY_BUFFER, this.createImageGrid(), gl.STATIC_DRAW); // Fill buffer data
       gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(this.texCoordLocation);
       // Set up uniforms variables (image).
@@ -101,184 +113,77 @@ var renderer = new function() {
       console.log('ERROR MAKING SHADERS: ', e);
       return;
     }
-  };
 
-  // Load a default image.
-  this.loadImage = function() {
-    var image = new Image();
-    image.onload = function() {
-      renderer.loadImage2(image);
-    };
-  };
-  // load a the user's image.
-  this.loadImageX = function(dataURL) {
-    var image = new Image();
+    // normalize vectors and anchors
+    let i,
+      anchor = {},
+      normalizedVectors = [],
+      normalizedAnchors = [];
 
-    image.onload = function() {
-      renderer.loadImage2(image);
-    };
+    for (i in this.vectors) {
+      let vector = {};
+      vector.point1 = this.normalizedPoint(
+        this.vectors[i][0].x,
+        this.vectors[i][0].y,
+        this.boundingRect.width,
+        this.boundingRect.height,
+      );
 
-    image.src = dataURL;
-  };
+      vector.point2 = this.normalizedPoint(
+        this.vectors[i][1].x,
+        this.vectors[i][1].y,
+        this.boundingRect.width,
+        this.boundingRect.height,
+      );
 
-  // This function does the heavy lifting of creating the texture from the image.
-  this.loadImage2 = function(image) {
-    // Convert the image to a square image via the temporary 2d canvas.
-    var canvas = document.getElementById('2dcanvas');
-    var ctx = canvas.getContext('2d');
-    var canvHeight = document.getElementById('2dcanvas').height;
-    var canvWidth = document.getElementById('2dcanvas').width;
-
-    var x = 0;
-    var y = 0;
-    var xx = canvWidth;
-    var yy = canvHeight;
-
-    ctx.clearRect(0, 0, canvWidth, canvHeight);
-    // If image isn't square, adjust width, height, and origin so it's centered.
-    // if (image.width < image.height) {
-    //   // Change origin and dimensions if the image isn't square.
-    //   // Change x, xx
-    //   xx = image.width / image.height * canvHeight;
-    //   x = (canvHeight - xx) / 2;
-    // }
-    // if (image.width > image.height) {
-    //   // Change y, yy
-    //   yy = image.height / image.width * canvHeight;
-    //   y = (canvHeight - yy) / 2;
-    // }
-
-    // Put the image on the canvas, scaled using xx & yy.
-    ctx.drawImage(image, 0, 0, image.width, image.height, x, y, xx, yy);
-    var gl = this.gl;
-
-    // Create a texture object that will contain the image.
-    var texture = gl.createTexture();
-
-    // Bind the texture the target (TEXTURE_2D) of the active texture unit.
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-
-    // Flip the image's Y axis to match the WebGL texture coordinate space.
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
-    // Set the parameters so we can render any size image.
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-    //    Note: a canvas is used here but can be replaced by an image object.
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
-    ctx.clearRect(0, 0, canvWidth, canvHeight);
-  };
-
-  this.render = function() {
-    var gl = this.gl;
-
-    // Create two arrays to hold start and end point uniforms
-    var p1 = new Float32Array(this.numVectors * 2); //x and y
-    var p2 = new Float32Array(this.numVectors * 2); //x and y
-
-    // Set up the arrays of points
-    {
-      var index = 0;
-      for (var i = 0; i < this.numVectors; i++) {
-        // Working values
-        var x1, y1, x2, y2;
-
-        if (moves[i]) {
-          x1 = moves[i].point1.x;
-          y1 = moves[i].point1.y;
-          x2 = moves[i].point2.x;
-          y2 = moves[i].point2.y;
-        } else {
-          x1 = 1;
-          y1 = 1;
-          x2 = 0.9999999;
-          y2 = 0.9999999;
-        }
-
-        p1[index] = x1;
-        p1[index + 1] = y1;
-        p2[index] = x2;
-        p2[index + 1] = y2;
-        index += 2;
-      }
+      normalizedVectors.unshift(vector);
     }
 
-    var a = new Float32Array(this.numAnchors * 2);
-    // Set up the anchor points
-    {
-      var index = 0;
-      for (var i = 0; i < this.numAnchors; i++) {
-        // Working values
-        var x, y;
+    for (i in this.anchors) {
+      anchor = this.normalizedPoint(
+        this.anchors[i].x,
+        this.anchors[i].y,
+        this.boundingRect.width,
+        this.boundingRect.height,
+      );
 
-        if (anchors[i]) {
-          x = anchors[i].x;
-          y = anchors[i].y;
-        } else {
-          x = 1.0;
-          y = 1.0;
-        }
+      // texture space goes from 0 - 1 not -1 - 1
+      anchor.x = (anchor.x + 1.0) / 2.0;
+      anchor.y = (anchor.y + 1.0) / 2.0;
 
-        a[index] = x;
-        a[index + 1] = y;
-        index += 2;
-      }
+      normalizedAnchors.unshift(anchor);
     }
 
-    //  Clear color buffer and set it to light gray
-    gl.clearColor(1.0, 1.0, 1.0, 0.5);
-    gl.clear(this.gl.COLOR_BUFFER_BIT);
+    this.vectors = normalizedVectors;
+    this.anchors = normalizedAnchors;
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);
-
-    gl.useProgram(this.pictureprogram);
-
-    // console.log("RENDERING WITH: ", p1, p2);
-    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'p1'), p1);
-    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'p2'), p2);
-    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'anchors'), a);
-    gl.uniform1f(
-      gl.getUniformLocation(this.pictureprogram, 'tween0'),
-      this.tween.val,
-    );
-    gl.uniform1f(
-      gl.getUniformLocation(this.pictureprogram, 'tween1'),
-      this.tween.val,
-    );
-
-    gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
-
-    gl.enableVertexAttribArray(this.texCoordLocation);
-
-    gl.drawArrays(gl.TRIANGLES, 0, resolution * resolution * 2 * 3);
+    this.setImage(this.imagePath, () => {
+      this.start();
+    });
   };
 
-  this.newMove = function(
-    point, // Where the warp starts (-1 to 1 range)
-  ) {
-    var move = new Move(point);
-    // Adds move to beginning of moves array (pushes onto array)
-    moves.unshift(move);
-
-    return move;
+  update = (anchors, vectors) => {
+    this.anchors = anchors;
+    this.vectors = vectors;
+    this.init();
   };
 
-  this.newAnchor = function(point) {
-    point.x = (point.x + 1.0) / 2.0;
-    point.y = (point.y + 1.0) / 2.0;
+  boundedPoint = (x, y) => {
+    if (x < -1) x = -1;
+    if (y < -1) y = -1;
+    if (x > 1) x = 1;
+    if (y > 1) y = 1;
 
-    anchors.unshift(point);
-    return point;
+    return { x, y };
   };
 
-  function createImageGrid() {
+  createImageGrid = () => {
     var q = 0.000000001;
+    const resolution = this.resolution;
 
     var r = (1 - q * 2) / resolution;
-    var c = new Float32Array(resolution * resolution * 12); //2 numbers per coord; three coords per triangle; 2 triagles per square; resolution * resolution squares.
+    //2 numbers per coord; three coords per triangle; 2 triagles per square; resolution * resolution squares.
+    var c = new Float32Array(resolution * resolution * 12);
 
     var i = 0;
 
@@ -307,138 +212,195 @@ var renderer = new function() {
       }
     }
     return c;
-  }
-}();
+  };
 
-// Program starts here
-function main(imagePath, anchors, vectors, boundingRect, animationParams) {
-  renderer.init(animationParams, vectors.length || 1, anchors.length || 1); // Initialize WebGL shapes and image
-  setImage(imagePath);
-  setTimeout(() => {
-    let i, move;
-    for (i in vectors) {
-      move = renderer.newMove(
-        normalizedPoint(
-          vectors[i][0].x,
-          vectors[i][0].y,
-          boundingRect.width,
-          boundingRect.height,
-        ),
-      );
-      move.point2 = normalizedPoint(
-        vectors[i][1].x,
-        vectors[i][1].y,
-        boundingRect.width,
-        boundingRect.height,
-      );
+  render = () => {
+    // do nothing if there are no vectors
+    if (!this.vectors[0].point1) {
+      return;
     }
 
-    for (i in anchors) {
-      renderer.newAnchor(
-        normalizedPoint(
-          anchors[i].x,
-          anchors[i].y,
-          boundingRect.width,
-          boundingRect.height,
-        ),
-      );
+    var gl = this.gl;
+    const resolution = this.resolution;
+
+    // Create two arrays to hold start and end point uniforms
+    var p1 = new Float32Array(this.numVectors * 2); //x and y
+    var p2 = new Float32Array(this.numVectors * 2); //x and y
+
+    var index = 0;
+
+    for (var i = 0; i < this.numVectors; i++) {
+      // Working values
+      var x1, y1, x2, y2;
+      if (this.vectors[i]) {
+        x1 = this.vectors[i].point1.x;
+        y1 = this.vectors[i].point1.y;
+        x2 = this.vectors[i].point2.x;
+        y2 = this.vectors[i].point2.y;
+      } else {
+        x1 = 1;
+        y1 = 1;
+        x2 = 0.9999999;
+        y2 = 0.9999999;
+      }
+
+      p1[index] = x1;
+      p1[index + 1] = y1;
+      p2[index] = x2;
+      p2[index + 1] = y2;
+      index += 2;
     }
 
-    startPreview();
-  }, 100);
+    var a = new Float32Array(this.numAnchors * 2);
+
+    var index = 0;
+    for (var i = 0; i < this.numAnchors; i++) {
+      // Working values
+      var x, y;
+
+      if (this.anchors[i]) {
+        x = this.anchors[i].x;
+        y = this.anchors[i].y;
+      } else {
+        x = 1.0;
+        y = 1.0;
+      }
+
+      a[index] = x;
+      a[index + 1] = y;
+      index += 2;
+    }
+
+    //  Clear color buffer and set it to light gray
+    gl.clearColor(1.0, 1.0, 1.0, 0.5);
+    gl.clear(this.gl.COLOR_BUFFER_BIT);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);
+
+    gl.useProgram(this.pictureprogram);
+
+    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'p1'), p1);
+    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'p2'), p2);
+    gl.uniform2fv(gl.getUniformLocation(this.pictureprogram, 'anchors'), a);
+    gl.uniform1f(
+      gl.getUniformLocation(this.pictureprogram, 'tween0'),
+      this.tween,
+    );
+    gl.uniform1f(
+      gl.getUniformLocation(this.pictureprogram, 'tween1'),
+      this.tween,
+    );
+
+    gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+    gl.enableVertexAttribArray(this.texCoordLocation);
+
+    gl.drawArrays(gl.TRIANGLES, 0, resolution * resolution * 2 * 3);
+  };
+
+  start = () => {
+    this.isPlaying = true;
+    window.requestAnimationFrame(this.renderAnimationFrame);
+  };
+
+  stop = () => {
+    this.isPlaying = false;
+  };
+
+  renderAnimationFrame = time => {
+    const framerate = this.isCapturing ? this.framerate : this.previewRate;
+
+    this.tween += 1.0 / (framerate * this.duration);
+
+    if (this.tween > 1.0) {
+      this.tween = 0.0;
+    }
+
+    this.render();
+
+    this.capturer.capture(this.canvas);
+
+    if (this.isCapturing) {
+      this.captureProgress++;
+      if (this.captureProgress > framerate * this.duration) {
+        this.capturer.stop();
+        this.capturer.save(blob => {
+          let ttMp4 = new TarToMp4(blob);
+
+          // export mp4 to temporary storage (for now)
+          ttMp4.export('./renderer/static/temp/', this.exportCallback);
+        });
+        this.isCapturing = false;
+      }
+    }
+
+    if (this.isPlaying) {
+      window.requestAnimationFrame(this.renderAnimationFrame);
+    }
+  };
+
+  normalizedPoint = (x, y, width, height) => {
+    x = x / width * 2 - 1;
+    y = (1 - y / height) * 2 - 1;
+
+    return this.boundedPoint(x, y);
+  };
+
+  setImage = (imagePath, callback) => {
+    imagePath = imagePath.split('file://')[1];
+
+    var bitmap = fs.readFileSync(imagePath);
+    const base64str = `data:image/jpeg;base64,${new Buffer(bitmap).toString(
+      'base64',
+    )}`;
+
+    var image = new Image();
+
+    image.onload = () => {
+      this.loadImage(image);
+      callback();
+    };
+
+    image.src = base64str;
+  };
+
+  // This function does the heavy lifting of creating the texture from the image.
+  loadImage = image => {
+    var canvas = document.getElementById('2dcanvas');
+    var ctx = canvas.getContext('2d');
+    var canvHeight = document.getElementById('2dcanvas').height;
+    var canvWidth = document.getElementById('2dcanvas').width;
+
+    var x = 0;
+    var y = 0;
+    var xx = canvWidth;
+    var yy = canvHeight;
+
+    ctx.clearRect(0, 0, canvWidth, canvHeight);
+
+    // Put the image on the canvas, scaled using xx & yy.
+    ctx.drawImage(image, 0, 0, image.width, image.height, x, y, xx, yy);
+    var gl = this.gl;
+
+    // Create a texture object that will contain the image.
+    var texture = gl.createTexture();
+
+    // Bind the texture the target (TEXTURE_2D) of the active texture unit.
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    // Flip the image's Y axis to match the WebGL texture coordinate space.
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+    // Set the parameters so we can render any size image.
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    //    Note: a canvas is used here but can be replaced by an image object.
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
+    ctx.clearRect(0, 0, canvWidth, canvHeight);
+  };
 }
 
-const startPreview = () => {
-  renderer.tween = { val: 0.0 };
-  TWEEN.removeAll();
-  let tween = new TWEEN.Tween(renderer.tween)
-    .to({ val: 1.0 }, 3000)
-    .repeat(101)
-    .start();
-  window.requestAnimationFrame(renderAnimationFrame);
-};
-
-const renderAnimationFrame = time => {
-  TWEEN.update(time);
-  renderer.render();
-  window.requestAnimationFrame(renderAnimationFrame);
-};
-
-function normalizedPoint(x, y, width, height) {
-  x = x / width * 2 - 1;
-  y = (1 - y / height) * 2 - 1;
-
-  return new Point(x, y);
-}
-
-function setVec2(id, a, b) {
-  gl.uniform2f(gl.getUniformLocation(program, id), a, b);
-}
-
-// Loads a shader from a script tag
-// Parameters:
-//   WebGL context
-//   id of script element containing the shader to load
-function getShader(gl, str, type) {
-  var shader;
-
-  // Create shaders based on the type we set
-  //   note: these types are commonly used, but not required
-  if (type == 'frag') {
-    shader = gl.createShader(gl.FRAGMENT_SHADER);
-  } else if (type == 'vertex') {
-    shader = gl.createShader(gl.VERTEX_SHADER);
-  } else {
-    return null;
-  }
-
-  gl.shaderSource(shader, str);
-  gl.compileShader(shader);
-
-  // Check the compile status, return an error if failed
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.log('SHADER FAILED TO COMPILE: ', gl.getShaderInfoLog(shader));
-    return null;
-  }
-
-  return shader;
-}
-
-function loadProgram(gl, vertexShader, fragmentShader) {
-  // create a progam object
-  var program = gl.createProgram();
-
-  // attach the two shaders
-  gl.attachShader(program, vertexShader);
-  gl.attachShader(program, fragmentShader);
-
-  // link everything
-  gl.linkProgram(program);
-
-  // Check the link status
-  var linked = gl.getProgramParameter(program, gl.LINK_STATUS);
-  if (!linked) {
-    // An error occurred while linking
-    var lastError = gl.getProgramInfoLog(program);
-    console.warn('Error in program linking:' + lastError);
-
-    gl.deleteProgram(program);
-    return null;
-  }
-
-  // if all is well, return the program object
-  return program;
-}
-
-function setImage(imagePath) {
-  imagePath = imagePath.split('file://')[1];
-
-  var bitmap = fs.readFileSync(imagePath);
-  const base64str = `data:image/jpeg;base64,${new Buffer(bitmap).toString(
-    'base64',
-  )}`;
-
-  renderer.loadImageX(base64str);
-}
-
-export default main;
+export default Preview;
