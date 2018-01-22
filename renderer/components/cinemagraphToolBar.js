@@ -25,15 +25,9 @@ class NavBar extends React.Component {
             filesHandler={this.props.selectCinemagraphVideo}
           />
           <IconButton
-            onClick={this.props.initializeCinemagraphCanvas}
             stroke={globalStyles.background}
             name="crosshair"
             backgroundColor={globalStyles.secondary}
-          />
-          <PreviewToggle
-            viewMode={this.props.viewMode}
-            startPreview={this.props.attemptPreviewCinemagraph}
-            startEdit={this.props.startCinemagraphEditMode}
           />
           <FileSaver type="video" fileHandler={this.props.renderCinemagraph} />
         </div>
