@@ -1,6 +1,8 @@
 # Splish-Desktop
 
-Setup:
+To download latest production: https://desktop-update.splish.io/download
+
+## Setup:
 
 * Install opencv and electron
 
