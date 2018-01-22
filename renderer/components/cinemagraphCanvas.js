@@ -2,6 +2,7 @@ import React from 'react';
 import * as globalStyles from '../globalStyles';
 import Preview from '../webgl/helpers/renderCinemagraph';
 import AnimationDebugger from './animationDebugger';
+import BrushCanvas from './brushCanvas';
 import fs from 'fs';
 
 class MovingStillPreview extends React.Component {
@@ -10,17 +11,17 @@ class MovingStillPreview extends React.Component {
     this.state = {
       hasPlayed: false,
       hasSelectedVideo: false,
+      brushPoints: [],
     };
   }
 
   componentDidUpdate() {
     if (this.state.hasSelectedVideo) {
       if (this.state.hasLoaded) {
-        this.preview.update(this.props.anchors, this.props.vectors);
+        this.preview.update(this.state.brushPoints);
       } else {
         this.preview = new Preview(
-          this.props.videoSrc,
-          this.props.brushPoints,
+          this.state.brushPoints,
           this.props.boundingRect,
           // callback for when the video completes capture
           // Read file and send it to s3, also notify redux
@@ -48,6 +49,10 @@ class MovingStillPreview extends React.Component {
     }
   }
 
+  onBrush = brushPoints => {
+    this.setState({ brushPoints });
+  };
+
   render() {
     const video = this.props.videoSrc ? (
       <video
@@ -72,6 +77,10 @@ class MovingStillPreview extends React.Component {
     return (
       <div>
         <div className="overlay" />
+        <BrushCanvas
+          height={this.props.videoClientHeight}
+          onBrush={this.onBrush}
+        />
         {video}
         <canvas
           style={{

@@ -126,8 +126,8 @@ class Preview {
     this.start();
   };
 
-  update = () => {
-    this.init();
+  update = brushPoints => {
+    console.log('UPDATING WITH BRUSHPOINTS: ', brushPoints);
   };
 
   boundedPoint = (x, y) => {
