@@ -1,6 +1,6 @@
 # Splish-Desktop
 
-To download latest production: https://desktop-update.splish.io/download
+To download latest production: http://d.splish.io/
 
 ## Setup:
 
