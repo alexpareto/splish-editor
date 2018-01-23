@@ -8,7 +8,6 @@ const initialState = {
   boundingRect: {},
   brushPoints: [],
   brushBlur: 0,
-  videoClientHeight: 0,
   videoDimensions: {
     width: 0,
     height: 0,
@@ -26,12 +25,16 @@ export const cinemagraphReducer = (state = initialState, action) => {
       };
     case actionTypes.INITIALIZE_CINEMAGRAPH_CANVAS:
       const vid = document.getElementById('cinemagraphVideo');
-      const videoClientHeight = vid.clientHeight;
+      const clientWidth = vid.clientWidth;
+      const clientHeight = vid.clientHeight;
       const naturalWidth = vid.videoWidth;
       const naturalHeight = vid.videoHeight;
       return {
         ...state,
-        videoClientHeight,
+        boundingRect: {
+          width: clientWidth,
+          height: clientHeight,
+        },
         videoDimensions: {
           width: naturalWidth,
           height: naturalHeight,

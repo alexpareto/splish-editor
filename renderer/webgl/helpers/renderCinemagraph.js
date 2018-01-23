@@ -7,12 +7,9 @@ import createImageGrid from './createImageGrid';
 import TarToMp4 from './tarToMp4';
 
 class Preview {
-  constructor(brushPoints, boundingRect, exportCallback) {
-    this.brushPoints = brushPoints;
+  constructor(boundingRect, exportCallback) {
     this.boundingRect = boundingRect;
     this.exportCallback = exportCallback;
-
-    // this.numBrushPoints = brushPoints.length + 1;
 
     this.canvas = document.getElementById('cinemagraphcanvas');
     this.gl = this.canvas.getContext('webgl');
@@ -37,9 +34,16 @@ class Preview {
       quality: 99,
     });
 
+    this.canvas2d = document.getElementById('2dcinemagraph');
+    this.ctx = this.canvas2d.getContext('2d');
+
     this.video = document.getElementById('cinemagraphVideo');
+    this.videoWidth = this.video.videoWidth;
+    this.videoHeight = this.video.videoHeight;
     this.vidTexture = this.gl.createTexture();
     this.imgTexture = this.gl.createTexture();
+    this.originalImage = [];
+    this.brushedImage = [];
     this.init();
   }
 
@@ -126,17 +130,33 @@ class Preview {
     this.start();
   };
 
-  update = brushPoints => {
-    console.log('UPDATING WITH BRUSHPOINTS: ', brushPoints);
-  };
+  update = newPoint => {
+    const normalizedPoint = this.normalizedPoint(
+      newPoint[0],
+      newPoint[1],
+      this.boundingRect.width,
+      this.boundingRect.height,
+    );
 
-  boundedPoint = (x, y) => {
-    if (x < -1) x = -1;
-    if (y < -1) y = -1;
-    if (x > 1) x = 1;
-    if (y > 1) y = 1;
+    console.log('new normalized point: ', normalizedPoint);
 
-    return { x, y };
+    let l = this.brushedImage.data.length / 4;
+    for (let i = 0; i < l; i++) {
+      const x = i % this.videoWidth;
+      const y = Math.min(i / this.videoWidth);
+      let dist = Math.sqrt(
+        Math.pow(normalizedPoint.x - x, 2) + Math.pow(normalizedPoint.y - y, 2),
+      );
+      if (dist < 80) {
+        const blur = 6.0;
+        const normalizedDistance = Math.pow(dist / 80.0, blur) * 255.0;
+
+        this.brushedImage.data[i * 4 + 3] = Math.min(
+          this.brushedImage.data[i * 4 + 3],
+          normalizedDistance,
+        );
+      }
+    }
   };
 
   render = () => {
@@ -145,6 +165,7 @@ class Preview {
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.vidTexture);
+
     gl.texImage2D(
       gl.TEXTURE_2D,
       0,
@@ -156,19 +177,39 @@ class Preview {
 
     // for now just take a snapshot of the first frame played
     // as the still image
+    // TODO: seek to a specified still image in the video and
+    // set that!
     if (!this.hasRendered) {
-      gl.activeTexture(gl.TEXTURE1);
-      gl.bindTexture(gl.TEXTURE_2D, this.imgTexture);
-      gl.texImage2D(
-        gl.TEXTURE_2D,
+      this.ctx.drawImage(this.video, 0, 0, this.videoWidth, this.videoHeight);
+
+      this.originalImage = this.ctx.getImageData(
         0,
-        gl.RGBA,
-        gl.RGBA,
-        gl.UNSIGNED_BYTE,
-        this.video,
+        0,
+        this.videoWidth,
+        this.videoHeight,
       );
+      this.brushedImage = this.ctx.getImageData(
+        0,
+        0,
+        this.videoWidth,
+        this.videoHeight,
+      );
+
       this.hasRendered = true;
+    } else {
+      this.ctx.putImageData(this.brushedImage, 0, 0);
     }
+
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, this.imgTexture);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.RGBA,
+      gl.RGBA,
+      gl.UNSIGNED_BYTE,
+      this.canvas2d,
+    );
 
     //  Clear color buffer and set it to light gray
     gl.clearColor(1.0, 1.0, 1.0, 0.5);
@@ -214,15 +255,16 @@ class Preview {
     if (this.isPlaying) {
       setTimeout(() => {
         this.renderAnimationFrame();
-      }, 40);
+      }, 20);
     }
   };
 
+  // normalized relative to videoHeight/width
   normalizedPoint = (x, y, width, height) => {
-    x = x / width * 2 - 1;
-    y = (1 - y / height) * 2 - 1;
+    x = Math.max(x / width * this.videoWidth);
+    y = Math.max(y / height * this.videoHeight);
 
-    return this.boundedPoint(x, y);
+    return { x, y };
   };
 }
 

@@ -17,7 +17,7 @@ class Cinemagraph extends React.Component {
         <CinemagraphCanvas
           initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
           videoSrc={this.props.cinemagraph.videoPath}
-          videoClientHeight={this.props.cinemagraph.videoClientHeight}
+          boundingRect={this.props.cinemagraph.boundingRect}
           videoDimensions={this.props.cinemagraph.videoDimensions}
         />
         <Trimmer />

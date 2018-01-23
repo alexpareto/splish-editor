@@ -54,13 +54,12 @@ class brushCanvas extends React.Component {
   brush = mouse => {
     //for debugging
     let circle = this.state.svg.append('circle');
-    circle
-      .attr('cx', mouse[0])
-      .attr('cy', mouse[1])
-      .attr('r', 2);
-
+    // circle
+    //   .attr('cx', mouse[0])
+    //   .attr('cy', mouse[1])
+    //   .attr('r', 2);
     this.brushPoints.push(mouse);
-    this.props.onBrush(this.brushPoints);
+    this.props.onBrush(mouse);
   };
 
   render() {

@@ -5,39 +5,33 @@ import AnimationDebugger from './animationDebugger';
 import BrushCanvas from './brushCanvas';
 import fs from 'fs';
 
-class MovingStillPreview extends React.Component {
+class CinemagraphPreview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       hasPlayed: false,
       hasSelectedVideo: false,
-      brushPoints: [],
     };
   }
 
   componentDidUpdate() {
-    if (this.state.hasSelectedVideo) {
-      if (this.state.hasLoaded) {
-        this.preview.update(this.state.brushPoints);
-      } else {
-        this.preview = new Preview(
-          this.state.brushPoints,
-          this.props.boundingRect,
-          // callback for when the video completes capture
-          // Read file and send it to s3, also notify redux
-          // to stop capturing the video b/c export is done
-          filePath => {
-            fs.readFile(filePath, (err, data) => {
-              const file = new File([data], 'output.mp4', {
-                type: 'video/mp4',
-              });
-
-              this.props.uploadExportRequest(file);
+    if (this.state.hasSelectedVideo && !this.state.hasLoaded) {
+      this.preview = new Preview(
+        this.props.boundingRect,
+        // callback for when the video completes capture
+        // Read file and send it to s3, also notify redux
+        // to stop capturing the video b/c export is done
+        filePath => {
+          fs.readFile(filePath, (err, data) => {
+            const file = new File([data], 'output.mp4', {
+              type: 'video/mp4',
             });
-          },
-        );
-        this.setState({ hasLoaded: true });
-      }
+
+            this.props.uploadExportRequest(file);
+          });
+        },
+      );
+      this.setState({ hasLoaded: true });
     }
 
     // give time for image upload to GPU
@@ -49,8 +43,8 @@ class MovingStillPreview extends React.Component {
     }
   }
 
-  onBrush = brushPoints => {
-    this.setState({ brushPoints });
+  onBrush = brushPoint => {
+    this.preview.update(brushPoint);
   };
 
   render() {
@@ -78,20 +72,31 @@ class MovingStillPreview extends React.Component {
       <div>
         <div className="overlay" />
         <BrushCanvas
-          height={this.props.videoClientHeight}
+          height={this.props.boundingRect.height}
           onBrush={this.onBrush}
         />
         {video}
         <canvas
           style={{
             width: '800px',
-            height: `${this.props.videoClientHeight}px`,
+            height: `${this.props.boundingRect.height}px`,
             zIndex: 1,
             position: 'absolute',
           }}
           width={this.props.videoDimensions.width}
           height={this.props.videoDimensions.height}
           id="cinemagraphcanvas"
+        />
+        <canvas
+          style={{
+            width: '800px',
+            height: `${this.props.boundingRect.height}px`,
+            zIndex: -1,
+            position: 'absolute',
+          }}
+          width={this.props.videoDimensions.width}
+          height={this.props.videoDimensions.height}
+          id="2dcinemagraph"
         />
         <style jsx>{`
           .overlay {
@@ -107,4 +112,4 @@ class MovingStillPreview extends React.Component {
   }
 }
 
-export default MovingStillPreview;
+export default CinemagraphPreview;
