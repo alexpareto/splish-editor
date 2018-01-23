@@ -72,7 +72,7 @@ void main() {
       vec2 pt1 = (p1[i] + 1.0) / 2.0;
       vec2 intersect;
       float min = 1.0 / ${anchorImpact};
-      bool isDifSide;
+      bool isDifSide = false;
 
       for(int j = 0; j < NUM_ANCHORS - 1; j++)
       {
@@ -96,19 +96,12 @@ void main() {
           min = intersectDistance;
         }
 
-        isDifSide = 
+        isDifSide = isDifSide ||
           (a_texCoord.y > (a_texCoord.x * slope + yIntercept)) !=
           (pt1.y > (pt1.x * slope + yIntercept));
-
-        if(isDifSide) {
-          break;
-        }
       }
 
-      if(isDifSide) {
-        v_texCoord = a_texCoord;
-        v_texCoord2 = a_texCoord;
-      } else {
+      if(!isDifSide) {
         v_texCoord -= (maxdistortAhead * normalizedimpact * min * ${anchorImpact});
         v_texCoord2 += (maxdistortBehind * normalizedimpact * min * ${anchorImpact});
       }
