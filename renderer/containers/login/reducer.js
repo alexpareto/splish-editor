@@ -40,6 +40,7 @@ export const authReducer = (state = initialState, action) => {
       };
     case actionTypes.SIGN_UP_USER_SUCCESS:
       window.localStorage.setItem('token', action.token);
+      fbq('track', 'CompleteRegistration');
       return {
         ...state,
         requestSent: false,
