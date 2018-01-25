@@ -38,6 +38,8 @@ class Preview {
     this.ctx = this.canvas2d.getContext('2d');
 
     this.video = document.getElementById('cinemagraphVideo');
+    this.duration = this.video.duration;
+    console.log('DURATION: ', this.duration);
     this.videoWidth = this.video.videoWidth;
     this.videoHeight = this.video.videoHeight;
     this.vidTexture = this.gl.createTexture();
@@ -49,7 +51,7 @@ class Preview {
 
   capture = () => {
     this.captureProgress = 0;
-    this.tween = 0;
+    this.video.currentTime = 0;
     this.capturer.start();
     this.isCapturing = true;
   };
@@ -137,8 +139,6 @@ class Preview {
       this.boundingRect.width,
       this.boundingRect.height,
     );
-
-    console.log('new normalized point: ', normalizedPoint);
 
     let l = this.brushedImage.data.length / 4;
     for (let i = 0; i < l; i++) {
@@ -237,8 +237,10 @@ class Preview {
     this.capturer.capture(this.canvas);
 
     if (this.isCapturing) {
+      console.log('CAPTURING');
       this.captureProgress++;
-      if (this.captureProgress > this.framerate * this.duration) {
+      // this.video.currentTime = this.videoCurrentT
+      if (this.captureProgress > this.framerate * this.duration * 1000) {
         this.capturer.stop();
         this.capturer.save(blob => {
           let ttMp4 = new TarToMp4(blob);

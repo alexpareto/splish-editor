@@ -29,7 +29,7 @@ class NavBar extends React.Component {
       <ExportModal
         isRendering={this.props.isRendering}
         exports={this.props.exports}
-        movingStillShareComplete={this.props.movingStillShareComplete}
+        onComplete={this.props.movingStillShareComplete}
       />
     ) : null;
 

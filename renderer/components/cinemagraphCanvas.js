@@ -34,7 +34,6 @@ class CinemagraphPreview extends React.Component {
       this.setState({ hasLoaded: true });
     }
 
-    // give time for image upload to GPU
     if (this.props.isRendering) {
       setTimeout(() => {
         this.preview.capture();
@@ -63,8 +62,8 @@ class CinemagraphPreview extends React.Component {
           this.props.initializeCinemagraphCanvas();
           this.setState({ hasSelectedVideo: true });
         }}
-        loop
         muted={true}
+        loop
       />
     ) : null;
 

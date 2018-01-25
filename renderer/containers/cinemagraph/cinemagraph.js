@@ -4,6 +4,7 @@ import CinemagraphCanvas from '../../components/cinemagraphCanvas';
 import Trimmer from '../../components/trimmer';
 import { connect } from 'react-redux';
 import * as Actions from './actions';
+import * as ExportActions from '../exports/actions';
 
 class Cinemagraph extends React.Component {
   render() {
@@ -12,13 +13,20 @@ class Cinemagraph extends React.Component {
       <div>
         <NavBar
           selectCinemagraphVideo={this.props.selectCinemagraphVideo}
-          renderCinemagraph={this.props.renderCinemagraph}
+          startExportingCinemagraph={this.props.startExportingCinemagraph}
+          cinemagraphShareComplete={this.props.cinemagraphShareComplete}
+          showExportModal={this.props.cinemagraph.showExportModal}
+          isRendering={this.props.cinemagraph.isRendering}
+          exports={this.props.exports}
         />
         <CinemagraphCanvas
           initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
           videoSrc={this.props.cinemagraph.videoPath}
           boundingRect={this.props.cinemagraph.boundingRect}
+          isRendering={this.props.cinemagraph.isRendering}
           videoDimensions={this.props.cinemagraph.videoDimensions}
+          cinemagraphExportComplete={this.props.cinemagraphExportComplete}
+          uploadExportRequest={this.props.uploadExportRequest}
         />
         <Trimmer />
       </div>
@@ -33,9 +41,20 @@ const mapDispatchToProps = dispatch => {
     renderCinemagraph: path => dispatch(Actions.renderCinemagraph(path)),
     initializeCinemagraphCanvas: () =>
       dispatch(Actions.initializeCinemagraphCanvas()),
+    startExportingCinemagraph: () =>
+      dispatch(Actions.startExportingCinemagraph()),
+    uploadExportRequest: file =>
+      dispatch(ExportActions.uploadExportRequest(file)),
+    cinemagraphExportComplete: () =>
+      dispatch(Actions.cinemagraphExportComplete()),
+    cinemagraphShareComplete: () =>
+      dispatch(Actions.cinemagraphShareComplete()),
   };
 };
 
-const mapStateToProps = state => ({ cinemagraph: state.cinemagraph });
+const mapStateToProps = state => ({
+  cinemagraph: state.cinemagraph,
+  exports: state.exports.exports,
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cinemagraph);
