@@ -9,7 +9,7 @@ class CinemagraphPreview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasPlayed: false,
+      hasLoaded: false,
       hasSelectedVideo: false,
     };
   }
@@ -60,8 +60,10 @@ class CinemagraphPreview extends React.Component {
         width="800px"
         autoPlay={true}
         onPlay={() => {
-          this.props.initializeCinemagraphCanvas();
-          this.setState({ hasSelectedVideo: true });
+          if (!this.state.hasLoaded) {
+            this.props.initializeCinemagraphCanvas();
+            this.setState({ hasSelectedVideo: true });
+          }
         }}
         muted={true}
         loop

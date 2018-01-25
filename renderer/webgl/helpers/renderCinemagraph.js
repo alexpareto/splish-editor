@@ -17,7 +17,7 @@ class Preview {
     //state
     this.isCapturing = false;
     this.captureProgress = 0;
-    this.framerate = 30;
+    this.framerate = 24;
     this.resolution = 20;
     this.hasRendered = false;
 
@@ -44,7 +44,7 @@ class Preview {
       format: 'jpg',
       verbose: true,
       display: false,
-      framerate: 30,
+      framerate: 24,
       quality: 99,
       syncVideo: this.video,
     });
