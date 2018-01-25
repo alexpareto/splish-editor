@@ -29,6 +29,7 @@ class CinemagraphPreview extends React.Component {
 
             this.props.uploadExportRequest(file);
           });
+          this.props.cinemagraphExportComplete();
         },
       );
       this.setState({ hasLoaded: true });

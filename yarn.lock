@@ -4346,12 +4346,6 @@ lru-cache@^4.0.1:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
-macro-inferno@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/macro-inferno/-/macro-inferno-0.2.1.tgz#20de3ae8e9ac76b3fc652cbf6c25f325a9ba2e22"
-  dependencies:
-    nan "^2.7.0"
-
 make-dir@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-1.1.0.tgz#19b4369fe48c116f53c2af95ad102c0e39e85d51"
@@ -4542,7 +4536,7 @@ mz@2.7.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
-nan@^2.3.0, nan@^2.7.0:
+nan@^2.3.0:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.8.0.tgz#ed715f3fe9de02b57a5e6252d90a96675e1f085a"
 
@@ -4897,13 +4891,6 @@ onetime@^2.0.0:
   resolved "https://registry.yarnpkg.com/onetime/-/onetime-2.0.1.tgz#067428230fd67443b2794b22bba528b6867962d4"
   dependencies:
     mimic-fn "^1.0.0"
-
-opencv4nodejs@^2.27.0:
-  version "2.37.1"
-  resolved "https://registry.yarnpkg.com/opencv4nodejs/-/opencv4nodejs-2.37.1.tgz#c4543667da6fa45190c06900ba609b6b793378e4"
-  dependencies:
-    macro-inferno "^0.2.1"
-    nan "^2.7.0"
 
 optimist@^0.6.1:
   version "0.6.1"
@@ -7014,9 +7001,9 @@ yauzl@2.4.1:
   dependencies:
     fd-slicer "~1.0.1"
 
-zcapture.js@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/zcapture.js/-/zcapture.js-0.0.1.tgz#6d158f9dae272f1372f80e4a502224d204b60827"
+zcapture.js@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/zcapture.js/-/zcapture.js-0.0.2.tgz#8aff9c8fa150c0c34ec994f98031446fdac2a668"
 
 zen-observable@^0.6.0:
   version "0.6.1"

@@ -17,22 +17,9 @@ class Preview {
     //state
     this.isCapturing = false;
     this.captureProgress = 0;
-    this.framerate = 24;
+    this.framerate = 30;
     this.resolution = 20;
     this.hasRendered = false;
-
-    // video capturing
-    let CCapture;
-    if (window) {
-      CCapture = require('zcapture.js');
-    }
-
-    this.capturer = new CCapture({
-      format: 'jpg',
-      verbose: true,
-      display: false,
-      quality: 99,
-    });
 
     this.canvas2d = document.getElementById('2dcinemagraph');
     this.ctx = this.canvas2d.getContext('2d');
@@ -46,6 +33,22 @@ class Preview {
     this.imgTexture = this.gl.createTexture();
     this.originalImage = [];
     this.brushedImage = [];
+
+    // video capturing
+    let CCapture;
+    if (window) {
+      CCapture = require('zcapture.js');
+    }
+
+    this.capturer = new CCapture({
+      format: 'jpg',
+      verbose: true,
+      display: false,
+      framerate: 30,
+      quality: 99,
+      syncVideo: this.video,
+    });
+
     this.init();
   }
 
@@ -237,10 +240,8 @@ class Preview {
     this.capturer.capture(this.canvas);
 
     if (this.isCapturing) {
-      console.log('CAPTURING');
       this.captureProgress++;
-      // this.video.currentTime = this.videoCurrentT
-      if (this.captureProgress > this.framerate * this.duration * 1000) {
+      if (this.captureProgress > this.framerate * this.duration) {
         this.capturer.stop();
         this.capturer.save(blob => {
           let ttMp4 = new TarToMp4(blob);
@@ -255,9 +256,13 @@ class Preview {
     // preview at a lower framerate than 60fps
     // frame every 40 ms => 25 fps
     if (this.isPlaying) {
-      setTimeout(() => {
-        this.renderAnimationFrame();
-      }, 20);
+      if (this.isCapturing) {
+        window.requestAnimationFrame(this.renderAnimationFrame);
+      } else {
+        setTimeout(() => {
+          this.renderAnimationFrame();
+        }, 40);
+      }
     }
   };
 
