@@ -6,36 +6,45 @@ import stream from 'stream';
 class TarToMp4 {
   constructor(tarBlob) {
     console.log('Converting Tar to MP4');
+    const directory = './renderer/static/temp/frames';
     // local state
     this.exportRequested = false;
     this.bufferStreamCompleted = false;
     this.exportPath = '';
     this.exportCallback = () => {};
 
-    const frameDir = './renderer/static/temp/frames';
-
-    let url = window.URL.createObjectURL(tarBlob);
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      // exctract .tar to file system
-      const buffer = new Buffer(reader.result);
-      const bufferStream = new stream.PassThrough();
-      bufferStream.end(buffer);
-
-      const streamer = bufferStream.pipe(tar.extract(frameDir));
-
-      streamer.on('finish', () => {
-        this.bufferStreamCompleted = true;
-
-        if (this.exportRequested) {
-          this.export(this.exportPath, this.exportCallback);
+    fs.readdir(directory, (err, files) => {
+      if (files) {
+        for (const file of files) {
+          fs.unlinkSync(directory + '/' + file);
         }
-      });
-    };
+      }
 
-    reader.readAsArrayBuffer(tarBlob);
+      const frameDir = './renderer/static/temp/frames';
+
+      let url = window.URL.createObjectURL(tarBlob);
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        // exctract .tar to file system
+        const buffer = new Buffer(reader.result);
+        const bufferStream = new stream.PassThrough();
+        bufferStream.end(buffer);
+
+        const streamer = bufferStream.pipe(tar.extract(frameDir));
+
+        streamer.on('finish', () => {
+          this.bufferStreamCompleted = true;
+
+          if (this.exportRequested) {
+            this.export(this.exportPath, this.exportCallback);
+          }
+        });
+      };
+
+      reader.readAsArrayBuffer(tarBlob);
+    });
   }
 
   reset = () => {
@@ -46,6 +55,7 @@ class TarToMp4 {
 
   // export to local file system
   export = (filePath, callback) => {
+    console.log('EXPORTING');
     this.exportPath = filePath;
     this.exportRequested = true;
     this.exportCallback = callback;

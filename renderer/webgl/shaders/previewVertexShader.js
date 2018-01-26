@@ -35,6 +35,16 @@ void main() {
   float tweenAhead = tween0;
   float tweenBehind = 1.0 - tween0;
 
+  vec2 maxImpactBehind;
+  vec2 maxImpactAhead;
+  vec2 zeroVec;
+  maxImpactAhead.x = 0.0;
+  maxImpactAhead.y = 0.0;
+  maxImpactBehind.x = 0.0;
+  maxImpactBehind.y = 0.0;
+  zeroVec.x = 0.0;
+  zeroVec.y = 0.0;
+
   for (int i = 0; i < NUM_VECTORS - 1; i++) // loop through 
   {
     dx = p1[i].x - p2[i].x;
@@ -72,7 +82,7 @@ void main() {
       vec2 pt1 = (p1[i] + 1.0) / 2.0;
       vec2 intersect;
       float min = 1.0 / ${anchorImpact};
-      bool isDifSide;
+      bool isDifSide = false;
 
       for(int j = 0; j < NUM_ANCHORS - 1; j++)
       {
@@ -81,8 +91,8 @@ void main() {
         float dx = anchors[j].x - pt1.x;
 
         // prevent divide by zero errors
-        // dx += 0.000001;
-        // dy += 0.000001;
+        dx += 0.000001;
+        dy += 0.000001;
 
         float slope = 1.0 / (-dy/dx);
         float yIntercept = anchors[j].y - (slope * anchors[j].x);
@@ -96,28 +106,52 @@ void main() {
           min = intersectDistance;
         }
 
-        isDifSide = 
+        isDifSide = isDifSide ||
           (a_texCoord.y > (a_texCoord.x * slope + yIntercept)) !=
           (pt1.y > (pt1.x * slope + yIntercept));
-
-        if(isDifSide) {
-          break;
-        }
       }
 
-      if(isDifSide) {
-        v_texCoord = a_texCoord;
-        v_texCoord2 = a_texCoord;
-      } else {
+      if(!isDifSide) {
         v_texCoord -= (maxdistortAhead * normalizedimpact * min * ${anchorImpact});
         v_texCoord2 += (maxdistortBehind * normalizedimpact * min * ${anchorImpact});
-      }
 
+        if(
+          distance(zeroVec, maxImpactBehind) < 
+          distance(zeroVec, (maxdistortBehind * normalizedimpact * min * ${anchorImpact}))
+        ){
+          maxImpactBehind = (maxdistortBehind * normalizedimpact * min * ${anchorImpact});
+        }
+
+        if(
+          distance(zeroVec, maxImpactAhead) < 
+          distance(zeroVec, (maxdistortAhead * normalizedimpact * min * ${anchorImpact}))
+        ){
+          maxImpactAhead = (maxdistortAhead * normalizedimpact * min * ${anchorImpact});
+        }
+      }
     }
   }
 
-// gl_Position always specifies where to render this vector 
-gl_Position = vec4(position, 0.0, 1.0);     // x,y,z,
+  // add correction for multiple vectors in the same direction
+  float maxDistAhead = distance(zeroVec, maxImpactAhead);
+  float maxDistBehind = distance(zeroVec, maxImpactBehind);
+  float actualDistAhead = distance(a_texCoord, v_texCoord);
+  float actualDistBehind = distance(a_texCoord, v_texCoord2);
+
+  if(maxDistAhead < actualDistAhead){
+    vec2 change = a_texCoord - v_texCoord;
+    change = change * (maxDistAhead / actualDistAhead);
+    v_texCoord = a_texCoord - change;
+  }
+
+  if(maxDistBehind < actualDistBehind){
+    vec2 change = a_texCoord - v_texCoord2;
+    change = change * (maxDistBehind / actualDistBehind);
+    v_texCoord2 = a_texCoord - change;
+  }
+
+  // gl_Position always specifies where to render this vector 
+  gl_Position = vec4(position, 0.0, 1.0);     // x,y,z,
 }
 `;
 };

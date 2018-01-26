@@ -12,6 +12,8 @@ const initialState = {
     width: 0,
     height: 0,
   },
+  showExportModal: false,
+  isRendering: false,
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
@@ -48,10 +50,21 @@ export const cinemagraphReducer = (state = initialState, action) => {
       return {
         ...state,
       };
-    case actionTypes.RENDER_CINEMAGRAPH:
+    case actionTypes.START_EXPORTING_CINEMAGRAPH:
       return {
         ...state,
-        renderPath,
+        isRendering: true,
+        showExportModal: true,
+      };
+    case actionTypes.CINEMAGRAPH_EXPORT_COMPLETE:
+      return {
+        ...state,
+        isRendering: false,
+      };
+    case actionTypes.CINEMAGRAPH_SHARE_COMPLETE:
+      return {
+        ...state,
+        showExportModal: false,
       };
     default:
       return state;

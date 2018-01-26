@@ -63,7 +63,7 @@
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
     "tar-fs": "^1.16.0",
-    "zcapture.js": "^0.0.1"
+    "zcapture.js": "^0.0.2"
   },
   "build": {
     "appId": "io.splish.desktop",

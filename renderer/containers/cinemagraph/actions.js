@@ -5,7 +5,9 @@ export const actionTypes = {
   REDO_CINEMAGRAPH: 'REDO_CINEMAGRAPH',
   UPDATE_CINEMAGRAPH_BRUSH_POINTS: 'UPDATE_CINEMAGRAPH_BRUSH_POINTS',
   UPDATE_CINEMAGRAPH_BRUSH_BLUR: 'UPDATE_CINEMAGRAPH_BRUSH_POINTS',
-  RENDER_CINEMAGRAPH: 'RENDER_CINEMAGRAPH',
+  START_EXPORTING_CINEMAGRAPH: 'START_EXPORTING_CINEMAGRAPH',
+  CINEMAGRAPH_EXPORT_COMPLETE: 'CINEMAGRAPH_EXPORT_COMPLETE',
+  CINEMAGRAPH_SHARE_COMPLETE: 'CINEMAGRAPH_SHARE_COMPLETE',
 };
 
 export const selectCinemagraphVideo = files => {
@@ -30,4 +32,16 @@ export const updateCinemagraphBrushBlur = path => {
 
 export const initializeCinemagraphCanvas = () => {
   return { type: actionTypes.INITIALIZE_CINEMAGRAPH_CANVAS };
+};
+
+export const startExportingCinemagraph = () => {
+  return { type: actionTypes.START_EXPORTING_CINEMAGRAPH };
+};
+
+export const cinemagraphExportComplete = () => {
+  return { type: actionTypes.CINEMAGRAPH_EXPORT_COMPLETE };
+};
+
+export const cinemagraphShareComplete = () => {
+  return { type: actionTypes.CINEMAGRAPH_SHARE_COMPLETE };
 };

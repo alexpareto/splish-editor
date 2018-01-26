@@ -9,7 +9,7 @@ class CinemagraphPreview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasPlayed: false,
+      hasLoaded: false,
       hasSelectedVideo: false,
     };
   }
@@ -29,12 +29,12 @@ class CinemagraphPreview extends React.Component {
 
             this.props.uploadExportRequest(file);
           });
+          this.props.cinemagraphExportComplete();
         },
       );
       this.setState({ hasLoaded: true });
     }
 
-    // give time for image upload to GPU
     if (this.props.isRendering) {
       setTimeout(() => {
         this.preview.capture();
@@ -60,11 +60,13 @@ class CinemagraphPreview extends React.Component {
         width="800px"
         autoPlay={true}
         onPlay={() => {
-          this.props.initializeCinemagraphCanvas();
-          this.setState({ hasSelectedVideo: true });
+          if (!this.state.hasLoaded) {
+            this.props.initializeCinemagraphCanvas();
+            this.setState({ hasSelectedVideo: true });
+          }
         }}
-        loop
         muted={true}
+        loop
       />
     ) : null;
 

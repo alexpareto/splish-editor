@@ -21,6 +21,19 @@ class Preview {
     this.resolution = 20;
     this.hasRendered = false;
 
+    this.canvas2d = document.getElementById('2dcinemagraph');
+    this.ctx = this.canvas2d.getContext('2d');
+
+    this.video = document.getElementById('cinemagraphVideo');
+    this.duration = this.video.duration;
+    console.log('DURATION: ', this.duration);
+    this.videoWidth = this.video.videoWidth;
+    this.videoHeight = this.video.videoHeight;
+    this.vidTexture = this.gl.createTexture();
+    this.imgTexture = this.gl.createTexture();
+    this.originalImage = [];
+    this.brushedImage = [];
+
     // video capturing
     let CCapture;
     if (window) {
@@ -31,25 +44,17 @@ class Preview {
       format: 'jpg',
       verbose: true,
       display: false,
+      framerate: 24,
       quality: 99,
+      syncVideo: this.video,
     });
 
-    this.canvas2d = document.getElementById('2dcinemagraph');
-    this.ctx = this.canvas2d.getContext('2d');
-
-    this.video = document.getElementById('cinemagraphVideo');
-    this.videoWidth = this.video.videoWidth;
-    this.videoHeight = this.video.videoHeight;
-    this.vidTexture = this.gl.createTexture();
-    this.imgTexture = this.gl.createTexture();
-    this.originalImage = [];
-    this.brushedImage = [];
     this.init();
   }
 
   capture = () => {
     this.captureProgress = 0;
-    this.tween = 0;
+    this.video.currentTime = 0;
     this.capturer.start();
     this.isCapturing = true;
   };
@@ -137,8 +142,6 @@ class Preview {
       this.boundingRect.width,
       this.boundingRect.height,
     );
-
-    console.log('new normalized point: ', normalizedPoint);
 
     let l = this.brushedImage.data.length / 4;
     for (let i = 0; i < l; i++) {
@@ -253,9 +256,13 @@ class Preview {
     // preview at a lower framerate than 60fps
     // frame every 40 ms => 25 fps
     if (this.isPlaying) {
-      setTimeout(() => {
-        this.renderAnimationFrame();
-      }, 20);
+      if (this.isCapturing) {
+        window.requestAnimationFrame(this.renderAnimationFrame);
+      } else {
+        setTimeout(() => {
+          this.renderAnimationFrame();
+        }, 40);
+      }
     }
   };
 

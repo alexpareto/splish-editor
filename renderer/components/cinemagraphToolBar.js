@@ -4,13 +4,23 @@ import FileSelection from './fileSelection';
 import FileSaver from './fileSaver';
 import IconButton from './iconButton';
 import PreviewToggle from './previewToggle';
+import ExportModal from './exportModal';
 import Link from 'next/link';
 
 class NavBar extends React.Component {
   render() {
+    const exportModal = this.props.showExportModal ? (
+      <ExportModal
+        isRendering={this.props.isRendering}
+        exports={this.props.exports}
+        onComplete={this.props.cinemagraphShareComplete}
+      />
+    ) : null;
+
     return (
       <div className="container">
         <div className="flex">
+          {exportModal}
           <Link href="/mainMenu" prefetch>
             <a>
               <IconButton
@@ -26,10 +36,10 @@ class NavBar extends React.Component {
           />
           <IconButton
             stroke={globalStyles.background}
-            name="crosshair"
+            name="share"
             backgroundColor={globalStyles.secondary}
+            onClick={this.props.startExportingCinemagraph}
           />
-          <FileSaver type="video" fileHandler={this.props.renderCinemagraph} />
         </div>
         <style jsx>
           {`
