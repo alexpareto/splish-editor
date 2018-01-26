@@ -115,6 +115,7 @@ class AnimationDebugger extends React.Component {
               width: 40px;
             }
             .container {
+              max-height: 95vh;
               position: absolute;
               display: flex;
               flex-direction: column;
@@ -122,7 +123,7 @@ class AnimationDebugger extends React.Component {
               margin-left: -8px;
               align-items: center;
               z-index: 3000000;
-              top: 15vh;
+              bottom: 0px;
               background-color: rgba(255, 255, 255, 0.7);
               width: 100vw;
             }
