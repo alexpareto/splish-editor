@@ -148,8 +148,7 @@ class Preview {
       brushSize * this.videoWidth / this.boundingRect.width;
 
     let blur = 21 - 2 * brushBlur;
-
-    // console.log("NORMALIZED BRUSH SIZE/BLUR: ", )
+    
     let l = this.brushedImage.data.length / 4;
     for (let i = 0; i < l; i++) {
       const x = i % this.videoWidth;
