@@ -17,7 +17,11 @@ class Cinemagraph extends React.Component {
           cinemagraphShareComplete={this.props.cinemagraphShareComplete}
           showExportModal={this.props.cinemagraph.showExportModal}
           isRendering={this.props.cinemagraph.isRendering}
+          updateCinemagraphBrushBlur={this.props.updateCinemagraphBrushBlur}
+          updateCinemagraphBrushSize={this.props.updateCinemagraphBrushSize}
           exports={this.props.exports}
+          brushSize={this.props.cinemagraph.brushSize}
+          brushBlur={this.props.cinemagraph.brushBlur}
         />
         <CinemagraphCanvas
           initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
@@ -27,6 +31,8 @@ class Cinemagraph extends React.Component {
           videoDimensions={this.props.cinemagraph.videoDimensions}
           cinemagraphExportComplete={this.props.cinemagraphExportComplete}
           uploadExportRequest={this.props.uploadExportRequest}
+          brushSize={this.props.cinemagraph.brushSize}
+          brushBlur={this.props.cinemagraph.brushBlur}
         />
         <Trimmer />
       </div>
@@ -49,6 +55,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.cinemagraphExportComplete()),
     cinemagraphShareComplete: () =>
       dispatch(Actions.cinemagraphShareComplete()),
+    updateCinemagraphBrushBlur: brushBlur =>
+      dispatch(Actions.updateCinemagraphBrushBlur(brushBlur)),
+    updateCinemagraphBrushSize: brushSize =>
+      dispatch(Actions.updateCinemagraphBrushSize(brushSize)),
   };
 };
 

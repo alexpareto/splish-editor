@@ -135,7 +135,7 @@ class Preview {
     this.start();
   };
 
-  update = newPoint => {
+  update = (newPoint, brushSize, brushBlur) => {
     const normalizedPoint = this.normalizedPoint(
       newPoint[0],
       newPoint[1],
@@ -143,6 +143,13 @@ class Preview {
       this.boundingRect.height,
     );
 
+    // normalize brush size based off of actual image width
+    let normalizedBrushSize =
+      brushSize * this.videoWidth / this.boundingRect.width;
+
+    let blur = 21 - 2 * brushBlur;
+
+    // console.log("NORMALIZED BRUSH SIZE/BLUR: ", )
     let l = this.brushedImage.data.length / 4;
     for (let i = 0; i < l; i++) {
       const x = i % this.videoWidth;
@@ -150,9 +157,9 @@ class Preview {
       let dist = Math.sqrt(
         Math.pow(normalizedPoint.x - x, 2) + Math.pow(normalizedPoint.y - y, 2),
       );
-      if (dist < 80) {
-        const blur = 6.0;
-        const normalizedDistance = Math.pow(dist / 80.0, blur) * 255.0;
+      if (dist < normalizedBrushSize) {
+        const normalizedDistance =
+          Math.pow(dist / normalizedBrushSize, blur) * 255.0;
 
         this.brushedImage.data[i * 4 + 3] = Math.min(
           this.brushedImage.data[i * 4 + 3],
