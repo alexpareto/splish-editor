@@ -3,7 +3,7 @@ export const actionTypes = {
   INITIALIZE_CINEMAGRAPH_CANVAS: 'INITIALIZE_CINEMAGRAPH_CANVAS',
   UNDO_CINEMAGRAPH: 'UNDO_CINEMAGRAPH',
   REDO_CINEMAGRAPH: 'REDO_CINEMAGRAPH',
-  UPDATE_CINEMAGRAPH_BRUSH_POINTS: 'UPDATE_CINEMAGRAPH_BRUSH_POINTS',
+  UPDATE_CINEMAGRAPH_BRUSH_SIZE: 'UPDATE_CINEMAGRAPH_BRUSH_SIZE',
   UPDATE_CINEMAGRAPH_BRUSH_BLUR: 'UPDATE_CINEMAGRAPH_BRUSH_POINTS',
   START_EXPORTING_CINEMAGRAPH: 'START_EXPORTING_CINEMAGRAPH',
   CINEMAGRAPH_EXPORT_COMPLETE: 'CINEMAGRAPH_EXPORT_COMPLETE',
@@ -18,16 +18,12 @@ export const startCinemagraphEditMode = () => {
   return { type: actionTypes.START_CINEMAGRAPH_EDIT_MODE };
 };
 
-export const renderCinemagraph = path => {
-  return { type: actionTypes.RENDER_CINEMAGRAPH, path: path };
+export const updateCinemagraphBrushSize = brushSize => {
+  return { type: actionTypes.UPDATE_CINEMAGRAPH_BRUSH_SIZE, brushSize };
 };
 
-export const updateCinemagraphBrushPoints = path => {
-  return { type: actionTypes.UPDATE_CINEMAGRAPH_BRUSH_POINTS, path: path };
-};
-
-export const updateCinemagraphBrushBlur = path => {
-  return { type: actionTypes.UPDATE_CINEMAGRAPH_BRUSH_BLUR, path: path };
+export const updateCinemagraphBrushBlur = brushBlur => {
+  return { type: actionTypes.UPDATE_CINEMAGRAPH_BRUSH_BLUR, brushBlur };
 };
 
 export const initializeCinemagraphCanvas = () => {

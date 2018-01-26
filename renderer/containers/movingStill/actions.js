@@ -14,6 +14,7 @@ export const actionTypes = {
   START_EXPORTING_MOVING_STILL: 'START_EXPORTING_MOVING_STILL',
   MOVING_STILL_EXPORT_COMPLETE: 'MOVING_STILL_EXPORT_COMPLETE',
   MOVING_STILL_SHARE_COMPLETE: 'MOVING_STILL_SHARE_COMPLETE',
+  UPDATE_MOVING_STILL_DURATION: 'UPDATE_MOVING_STILL_DURATION',
 };
 
 // ACTIONS
@@ -67,4 +68,8 @@ export const movingStillExportComplete = () => {
 
 export const movingStillShareComplete = () => {
   return { type: actionTypes.MOVING_STILL_SHARE_COMPLETE };
+};
+
+export const updateMovingStillDuration = duration => {
+  return { type: actionTypes.UPDATE_MOVING_STILL_DURATION, duration };
 };

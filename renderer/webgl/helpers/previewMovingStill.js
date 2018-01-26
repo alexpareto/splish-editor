@@ -13,6 +13,7 @@ class Preview {
     vectors,
     boundingRect,
     animationParams,
+    duration,
     exportCallback,
   ) {
     this.imagePath = imagePath;
@@ -20,8 +21,8 @@ class Preview {
     this.vectors = vectors;
     this.boundingRect = boundingRect;
     this.animationParams = animationParams;
+    this.duration = duration;
     this.exportCallback = exportCallback;
-    this.duration = 3.0;
 
     this.gl;
     this.texCoordLocation; // Location of the texture for the picture fragment shader.
@@ -167,9 +168,10 @@ class Preview {
     });
   };
 
-  update = (anchors, vectors) => {
+  update = (anchors, vectors, duration) => {
     this.anchors = anchors;
     this.vectors = vectors;
+    this.duration = duration;
     this.init();
   };
 

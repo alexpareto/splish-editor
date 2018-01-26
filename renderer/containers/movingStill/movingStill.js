@@ -25,7 +25,9 @@ class MovingStill extends React.Component {
           showExportModal={this.props.movingStill.showExportModal}
           movingStillShareComplete={this.props.movingStillShareComplete}
           isRendering={this.props.movingStill.isRendering}
+          updateMovingStillDuration={this.props.updateMovingStillDuration}
           exports={this.props.exports}
+          duration={this.props.movingStill.duration}
         />
         <MovingStillPreview
           display={showPreview}
@@ -40,6 +42,7 @@ class MovingStill extends React.Component {
           isRendering={this.props.movingStill.isRendering}
           movingStillExportComplete={this.props.movingStillExportComplete}
           uploadExportRequest={this.props.uploadExportRequest}
+          duration={this.props.movingStill.duration}
         />
         <VectorCanvas
           display={!showPreview}
@@ -80,6 +83,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(ExportActions.uploadExportRequest(file)),
     movingStillShareComplete: () =>
       dispatch(Actions.movingStillShareComplete()),
+    updateMovingStillDuration: duration =>
+      dispatch(Actions.updateMovingStillDuration(duration)),
   };
 };
 

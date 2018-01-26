@@ -44,7 +44,8 @@ class CinemagraphPreview extends React.Component {
   }
 
   onBrush = brushPoint => {
-    this.preview.update(brushPoint);
+    // console.log("BRUSHING WITH BRUSH SIZE, BLUR: ", this.props.brushSize, this.props.brushBlur);
+    this.preview.update(brushPoint, this.props.brushSize, this.props.brushBlur);
   };
 
   render() {

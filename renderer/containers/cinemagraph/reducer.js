@@ -7,7 +7,8 @@ const initialState = {
   videoPath: '',
   boundingRect: {},
   brushPoints: [],
-  brushBlur: 0,
+  brushBlur: 5,
+  brushSize: 50,
   videoDimensions: {
     width: 0,
     height: 0,
@@ -42,13 +43,15 @@ export const cinemagraphReducer = (state = initialState, action) => {
           height: naturalHeight,
         },
       };
-    case actionTypes.UPDATE_CINEMAGRAPH_BRUSH_POINTS:
+    case actionTypes.UPDATE_CINEMAGRAPH_BRUSH_SIZE:
       return {
         ...state,
+        brushSize: action.brushSize,
       };
     case actionTypes.UPDATE_CINEMAGRAPH_BRUSH_BLUR:
       return {
         ...state,
+        brushBlur: action.brushBlur,
       };
     case actionTypes.START_EXPORTING_CINEMAGRAPH:
       return {
