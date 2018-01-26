@@ -28,6 +28,7 @@ const initialState = {
   showExportModal: false,
   isRendering: false,
   shareLink: '',
+  duration: 3.0,
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -124,6 +125,11 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         showExportModal: false,
+      };
+    case actionTypes.UPDATE_MOVING_STILL_DURATION:
+      return {
+        ...state,
+        duration: action.duration,
       };
     default:
       return state;

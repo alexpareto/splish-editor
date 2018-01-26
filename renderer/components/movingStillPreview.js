@@ -15,7 +15,11 @@ class MovingStillPreview extends React.Component {
   componentDidUpdate() {
     if (this.props.display || this.props.isRendering) {
       if (this.state.hasLoaded) {
-        this.preview.update(props.anchors, props.vectors);
+        this.preview.update(
+          this.props.anchors,
+          this.props.vectors,
+          this.props.duration,
+        );
       } else {
         this.preview = new Preview(
           this.props.imgSrc,
@@ -23,6 +27,7 @@ class MovingStillPreview extends React.Component {
           this.props.vectors,
           this.props.boundingRect,
           this.props.animationParams,
+          this.props.duration,
           // callback for when the video completes capture
           // Read file and send it to s3, also notify redux
           // to stop capturing the video b/c export is done

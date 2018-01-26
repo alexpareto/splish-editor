@@ -6,8 +6,17 @@ import IconButton from './iconButton';
 import PreviewToggle from './previewToggle';
 import Link from 'next/link';
 import ExportModal from './exportModal';
+import Slider from 'rc-slider';
+import Head from 'next/head';
 
 class NavBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      duration: this.props.duration,
+    };
+  }
+
   anchorClicked = () => {
     if (this.props.isInitialized) {
       this.props.selectAnchorTool();
@@ -35,6 +44,13 @@ class NavBar extends React.Component {
 
     return (
       <div className="container">
+        <Head>
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="/static/css/rcSlider.css"
+          />
+        </Head>
         <div className="flex">
           {exportModal}
           <Link href="/mainMenu" prefetch>
@@ -73,6 +89,21 @@ class NavBar extends React.Component {
             name="share"
             backgroundColor={globalStyles.secondary}
           />
+          <div>
+            Seconds: {this.state.duration}
+            <Slider
+              min={1.0}
+              step={0.5}
+              max={5.0}
+              defaultValue={this.props.duration}
+              onChange={duration => {
+                this.setState({ duration });
+              }}
+              onAfterChange={duration => {
+                this.props.updateMovingStillDuration(duration);
+              }}
+            />
+          </div>
         </div>
         <style jsx>
           {`
