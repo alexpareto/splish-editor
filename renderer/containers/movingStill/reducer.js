@@ -54,6 +54,7 @@ export const movingStillReducer = (state = initialState, action) => {
         imgPath,
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
+      let vectorCanvas = d3.select('#movingStillSVG');
       const img = document.getElementById('movingStillImage');
 
       const imageHeight = img.clientHeight;
@@ -64,9 +65,6 @@ export const movingStillReducer = (state = initialState, action) => {
       const naturalHeight =
         img.naturalHeight % 2 == 0 ? img.naturalHeight : img.naturalHeight + 1;
 
-      let vectorCanvas = d3.select('#movingStillSVG');
-      let boundingRect = vectorCanvas.node().getBoundingClientRect();
-
       return {
         ...state,
         imageHeight,
@@ -76,7 +74,6 @@ export const movingStillReducer = (state = initialState, action) => {
         },
         isInitialized: true,
         currentTool: action.tool,
-        boundingRect,
         vectorCanvas,
       };
     case actionTypes.SELECT_VECTOR_TOOL:
@@ -90,9 +87,11 @@ export const movingStillReducer = (state = initialState, action) => {
         currentTool: 'anchor',
       };
     case actionTypes.START_MOVING_STILL_PREVIEW_MODE:
+      let boundingRect = state.vectorCanvas.node().getBoundingClientRect();
       return {
         ...state,
         viewMode: 'preview',
+        boundingRect,
       };
     case actionTypes.START_MOVING_STILL_EDIT_MODE:
       return {
