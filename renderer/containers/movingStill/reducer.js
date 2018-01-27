@@ -110,6 +110,7 @@ export const movingStillReducer = (state = initialState, action) => {
         component: circle,
       };
 
+      // define the opposite action
       actionObject = {
         action: Actions.removeAnchor,
         arg1: anchor,

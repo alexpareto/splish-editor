@@ -9,6 +9,8 @@ export default (history, action, actionObject) => {
     // check for redo
     if (action.isRedo) {
       history.redoStack.pop();
+    } else {
+      history.redoStack = [];
     }
   }
 
