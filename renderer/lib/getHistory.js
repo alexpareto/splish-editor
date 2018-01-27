@@ -13,6 +13,5 @@ export default (history, action, actionObject) => {
       history.redoStack = [];
     }
   }
-
   return history;
 };
