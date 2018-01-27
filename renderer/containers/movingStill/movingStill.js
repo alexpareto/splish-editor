@@ -5,13 +5,33 @@ import MovingStillPreview from '../../components/movingStillPreview';
 import { connect } from 'react-redux';
 import * as Actions from './actions';
 import * as ExportActions from '../exports/actions';
+import MovingStillShortcuts from './movingStillShortcuts';
 
 class MovingStill extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.shortcuts = new MovingStillShortcuts(
+      this.props.undoMovingStill,
+      this.props.redoMovingStill,
+    );
+  }
   render() {
     const showPreview = this.props.movingStill.viewMode == 'preview';
 
     return (
-      <div>
+      <div
+        style={{
+          height: '100vh',
+          width: '100vw',
+          marginLeft: '-8px',
+          userSelect: 'none',
+        }}
+        onKeyDown={event => {
+          this.shortcuts.keyStroke(event, this.props.movingStill);
+        }}
+        tabIndex="0"
+      >
         <ToolBar
           selectMovingStillImage={this.props.selectMovingStillImage}
           viewMode={this.props.movingStill.viewMode}
@@ -85,6 +105,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.movingStillShareComplete()),
     updateMovingStillDuration: duration =>
       dispatch(Actions.updateMovingStillDuration(duration)),
+    undoMovingStill: actionObject =>
+      dispatch(Actions.undoMovingStill(actionObject)),
+    redoMovingStill: actionObject =>
+      dispatch(Actions.redoMovingStill(actionObject)),
   };
 };
 

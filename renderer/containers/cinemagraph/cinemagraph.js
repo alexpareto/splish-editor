@@ -5,12 +5,32 @@ import Trimmer from '../../components/trimmer';
 import { connect } from 'react-redux';
 import * as Actions from './actions';
 import * as ExportActions from '../exports/actions';
+import CinemagraphShortcuts from './cinemagraphShortcuts';
 
 class Cinemagraph extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.shortcuts = new CinemagraphShortcuts(
+      this.props.cinemagraphUndo,
+      this.props.cinemagraphRedo,
+    );
+  }
+
   render() {
-    console.log();
     return (
-      <div>
+      <div
+        style={{
+          height: '100vh',
+          width: '100vw',
+          marginLeft: '-8px',
+          userSelect: 'none',
+        }}
+        onKeyDown={event => {
+          this.shortcuts.keyStroke(event, this.props.movingStill);
+        }}
+        tabIndex="0"
+      >
         <NavBar
           selectCinemagraphVideo={this.props.selectCinemagraphVideo}
           startExportingCinemagraph={this.props.startExportingCinemagraph}

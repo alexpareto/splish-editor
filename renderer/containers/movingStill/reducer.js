@@ -1,12 +1,17 @@
 import { actionTypes } from './actions';
 import * as globalStyles from '../../globalStyles';
+import * as Actions from './actions';
 import * as d3 from 'd3';
+import getHistory from '../../lib/getHistory';
 
 const initialState = {
-  undoStack: [],
-  redoStack: [],
+  history: {
+    undoStack: [],
+    redoStack: [],
+  },
   imgPath: '',
   isInitialized: false,
+  vectorCanvas: {},
   imageHeight: 0,
   imgDimensions: {
     height: 0,
@@ -32,7 +37,7 @@ const initialState = {
 };
 
 export const movingStillReducer = (state = initialState, action) => {
-  let lc, mask;
+  let lc, mask, history, actionObject, anchors, anchor;
   switch (action.type) {
     case actionTypes.SELECT_MOVING_STILL_IMAGE:
       const imgPath = 'file://' + action.files[0];
@@ -51,6 +56,9 @@ export const movingStillReducer = (state = initialState, action) => {
       const naturalHeight =
         img.naturalHeight % 2 == 0 ? img.naturalHeight : img.naturalHeight + 1;
 
+      let vectorCanvas = d3.select('#movingStillSVG');
+      let boundingRect = vectorCanvas.node().getBoundingClientRect();
+
       return {
         ...state,
         imageHeight,
@@ -60,6 +68,8 @@ export const movingStillReducer = (state = initialState, action) => {
         },
         isInitialized: true,
         currentTool: action.tool,
+        boundingRect,
+        vectorCanvas,
       };
     case actionTypes.SELECT_VECTOR_TOOL:
       return {
@@ -72,12 +82,9 @@ export const movingStillReducer = (state = initialState, action) => {
         currentTool: 'anchor',
       };
     case actionTypes.START_MOVING_STILL_PREVIEW_MODE:
-      let svg = d3.select('#movingStillSVG');
-      let boundingRect = svg.node().getBoundingClientRect();
       return {
         ...state,
         viewMode: 'preview',
-        boundingRect,
       };
     case actionTypes.START_MOVING_STILL_EDIT_MODE:
       return {
@@ -90,11 +97,69 @@ export const movingStillReducer = (state = initialState, action) => {
         ...state,
       };
     case actionTypes.ADD_ANCHOR:
-      let anchors = state.anchors;
-      anchors.push(action.anchor);
+      anchors = state.anchors;
+      let circle = state.vectorCanvas.append('circle');
+      circle
+        .attr('cx', action.anchor.x)
+        .attr('cy', action.anchor.y)
+        .attr('r', 3);
+
+      anchor = {
+        x: action.anchor.x,
+        y: action.anchor.y,
+        component: circle,
+      };
+
+      actionObject = {
+        undo: {
+          action: Actions.removeAnchor,
+          arg1: anchor,
+        },
+        redo: {
+          action: Actions.addAnchor,
+          arg1: anchor,
+        },
+      };
+
+      anchors.push(anchor);
+      history = getHistory(state.history, action, actionObject);
+
       return {
         ...state,
         anchors,
+        history,
+      };
+    case actionTypes.REMOVE_ANCHOR:
+      anchors = state.anchors;
+      let removeIndex = state.anchors.length - 1;
+      anchor = action.anchor;
+
+      for (let i = state.anchors.length - 1; i >= 0; i--) {
+        if (anchors[i].x == anchor.x && anchors[i].y == anchor.y) {
+          removeIndex = i;
+          break;
+        }
+      }
+
+      actionObject = {
+        undo: {
+          action: Actions.addAnchor,
+          arg1: anchor,
+        },
+        redo: {
+          action: Actions.removeAnchor,
+          arg1: anchor,
+        },
+      };
+
+      anchors.splice(removeIndex, 1);
+      console.log('COMPONENT: ', anchor.component);
+      history = getHistory(history, action, actionObject);
+
+      return {
+        ...state,
+        anchors,
+        history,
       };
     case actionTypes.ADD_VECTOR:
       let vectors = state.vectors;

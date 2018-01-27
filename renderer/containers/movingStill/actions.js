@@ -15,6 +15,8 @@ export const actionTypes = {
   MOVING_STILL_EXPORT_COMPLETE: 'MOVING_STILL_EXPORT_COMPLETE',
   MOVING_STILL_SHARE_COMPLETE: 'MOVING_STILL_SHARE_COMPLETE',
   UPDATE_MOVING_STILL_DURATION: 'UPDATE_MOVING_STILL_DURATION',
+  REMOVE_ANCHOR: 'REMOVE_ANCHOR',
+  REMOVE_VECTOR: 'REMOVE_VECTOR',
 };
 
 // ACTIONS
@@ -72,4 +74,20 @@ export const movingStillShareComplete = () => {
 
 export const updateMovingStillDuration = duration => {
   return { type: actionTypes.UPDATE_MOVING_STILL_DURATION, duration };
+};
+
+export const undoMovingStill = actionObject => {
+  return { type: actionTypes.UNDO_MOVING_STILL, actionObject };
+};
+
+export const redoMovingStill = actionObject => {
+  return { type: actionTypes.REDO_MOVING_STILL, actionObject };
+};
+
+export const removeAnchor = anchor => {
+  return { type: actionTypes.REMOVE_ANCHOR, anchor };
+};
+
+export const removeVector = vector => {
+  return { type: actionTypes.REMOVE_VECTOR, vector };
 };

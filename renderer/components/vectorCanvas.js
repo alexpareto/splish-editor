@@ -54,11 +54,6 @@ class VectorCanvas extends React.Component {
       let data = [{ x: mouse[0], y: mouse[1] }, {}];
       this.setState({ data, isDown: true });
     } else {
-      let circle = this.state.svg.append('circle');
-      circle
-        .attr('cx', mouse[0])
-        .attr('cy', mouse[1])
-        .attr('r', 3);
       this.props.addAnchor({ x: mouse[0], y: mouse[1] });
     }
   };
