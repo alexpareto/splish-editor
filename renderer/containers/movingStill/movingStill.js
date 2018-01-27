@@ -91,8 +91,8 @@ const mapDispatchToProps = dispatch => {
     renderMovingStill: path => dispatch(Actions.renderMovingStill(path)),
     selectVectorTool: () => dispatch(Actions.selectVectorTool()),
     selectAnchorTool: () => dispatch(Actions.selectAnchorTool()),
-    addVector: vector => dispatch(Actions.addVector(vector)),
-    addAnchor: anchor => dispatch(Actions.addAnchor(anchor)),
+    addVector: vector => dispatch(Actions.addVector(false, false, vector)),
+    addAnchor: anchor => dispatch(Actions.addAnchor(false, false, anchor)),
     updateAnimationParams: params =>
       dispatch(Actions.updateAnimationParams(params)),
     startExportingMovingStill: () =>

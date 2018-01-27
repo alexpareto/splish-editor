@@ -48,12 +48,12 @@ export const selectVectorTool = () => {
   return { type: actionTypes.SELECT_VECTOR_TOOL };
 };
 
-export const addAnchor = anchor => {
-  return { type: actionTypes.ADD_ANCHOR, anchor };
+export const addAnchor = (isUndo, isRedo, anchor) => {
+  return { type: actionTypes.ADD_ANCHOR, anchor, isUndo, isRedo };
 };
 
-export const addVector = vector => {
-  return { type: actionTypes.ADD_VECTOR, vector };
+export const addVector = (isUndo, isRedo, vector) => {
+  return { type: actionTypes.ADD_VECTOR, vector, isUndo, isRedo };
 };
 
 export const updateAnimationParams = params => {
@@ -84,10 +84,10 @@ export const redoMovingStill = actionObject => {
   return { type: actionTypes.REDO_MOVING_STILL, actionObject };
 };
 
-export const removeAnchor = anchor => {
-  return { type: actionTypes.REMOVE_ANCHOR, anchor };
+export const removeAnchor = (isUndo, isRedo, anchor) => {
+  return { type: actionTypes.REMOVE_ANCHOR, anchor, isUndo, isRedo };
 };
 
-export const removeVector = vector => {
-  return { type: actionTypes.REMOVE_VECTOR, vector };
+export const removeVector = (isUndo, isRedo, vector) => {
+  return { type: actionTypes.REMOVE_VECTOR, vector, isUndo, isRedo };
 };

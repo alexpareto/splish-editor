@@ -1,12 +1,14 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import * as Actions from './actions';
 
-function* undo(actionObject) {
-  console.log('HELLO UNDO');
+function* undo(action) {
+  let undo = action.actionObject;
+  yield put(undo.action(true, false, undo.arg1, undo.arg2, undo.arg3));
 }
 
-function* redo(actionObject) {
-  console.log('HELLO REDO');
+function* redo(action) {
+  let redo = action.actionObject;
+  yield put(redo.action(false, true, redo.arg1, redo.arg2, redo.arg3));
 }
 
 export function* undoSaga() {

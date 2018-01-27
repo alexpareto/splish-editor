@@ -111,14 +111,8 @@ export const movingStillReducer = (state = initialState, action) => {
       };
 
       actionObject = {
-        undo: {
-          action: Actions.removeAnchor,
-          arg1: anchor,
-        },
-        redo: {
-          action: Actions.addAnchor,
-          arg1: anchor,
-        },
+        action: Actions.removeAnchor,
+        arg1: anchor,
       };
 
       anchors.push(anchor);
@@ -142,19 +136,13 @@ export const movingStillReducer = (state = initialState, action) => {
       }
 
       actionObject = {
-        undo: {
-          action: Actions.addAnchor,
-          arg1: anchor,
-        },
-        redo: {
-          action: Actions.removeAnchor,
-          arg1: anchor,
-        },
+        action: Actions.addAnchor,
+        arg1: anchor,
       };
 
       anchors.splice(removeIndex, 1);
-      console.log('COMPONENT: ', anchor.component);
-      history = getHistory(history, action, actionObject);
+      anchor.component.remove();
+      history = getHistory(state.history, action, actionObject);
 
       return {
         ...state,
