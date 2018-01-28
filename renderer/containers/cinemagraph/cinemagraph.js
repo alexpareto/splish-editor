@@ -12,8 +12,8 @@ class Cinemagraph extends React.Component {
     super(props);
 
     this.shortcuts = new CinemagraphShortcuts(
-      this.props.cinemagraphUndo,
-      this.props.cinemagraphRedo,
+      this.props.undoCinemagraph,
+      this.props.redoCinemagraph,
     );
   }
 
@@ -27,7 +27,7 @@ class Cinemagraph extends React.Component {
           userSelect: 'none',
         }}
         onKeyDown={event => {
-          this.shortcuts.keyStroke(event, this.props.movingStill);
+          this.shortcuts.keyStroke(event, this.props.cinemagraph);
         }}
         tabIndex="0"
       >
@@ -53,6 +53,10 @@ class Cinemagraph extends React.Component {
           uploadExportRequest={this.props.uploadExportRequest}
           brushSize={this.props.cinemagraph.brushSize}
           brushBlur={this.props.cinemagraph.brushBlur}
+          addCinemagraphBrushStroke={this.props.addCinemagraphBrushStroke}
+          startCinemagraphPreview={this.props.startCinemagraphPreview}
+          preview={this.props.cinemagraph.preview}
+          tool={this.props.cinemagraph.tool}
         />
         <Trimmer />
       </div>
@@ -64,9 +68,8 @@ const mapDispatchToProps = dispatch => {
   return {
     selectCinemagraphVideo: files =>
       dispatch(Actions.selectCinemagraphVideo(files)),
-    renderCinemagraph: path => dispatch(Actions.renderCinemagraph(path)),
-    initializeCinemagraphCanvas: () =>
-      dispatch(Actions.initializeCinemagraphCanvas()),
+    initializeCinemagraphCanvas: callback =>
+      dispatch(Actions.initializeCinemagraphCanvas(callback)),
     startExportingCinemagraph: () =>
       dispatch(Actions.startExportingCinemagraph()),
     uploadExportRequest: file =>
@@ -79,6 +82,14 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.updateCinemagraphBrushBlur(brushBlur)),
     updateCinemagraphBrushSize: brushSize =>
       dispatch(Actions.updateCinemagraphBrushSize(brushSize)),
+    addCinemagraphBrushStroke: stroke =>
+      dispatch(Actions.addCinemagraphBrushStroke(false, false, stroke)),
+    startCinemagraphPreview: callback =>
+      dispatch(Actions.startCinemagraphPreview(callback)),
+    undoCinemagraph: actionObject =>
+      dispatch(Actions.undoCinemagraph(actionObject)),
+    redoCinemagraph: actionObject =>
+      dispatch(Actions.redoCinemagraph(actionObject)),
   };
 };
 

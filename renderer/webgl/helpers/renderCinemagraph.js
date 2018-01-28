@@ -135,7 +135,8 @@ class Preview {
     this.start();
   };
 
-  update = (newPoint, brushSize, brushBlur) => {
+  update = (newPoint, brushSize, brushBlur, brushTool) => {
+    console.log(newPoint);
     const normalizedPoint = this.normalizedPoint(
       newPoint[0],
       newPoint[1],
@@ -148,7 +149,7 @@ class Preview {
       brushSize * this.videoWidth / this.boundingRect.width;
 
     let blur = 21 - 2 * brushBlur;
-    
+
     let l = this.brushedImage.data.length / 4;
     for (let i = 0; i < l; i++) {
       const x = i % this.videoWidth;
