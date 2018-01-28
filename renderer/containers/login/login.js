@@ -2,15 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 import Router from 'next/router';
-import Logo from '../../components/logo.js';
+
+import * as Actions from './actions.js';
 import checkLoggedIn from '../../lib/checkLoggedIn.js';
 import redirect from '../../lib/redirect.js';
-import * as Actions from './actions.js';
 
-const appVersion = window.require('electron').remote.app.getVersion();
+import Logo from '../../components/logo.js';
+import Input from '../../components/input.js';
+import Button from '../../components/button.js';
+import A from '../../components/a.js';
 
 class Login extends React.Component {
   async componentDidMount() {
+    this.appVersion = window.require('electron').remote.app.getVersion();
     const data = await checkLoggedIn();
     if (data) {
       Router.push('/mainMenu');
@@ -66,29 +70,39 @@ class Login extends React.Component {
       return null;
     }
     return (
-      <div>
-        <input
+      <div className="form-holder">
+        <Input
           name="email"
           type="email"
           placeholder="email"
           value={this.state.email}
           onChange={this.handleInputChange}
         />
-        <input
-          name="password"
-          type="password"
-          placeholder="password"
-          value={this.state.password}
-          onChange={this.handleInputChange}
-        />
-        <button onClick={this.onLoginButtonClick}>Login</button>
-        <button onClick={this.toggleLogin}>or Sign Up</button>
+        <div>
+          <Input
+            name="password"
+            type="password"
+            placeholder="password"
+            value={this.state.password}
+            onChange={this.handleInputChange}
+          />
+          <span className="confirm-button">
+            <Button onClick={this.onLoginButtonClick}>Login</Button>
+          </span>
+        </div>
+        <div>
+          or <A onClick={this.toggleLogin}>sign up</A>
+        </div>
         <style jsx>{`
-          div {
+          .form-holder {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+          }
+
+          .confirm-button {
+            position: absolute;
           }
         `}</style>
       </div>
@@ -101,36 +115,44 @@ class Login extends React.Component {
     }
 
     return (
-      <div>
-        <input
+      <div className="form-holder">
+        <Input
           name="email"
           type="email"
           placeholder="email"
           value={this.state.email}
           onChange={this.handleInputChange}
         />
-        <input
+        <Input
           name="password"
           type="password"
           placeholder="password"
           value={this.state.password}
           onChange={this.handleInputChange}
         />
-        <input
+        <Input
           name="passwordConfirm"
           type="password"
           placeholder="confirm password"
           value={this.state.passwordConfirm}
           onChange={this.handleInputChange}
         />
-        <button onClick={this.onSignUpButtonClick}>Sign Up</button>
-        <button onClick={this.toggleLogin}>or Login</button>
+        <div className="confirm-button">
+          <Button onClick={this.onSignUpButtonClick}>sign up</Button>
+        </div>
+        <div>
+          or <A onClick={this.toggleLogin}>login</A>
+        </div>
         <style jsx>{`
-          div {
+          .form-holder {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+          }
+
+          .confirm-button {
+            position: absolute;
           }
         `}</style>
       </div>
@@ -156,13 +178,21 @@ class Login extends React.Component {
         }}
       >
         <Logo size={150} />
-        <div>{appVersion}</div>
+        <div>{this.appVersion}</div>
         {this.renderLogin()}
         {this.renderSignUp()}
         {this.renderError()}
-        <Link href="/forgotPassword">
-          <a>Forgot your password?</a>
-        </Link>
+        <div className="forgot-password">
+          <Link href="/forgotPassword">
+            <A>Forgot your password?</A>
+          </Link>
+        </div>
+        <style jsx>{`
+          .forgot-password {
+            position: absolute;
+            bottom: 10px;
+          }
+        `}</style>
       </div>
     );
   }

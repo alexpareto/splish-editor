@@ -1,5 +1,6 @@
 import React from 'react';
 import Document, { Main, NextScript } from 'next/document';
+import * as globalStyles from '../globalStyles';
 
 export default class MyDocument extends Document {
   static getInitialProps({ renderPage }) {
@@ -38,7 +39,15 @@ export default class MyDocument extends Document {
           />
         </noscript>
         <body
-          style={{ overflow: 'hidden', height: '100vh', userSelect: 'none' }}
+          style={{
+            overflow: 'hidden',
+            height: '100vh',
+            userSelect: 'none',
+            backgroundColor: globalStyles.background,
+            fontFamily: globalStyles.fontFamily,
+            color: globalStyles.textColor,
+            fontSize: globalStyles.globalFontSize,
+          }}
         >
           {this.props.customValue}
           <Main />

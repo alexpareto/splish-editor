@@ -22,7 +22,7 @@ const Logo = props => {
           cx={size / 2}
           cy={size / 2}
           r={(size - strokeW * 3) / 2}
-          fill={globalStyles.primary}
+          fill={globalStyles.background}
           className="boundingCircle"
           strokeWidth={strokeW}
         />
@@ -35,7 +35,7 @@ const Logo = props => {
             r={(size - strokeW * 3) / 2}
             fill="none"
             strokeWidth={strokeW}
-            stroke="#fff"
+            stroke={globalStyles.accent}
           />
           <ellipse className="bulge" cx={size / 2} />
           <ellipse className="mainDroplet" cx={size / 2} />;
@@ -50,8 +50,8 @@ const Logo = props => {
               mode="matrix"
               values={`
 			      		1 0 0 0 0
-			      	  0 1 0 0 0  
-			      	  0 0 1 0 0  
+			      	  0 1 0 0 0
+			      	  0 0 1 0 0
 			      	  0 0 0 46 -${contrast}`}
               result="filter"
             />
@@ -65,16 +65,18 @@ const Logo = props => {
 
       <style jsx>
         {`
-	    	.container { 
+	    	.container {
     			background-color: ${globalStyles.background};
-	    	}; 
+          box-shadow: ${globalStyles.heavierBoxShadow};
+          border-radius: 50%;
+	    	};
 
-	    	.svg { 
-	    		
-	    	}; 
+	    	.svg {
 
-	    	.boundingCircle { 
-	    		stroke: ${globalStyles.primary};
+	    	};
+
+	    	.boundingCircle {
+	    		stroke: ${globalStyles.background};
 				};
 
 	    	.bulge {
@@ -90,69 +92,69 @@ const Logo = props => {
 			    80% { cy: 0; ry: 0; rx: 0; }
 				};
 
-	    	.mainDroplet { 
-	    		fill: ${globalStyles.background}; 
+	    	.mainDroplet {
+	    		fill: ${globalStyles.accent};
 	    		animation-name: mainDropletAnimation;
 	    		animation-duration: ${duration}s;
 	    		animation-iteration-count:infinite;
 	    		animation-timing-function: ease-in-out;
 	    	};
 
-	    	.mainDropletFriend { 
-	    		fill: ${globalStyles.background}; 
+	    	.mainDropletFriend {
+	    		fill: ${globalStyles.accent};
 	    		animation-name: mainDropletFriendAnimation;
 	    		animation-duration: ${duration * 1}s;
 	    		animation-iteration-count:infinite;
 	    		animation-timing-function: ease-in-out;
 	    	};
 
-	    	.mainDropletFriend2 { 
-	    		fill: ${globalStyles.background}; 
+	    	.mainDropletFriend2 {
+	    		fill: ${globalStyles.accent};
 	    		animation-name: mainDropletFriend2Animation;
 	    		animation-duration: ${duration * 1}s;
 	    		animation-iteration-count:infinite;
 	    		animation-timing-function: ease-in-out;
 	    	};
 
-	    	.droplet { 
+	    	.droplet {
 	    		filter:url('#dropletFilter');
 	    	};
 
 	    	@keyframes mainDropletFriendAnimation {
-	    		from { 
-	    			cy: -${strokeW * 5}; 
-	    			rx: ${strokeW * 1.5}; 
-	    			ry: ${strokeW * 1.5}; 
-	    			fill: ${globalStyles.background}; 
+	    		from {
+	    			cy: -${strokeW * 5};
+	    			rx: ${strokeW * 1.5};
+	    			ry: ${strokeW * 1.5};
+	    			fill: ${globalStyles.accent};
 	    		}
-	    		to { 
-	    			cy: ${size}; 
-	    			rx: ${strokeW * 1}; 
+	    		to {
+	    			cy: ${size};
+	    			rx: ${strokeW * 1};
 	    			ry: ${strokeW * 1};
-	    			fill: ${globalStyles.background};
+	    			fill: ${globalStyles.accent};
 	    		}
 	    	}
 
 	    	@keyframes mainDropletFriend2Animation {
-	    		from { 
+	    		from {
 	    			cy: -${strokeW * 5};
 	    			rx: ${strokeW * 1};
 	    			ry: ${strokeW * 1};
 	    		}
-	    		to { 
-	    			cy: ${size + strokeW * 7}; 
-	    			rx: ${strokeW * 1}; 
-	    			ry: ${strokeW * 1}; 
+	    		to {
+	    			cy: ${size + strokeW * 7};
+	    			rx: ${strokeW * 1};
+	    			ry: ${strokeW * 1};
 	    		}
 	    	}
 
     		@keyframes mainDropletAnimation {
-	    		from { 
+	    		from {
 	    			cy: -${strokeW * 5};
 	    			rx: ${strokeW * 4};
 	    			ry: ${strokeW * 4};
 	    		}
-	    		to { 
+	    		to {
 	    			cy: ${size + strokeW * 15};
 	    			rx: ${strokeW * 4};
 	    			ry: ${strokeW * 4};
