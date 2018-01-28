@@ -2,10 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 import Router from 'next/router';
-import Logo from '../../components/logo.js';
+
 import checkLoggedIn from '../../lib/checkLoggedIn.js';
 import redirect from '../../lib/redirect.js';
 import * as Actions from './actions.js';
+
+import Button from '../../components/button';
+import A from '../../components/a';
+import Input from '../../components/input';
+import Exports from '../exports/exports';
 
 class Profile extends React.Component {
   async componentDidMount() {
@@ -62,19 +67,19 @@ class Profile extends React.Component {
 
     return (
       <div>
-        <input
+        <Input
           name="first_name"
           placeholder="First Name"
           value={this.state.first_name}
           onChange={this.handleInputChange}
         />
-        <input
+        <Input
           name="last_name"
           placeholder="Last Name"
           value={this.state.last_name}
           onChange={this.handleInputChange}
         />
-        <button onClick={this.confirmUpdate}>Save changes</button>
+        <Button onClick={this.confirmUpdate}>save</Button>
       </div>
     );
   };
@@ -98,35 +103,64 @@ class Profile extends React.Component {
 
     return (
       <div>
-        <img src={this.props.user.picture} />
-        <p>First name:</p>
-        <p>
-          {this.props.user.first_name
-            ? this.props.user.first_name
-            : 'No first name yet'}
-        </p>
-        <p>Last name:</p>
-        <p>
-          {this.props.user.last_name
-            ? this.props.user.last_name
-            : 'No last name yet'}
-        </p>
-        <p>{this.props.user.email}</p>
-        <button onClick={this.showUpdate}>Change</button>
+        <div className="name">
+          <span>
+            {this.props.user.first_name ? this.props.user.first_name : 'Alex'}{' '}
+            {this.props.user.last_name ? this.props.user.last_name : 'Pareto'}
+          </span>
+        </div>
+        <div>{this.props.user.email}</div>
+        <div className="change-button">
+          <Button onClick={this.showUpdate}>Change</Button>
+        </div>
         <div>
           <Link href="/mainMenu" prefetch>
-            <a>Back to main menu</a>
+            <A>Back to main menu</A>
           </Link>
         </div>
+        <style jsx>{`
+          .change-button {
+            margin: 7px 0;
+          }
+
+          .name {
+            font-size: 24px;
+            margin-bottom: 20px;
+            height: 50px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+          }
+        `}</style>
       </div>
     );
   };
 
   render() {
     return (
-      <div>
-        {this.renderUpdateView()}
-        {this.renderNormalView()}
+      <div className="holder">
+        <div className="profile-holder">
+          {this.renderUpdateView()}
+          {this.renderNormalView()}
+        </div>
+        <div className="export-holder">
+          <Exports />
+        </div>
+        <style jsx>{`
+          .profile-holder {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+            padding-left: 50px;
+          }
+
+          .export-holder {
+            width: 70%;
+            height: 100vh;
+          }
+        `}</style>
       </div>
     );
   }

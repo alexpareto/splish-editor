@@ -14,7 +14,6 @@ import A from '../../components/a.js';
 
 class Login extends React.Component {
   async componentDidMount() {
-    this.appVersion = window.require('electron').remote.app.getVersion();
     const data = await checkLoggedIn();
     if (data) {
       Router.push('/mainMenu');
@@ -87,7 +86,7 @@ class Login extends React.Component {
             onChange={this.handleInputChange}
           />
           <span className="confirm-button">
-            <Button onClick={this.onLoginButtonClick}>Login</Button>
+            <Button onClick={this.onLoginButtonClick}>login</Button>
           </span>
         </div>
         <div>
@@ -130,15 +129,17 @@ class Login extends React.Component {
           value={this.state.password}
           onChange={this.handleInputChange}
         />
-        <Input
-          name="passwordConfirm"
-          type="password"
-          placeholder="confirm password"
-          value={this.state.passwordConfirm}
-          onChange={this.handleInputChange}
-        />
-        <div className="confirm-button">
-          <Button onClick={this.onSignUpButtonClick}>sign up</Button>
+        <div>
+          <Input
+            name="passwordConfirm"
+            type="password"
+            placeholder="confirm password"
+            value={this.state.passwordConfirm}
+            onChange={this.handleInputChange}
+          />
+          <span className="confirm-button">
+            <Button onClick={this.onSignUpButtonClick}>sign up</Button>
+          </span>
         </div>
         <div>
           or <A onClick={this.toggleLogin}>login</A>
@@ -177,20 +178,25 @@ class Login extends React.Component {
           height: '100vh',
         }}
       >
-        <Logo size={150} />
-        <div>{this.appVersion}</div>
+        <div className="logo">
+          <Logo size={170} />
+        </div>
         {this.renderLogin()}
         {this.renderSignUp()}
         {this.renderError()}
         <div className="forgot-password">
           <Link href="/forgotPassword">
-            <A>Forgot your password?</A>
+            <A>forgot your password?</A>
           </Link>
         </div>
         <style jsx>{`
           .forgot-password {
             position: absolute;
             bottom: 10px;
+          }
+
+          .logo {
+            margin-bottom: 30px;
           }
         `}</style>
       </div>

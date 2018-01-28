@@ -12,6 +12,7 @@ export default props => {
           border-top: none;
           border-left: none;
           border-right: none;
+          padding-bottom: 2px;
           border-bottom: 1px solid ${globalStyles.textColor};
         }
 
