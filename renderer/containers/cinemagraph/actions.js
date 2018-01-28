@@ -19,6 +19,14 @@ export const selectCinemagraphVideo = files => {
   return { type: actionTypes.SELECT_CINEMAGRAPH_VIDEO, files: files };
 };
 
+export const selectCinemagraphBrushTool = () => {
+  return { type: actionTypes.SELECT_CINEMAGRAPH_BRUSH_TOOL };
+};
+
+export const selectCinemagraphEraseTool = () => {
+  return { type: actionTypes.SELECT_CINEMAGRAPH_ERASE_TOOL };
+};
+
 export const startCinemagraphEditMode = () => {
   return { type: actionTypes.START_CINEMAGRAPH_EDIT_MODE };
 };

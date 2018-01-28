@@ -18,6 +18,14 @@ class NavBar extends React.Component {
     };
   }
 
+  toggleTool = () => {
+    if (this.props.tool == 'eraser') {
+      this.props.selectCinemagraphBrushTool();
+    } else {
+      this.props.selectCinemagraphEraseTool();
+    }
+  };
+
   render() {
     const exportModal = this.props.showExportModal ? (
       <ExportModal
@@ -50,6 +58,12 @@ class NavBar extends React.Component {
           <FileSelection
             type="video"
             filesHandler={this.props.selectCinemagraphVideo}
+          />
+          <IconButton
+            stroke={globalStyles.background}
+            name={this.props.tool == 'eraser' ? 'plusCircle' : 'minusCircle'}
+            backgroundColor={globalStyles.secondary}
+            onClick={this.toggleTool}
           />
           <IconButton
             stroke={globalStyles.background}

@@ -119,6 +119,16 @@ export const cinemagraphReducer = (state = initialState, action) => {
         ...state,
         showExportModal: false,
       };
+    case actionTypes.SELECT_CINEMAGRAPH_BRUSH_TOOL:
+      return {
+        ...state,
+        tool: 'brush',
+      };
+    case actionTypes.SELECT_CINEMAGRAPH_ERASE_TOOL:
+      return {
+        ...state,
+        tool: 'eraser',
+      };
     default:
       return state;
   }

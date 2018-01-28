@@ -43,6 +43,7 @@ class CinemagraphPreview extends React.Component {
       brushPoint,
       this.props.brushSize,
       this.props.brushBlur,
+      this.props.tool,
     );
   };
 

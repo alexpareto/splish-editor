@@ -160,10 +160,14 @@ class Preview {
         const normalizedDistance =
           Math.pow(dist / normalizedBrushSize, blur) * 255.0;
 
-        this.brushedImage.data[i * 4 + 3] = Math.min(
-          this.brushedImage.data[i * 4 + 3],
-          normalizedDistance,
-        );
+        const opacity =
+          brushTool == 'eraser'
+            ? Math.min(this.brushedImage.data[i * 4 + 3], normalizedDistance)
+            : Math.max(
+                this.brushedImage.data[i * 4 + 3],
+                255.0 - normalizedDistance,
+              );
+        this.brushedImage.data[i * 4 + 3] = opacity;
       }
     }
   };

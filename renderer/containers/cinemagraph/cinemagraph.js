@@ -39,9 +39,12 @@ class Cinemagraph extends React.Component {
           isRendering={this.props.cinemagraph.isRendering}
           updateCinemagraphBrushBlur={this.props.updateCinemagraphBrushBlur}
           updateCinemagraphBrushSize={this.props.updateCinemagraphBrushSize}
+          selectCinemagraphBrushTool={this.props.selectCinemagraphBrushTool}
+          selectCinemagraphEraseTool={this.props.selectCinemagraphEraseTool}
           exports={this.props.exports}
           brushSize={this.props.cinemagraph.brushSize}
           brushBlur={this.props.cinemagraph.brushBlur}
+          tool={this.props.cinemagraph.tool}
         />
         <CinemagraphCanvas
           initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
@@ -90,6 +93,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.undoCinemagraph(actionObject)),
     redoCinemagraph: actionObject =>
       dispatch(Actions.redoCinemagraph(actionObject)),
+    selectCinemagraphBrushTool: () =>
+      dispatch(Actions.selectCinemagraphBrushTool()),
+    selectCinemagraphEraseTool: () =>
+      dispatch(Actions.selectCinemagraphEraseTool()),
   };
 };
 
