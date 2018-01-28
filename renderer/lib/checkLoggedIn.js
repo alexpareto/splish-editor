@@ -1,7 +1,6 @@
 import * as api from './api';
 
 export default () => {
-  return true;
   return api
     .call('auth/self', 'GET')
     .then(data => {

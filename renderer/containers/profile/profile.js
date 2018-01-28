@@ -67,19 +67,30 @@ class Profile extends React.Component {
 
     return (
       <div>
-        <Input
-          name="first_name"
-          placeholder="First Name"
-          value={this.state.first_name}
-          onChange={this.handleInputChange}
-        />
-        <Input
-          name="last_name"
-          placeholder="Last Name"
-          value={this.state.last_name}
-          onChange={this.handleInputChange}
-        />
-        <Button onClick={this.confirmUpdate}>save</Button>
+        <div className="input-element">
+          <Input
+            name="first_name"
+            placeholder="First Name"
+            value={this.state.first_name}
+            onChange={this.handleInputChange}
+          />
+        </div>
+        <div className="input-element">
+          <Input
+            name="last_name"
+            placeholder="Last Name"
+            value={this.state.last_name}
+            onChange={this.handleInputChange}
+          />
+        </div>
+        <div className="input-element">
+          <Button onClick={this.confirmUpdate}>save</Button>
+        </div>
+        <style jsx>{`
+          .input-element {
+            margin: 7px 0;
+          }
+        `}</style>
       </div>
     );
   };

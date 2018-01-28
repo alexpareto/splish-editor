@@ -12,7 +12,6 @@ export default props => {
           color: ${globalStyles.textColor};
           border-style: none;
           font-size: 14px;
-          margin: 7px;
           padding: 7px;
           outline: none;
           box-sizing: border-box;

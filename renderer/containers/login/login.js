@@ -70,14 +70,16 @@ class Login extends React.Component {
     }
     return (
       <div className="form-holder">
-        <Input
-          name="email"
-          type="email"
-          placeholder="email"
-          value={this.state.email}
-          onChange={this.handleInputChange}
-        />
-        <div>
+        <div className="input-element">
+          <Input
+            name="email"
+            type="email"
+            placeholder="email"
+            value={this.state.email}
+            onChange={this.handleInputChange}
+          />
+        </div>
+        <div className="input-element">
           <Input
             name="password"
             type="password"
@@ -102,6 +104,11 @@ class Login extends React.Component {
 
           .confirm-button {
             position: absolute;
+            margin-left: 7px;
+          }
+
+          .input-element {
+            margin: 7px 0;
           }
         `}</style>
       </div>
@@ -115,21 +122,25 @@ class Login extends React.Component {
 
     return (
       <div className="form-holder">
-        <Input
-          name="email"
-          type="email"
-          placeholder="email"
-          value={this.state.email}
-          onChange={this.handleInputChange}
-        />
-        <Input
-          name="password"
-          type="password"
-          placeholder="password"
-          value={this.state.password}
-          onChange={this.handleInputChange}
-        />
-        <div>
+        <div className="input-element">
+          <Input
+            name="email"
+            type="email"
+            placeholder="email"
+            value={this.state.email}
+            onChange={this.handleInputChange}
+          />
+        </div>
+        <div className="input-element">
+          <Input
+            name="password"
+            type="password"
+            placeholder="password"
+            value={this.state.password}
+            onChange={this.handleInputChange}
+          />
+        </div>
+        <div className="input-element">
           <Input
             name="passwordConfirm"
             type="password"
@@ -154,6 +165,11 @@ class Login extends React.Component {
 
           .confirm-button {
             position: absolute;
+            margin-left: 7px;
+          }
+
+          .input-element {
+            margin: 7px 0;
           }
         `}</style>
       </div>
