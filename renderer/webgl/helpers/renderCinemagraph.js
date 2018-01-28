@@ -136,7 +136,6 @@ class Preview {
   };
 
   update = (newPoint, brushSize, brushBlur, brushTool) => {
-    console.log(newPoint);
     const normalizedPoint = this.normalizedPoint(
       newPoint[0],
       newPoint[1],
@@ -167,6 +166,14 @@ class Preview {
         );
       }
     }
+  };
+
+  setMask = mask => {
+    this.brushedImage.data.set(mask);
+  };
+
+  getMask = () => {
+    return new Uint8ClampedArray(this.brushedImage.data);
   };
 
   render = () => {

@@ -57,21 +57,21 @@ export const redoCinemagraph = actionObject => {
 
 // brush strokes and erase strokes will use the same action,
 // but each brush stroke will specify its brush type
-export const addCinemagraphBrushStroke = (isUndo, isRedo, stroke) => {
+export const addCinemagraphBrushStroke = (isUndo, isRedo, mask) => {
   return {
     type: actionTypes.ADD_CINEMAGRAPH_BRUSH_STROKE,
     isUndo,
     isRedo,
-    stroke,
+    mask,
   };
 };
 
-export const removeCinemagraphBrushStroke = (isUndo, isRedo, stroke) => {
+export const removeCinemagraphBrushStroke = (isUndo, isRedo, mask) => {
   return {
     type: actionTypes.REMOVE_CINEMAGRAPH_BRUSH_STROKE,
     isUndo,
     isRedo,
-    stroke,
+    mask,
   };
 };
 

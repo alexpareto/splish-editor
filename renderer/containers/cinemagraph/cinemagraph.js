@@ -82,8 +82,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.updateCinemagraphBrushBlur(brushBlur)),
     updateCinemagraphBrushSize: brushSize =>
       dispatch(Actions.updateCinemagraphBrushSize(brushSize)),
-    addCinemagraphBrushStroke: stroke =>
-      dispatch(Actions.addCinemagraphBrushStroke(false, false, stroke)),
+    addCinemagraphBrushStroke: mask =>
+      dispatch(Actions.addCinemagraphBrushStroke(false, false, mask)),
     startCinemagraphPreview: callback =>
       dispatch(Actions.startCinemagraphPreview(callback)),
     undoCinemagraph: actionObject =>

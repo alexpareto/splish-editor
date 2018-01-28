@@ -11,7 +11,6 @@ const initialState = {
   },
   videoPath: '',
   boundingRect: {},
-  brushStrokes: [],
   brushBlur: 5,
   brushSize: 50,
   videoDimensions: {
@@ -21,11 +20,10 @@ const initialState = {
   showExportModal: false,
   isRendering: false,
   tool: 'eraser',
-  strokeID: 0,
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
-  let preview, history, actionObject, stroke, brushStrokes, strokeID, tool;
+  let preview, history, actionObject, prevMask, nextMask, tool;
   switch (action.type) {
     case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
       const videoPath = 'file://' + action.files[0];
@@ -67,64 +65,43 @@ export const cinemagraphReducer = (state = initialState, action) => {
         brushBlur: action.brushBlur,
       };
     case actionTypes.ADD_CINEMAGRAPH_BRUSH_STROKE:
-      stroke = action.stroke;
-      strokeID = state.strokeID;
-      stroke.id = strokeID;
-      strokeID++;
+      prevMask = action.mask;
       preview = state.preview;
-      brushStrokes = state.brushStrokes;
 
-      brushStrokes.push(stroke);
+      // perform the drawing
+      if (action.isUndo || action.isRedo) {
+        nextMask = action.mask;
+        prevMask = preview.getMask();
+        preview.setMask(nextMask);
+      }
 
       actionObject = {
         action: Actions.removeCinemagraphBrushStroke,
-        arg1: stroke,
+        arg1: prevMask,
       };
 
       history = getHistory(state.history, action, actionObject);
 
-      // draw the brush stroke
-      if (action.isUndo || action.isRedo) {
-        for (let i = 0; i < stroke.points.length; i++) {
-          preview.update(
-            stroke.points[i],
-            stroke.brushSize,
-            stroke.brushBlur,
-            stroke.tool,
-          );
-        }
-      }
-
       return {
         ...state,
-        brushStrokes,
         history,
-        strokeID,
       };
     case actionTypes.REMOVE_CINEMAGRAPH_BRUSH_STROKE:
-      stroke = action.stroke;
-      brushStrokes = state.brushStrokes;
-
-      //get opposite tool of the stroke
-      tool = stroke.tool == 'erasor' ? 'brush' : 'erasor';
+      nextMask = action.mask;
       preview = state.preview;
 
-      // remove stroke from list of brushStrokes
-      for (let i = 0; i < brushStrokes.length; i++) {
-        if (stroke.id == brushStrokes[i].id) {
-          brushStrokes.splice(i, 1);
-          break;
-        }
-      }
+      actionObject = {
+        action: Actions.addCinemagraphBrushStroke,
+        arg1: preview.getMask(),
+      };
 
-      // draw the opposite of the stroke on the canvas
-      for (let i = 0; i < stroke.points.length; i++) {
-        preview.update(stroke.points[i], stroke.size, stroke.blur, tool);
-      }
+      preview.setMask(nextMask);
+
+      history = getHistory(state.history, action, actionObject);
 
       return {
         ...state,
-        brushStrokes,
+        history,
       };
     case actionTypes.START_EXPORTING_CINEMAGRAPH:
       return {

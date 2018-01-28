@@ -11,6 +11,8 @@ class CinemagraphPreview extends React.Component {
       hasLoaded: false,
       hasSelectedVideo: false,
     };
+
+    this.mask = [];
   }
 
   componentDidUpdate() {
@@ -44,15 +46,12 @@ class CinemagraphPreview extends React.Component {
     );
   };
 
-  onStrokeEnd = brushPoints => {
-    let stroke = {
-      points: brushPoints,
-      size: this.props.brushSize,
-      blur: this.props.brushBlur,
-      tool: this.props.tool,
-    };
+  onStrokeStart = () => {
+    this.mask = this.props.preview.getMask();
+  };
 
-    this.props.addCinemagraphBrushStroke(stroke);
+  onStrokeEnd = () => {
+    this.props.addCinemagraphBrushStroke(this.mask);
   };
 
   render() {
@@ -84,6 +83,7 @@ class CinemagraphPreview extends React.Component {
         <BrushCanvas
           height={this.props.boundingRect.height}
           onBrush={this.onBrush}
+          onStrokeStart={this.onStrokeStart}
           onStrokeEnd={this.onStrokeEnd}
         />
         {video}

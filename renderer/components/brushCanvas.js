@@ -9,8 +9,6 @@ class brushCanvas extends React.Component {
       svg: null,
       isDown: false,
     };
-
-    this.brushPoints = [];
   }
 
   componentDidMount() {
@@ -38,6 +36,7 @@ class brushCanvas extends React.Component {
 
   onMouseDown = mouse => {
     this.setState({ isDown: true });
+    this.props.onStrokeStart();
     this.brush(mouse);
   };
 
@@ -49,12 +48,10 @@ class brushCanvas extends React.Component {
 
   onMouseUp = mouse => {
     this.setState({ isDown: false });
-    this.props.onStrokeEnd(this.brushPoints);
-    this.brushPoints = [];
+    this.props.onStrokeEnd();
   };
 
   brush = mouse => {
-    this.brushPoints.push(mouse);
     this.props.onBrush(mouse);
   };
 
