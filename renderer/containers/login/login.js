@@ -11,6 +11,7 @@ import Logo from '../../components/logo.js';
 import Input from '../../components/input.js';
 import Button from '../../components/button.js';
 import A from '../../components/a.js';
+import EyeLogo from '../../components/eyelogo';
 
 class Login extends React.Component {
   async componentDidMount() {
@@ -194,6 +195,10 @@ class Login extends React.Component {
           height: '100vh',
         }}
       >
+        <div className="eye-logo">
+          <EyeLogo height={30} withText={true} />
+        </div>
+
         <div className="logo">
           <Logo size={170} />
         </div>
@@ -213,6 +218,17 @@ class Login extends React.Component {
 
           .logo {
             margin-bottom: 30px;
+          }
+
+          .eye-logo {
+            position: absolute;
+            top: 5px;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
           }
         `}</style>
       </div>

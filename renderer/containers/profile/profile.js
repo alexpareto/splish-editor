@@ -5,6 +5,7 @@ import Router from 'next/router';
 
 import checkLoggedIn from '../../lib/checkLoggedIn.js';
 import redirect from '../../lib/redirect.js';
+import { logoutUser } from '../login/actions.js';
 import * as Actions from './actions.js';
 
 import Button from '../../components/button';
@@ -39,6 +40,11 @@ class Profile extends React.Component {
     this.setState({
       [name]: value,
     });
+  };
+
+  logout = () => {
+    this.props.logout();
+    Router.push('/login');
   };
 
   renderLoading = () => {
@@ -130,6 +136,7 @@ class Profile extends React.Component {
             <A>Back to main menu</A>
           </Link>
         </div>
+
         <style jsx>{`
           .proficon {
             height: 50px;
@@ -160,6 +167,9 @@ class Profile extends React.Component {
         <div className="profile-holder">
           {this.renderUpdateView()}
           {this.renderNormalView()}
+          <div className="logout">
+            <A onClick={this.logout}>logout</A>
+          </div>
         </div>
         <div className="export-holder">
           <Exports />
@@ -173,6 +183,12 @@ class Profile extends React.Component {
             justify-content: center;
             height: 100vh;
             padding-left: 50px;
+            position: relative;
+          }
+
+          .logout {
+            position: absolute;
+            bottom: 30px;
           }
 
           .export-holder {
@@ -200,6 +216,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getUser: () => dispatch(Actions.getSelfRequest()),
     updateUser: data => dispatch(Actions.updateSelfRequest(data)),
+    logout: () => dispatch(logoutUser()),
   };
 };
 
