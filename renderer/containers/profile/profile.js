@@ -12,6 +12,7 @@ import Button from '../../components/button';
 import A from '../../components/a';
 import Input from '../../components/input';
 import Exports from '../exports/exports';
+import EyeLogo from '../../components/eyelogo';
 
 class Profile extends React.Component {
   async componentDidMount() {
@@ -164,6 +165,10 @@ class Profile extends React.Component {
   render() {
     return (
       <div className="holder">
+        <div className="eye-logo">
+          <EyeLogo height={30} withText={true} />
+        </div>
+
         <div className="profile-holder">
           {this.renderUpdateView()}
           {this.renderNormalView()}
@@ -175,6 +180,17 @@ class Profile extends React.Component {
           <Exports />
         </div>
         <style jsx>{`
+          .eye-logo {
+            position: absolute;
+            top: 5px;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+          }
+
           .profile-holder {
             width: 30%;
             box-sizing: border-box;

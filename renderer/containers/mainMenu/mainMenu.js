@@ -82,6 +82,7 @@ class MainMenu extends React.Component {
             .action-button {
               height: 80px;
               font-size: 24px;
+              font-weight: normal;
               cursor: pointer;
               line-height: 80px;
               display: flex;
