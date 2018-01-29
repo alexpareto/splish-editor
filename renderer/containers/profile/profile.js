@@ -131,11 +131,11 @@ class Profile extends React.Component {
         </div>
         <div>{this.props.user.email}</div>
         <div className="change-button">
-          <Button onClick={this.showUpdate}>Change</Button>
+          <Button onClick={this.showUpdate}>change</Button>
         </div>
         <div>
           <Link href="/mainMenu" prefetch>
-            <A>Back to main menu</A>
+            <A>back to main menu</A>
           </Link>
         </div>
 
