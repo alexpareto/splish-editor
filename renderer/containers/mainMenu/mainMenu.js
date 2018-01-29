@@ -1,12 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
-import Logo from '../../components/logo.js';
-import checkLoggedIn from '../../lib/checkLoggedIn.js';
-import redirect from '../../lib/redirect.js';
 import Router from 'next/router';
 
-import { logoutUser } from '../login/actions.js';
+import checkLoggedIn from '../../lib/checkLoggedIn.js';
+import redirect from '../../lib/redirect.js';
+import * as globalStyles from '../../globalStyles';
+
+import Logo from '../../components/logo.js';
+import Button from '../../components/button.js';
+import EyeLogo from '../../components/eyelogo.js';
+import Loading from '../../components/loading';
 
 class MainMenu extends React.Component {
   constructor(props) {
@@ -24,47 +28,82 @@ class MainMenu extends React.Component {
     }
   }
 
-  logout = () => {
-    this.props.logout();
-    Router.push('/login');
-  };
-
   render() {
     if (this.state.loading) {
-      return <div> loading </div>;
+      return <Loading />;
     }
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-        }}
-      >
-        <Logo size={150} />
-        <div>
-          <Link href="/cinemagraph" prefetch>
-            <a>Create new Cinemagraph</a>
-          </Link>
+      <div className="holder">
+        <div className="eye-logo">
+          <EyeLogo height={30} withText={true} />
         </div>
-        <div>
-          <Link href="/movingStill" prefetch>
-            <a>Create new Moving Still</a>
-          </Link>
-        </div>
-        <div>
-          <Link href="/exports" prefetch>
-            <a>View your exports</a>
-          </Link>
-        </div>
-        <div>
+        <div className="button-holder">
           <Link href="/profile" prefetch>
-            <a>View your profile</a>
+            <div className="action-button">
+              <img className="icon" src="/static/icons/splish-proficon.png" />
+              <span>profile</span>
+            </div>
+          </Link>
+          <Link href="/cinemagraph" prefetch>
+            <div className="action-button">
+              <img className="icon" src="/static/icons/splish-solidlogo.png" />
+              <span>cinemagrapher</span>
+            </div>
+          </Link>
+          <Link href="/movingStill" prefetch>
+            <div className="action-button">
+              <img className="icon" src="/static/icons/splish-liquidlogo.png" />
+              <span>liquigrapher</span>
+            </div>
           </Link>
         </div>
-        <button onClick={this.logout}>Logout</button>
+        <style jsx>
+          {`
+            .eye-logo {
+              position: absolute;
+              top: 5px;
+              left: 0;
+              right: 0;
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .button-holder {
+              width: 30%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              height: 100vh;
+              padding-left: 50px;
+            }
+
+            .action-button {
+              height: 80px;
+              font-size: 24px;
+              font-weight: normal;
+              cursor: pointer;
+              line-height: 80px;
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+            }
+
+            .icon {
+              display: inline-block;
+              height: 50px;
+              margin-right: 20px;
+              filter: drop-shadow(3px 5px 3px rgba(0, 0, 0, 0.6));
+              transition: all 0.3s ease;
+            }
+
+            .action-button:hover .icon {
+              filter: drop-shadow(4px 7px 4px rgba(0, 0, 0, 0.9));
+              transform: translateY(-3px);
+            }
+          `}
+        </style>
       </div>
     );
   }

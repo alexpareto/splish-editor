@@ -5,3 +5,5 @@ temp
 static/assets
 renderer/out/
 dist/
+
+.DS_Store

@@ -28,6 +28,7 @@ function createWindow() {
     webPreferences: {
       webSecurity: false,
     },
+    titleBarStyle: 'hidden',
   });
 
   // and load the index.html of the app.

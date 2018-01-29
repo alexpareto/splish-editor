@@ -18,5 +18,5 @@ export const call = (endpoint, method, body = null, context = {}) => {
     credentials: 'include',
   };
 
-  return fetch('https://dev-api.splish.io/api/0.1/' + endpoint, options);
+  return fetch('http://dev-api.splish.io/api/0.1/' + endpoint, options);
 };

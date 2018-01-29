@@ -2,12 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 import Router from 'next/router';
-import Logo from '../../components/logo.js';
+
+import * as Actions from './actions.js';
 import checkLoggedIn from '../../lib/checkLoggedIn.js';
 import redirect from '../../lib/redirect.js';
-import * as Actions from './actions.js';
 
-const appVersion = window.require('electron').remote.app.getVersion();
+import Logo from '../../components/logo.js';
+import Input from '../../components/input.js';
+import Button from '../../components/button.js';
+import A from '../../components/a.js';
+import EyeLogo from '../../components/eyelogo';
 
 class Login extends React.Component {
   async componentDidMount() {
@@ -66,29 +70,46 @@ class Login extends React.Component {
       return null;
     }
     return (
-      <div>
-        <input
-          name="email"
-          type="email"
-          placeholder="email"
-          value={this.state.email}
-          onChange={this.handleInputChange}
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="password"
-          value={this.state.password}
-          onChange={this.handleInputChange}
-        />
-        <button onClick={this.onLoginButtonClick}>Login</button>
-        <button onClick={this.toggleLogin}>or Sign Up</button>
+      <div className="form-holder">
+        <div className="input-element">
+          <Input
+            name="email"
+            type="email"
+            placeholder="email"
+            value={this.state.email}
+            onChange={this.handleInputChange}
+          />
+        </div>
+        <div className="input-element">
+          <Input
+            name="password"
+            type="password"
+            placeholder="password"
+            value={this.state.password}
+            onChange={this.handleInputChange}
+          />
+          <span className="confirm-button">
+            <Button onClick={this.onLoginButtonClick}>login</Button>
+          </span>
+        </div>
+        <div>
+          or <A onClick={this.toggleLogin}>sign up</A>
+        </div>
         <style jsx>{`
-          div {
+          .form-holder {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+          }
+
+          .confirm-button {
+            position: absolute;
+            margin-left: 7px;
+          }
+
+          .input-element {
+            margin: 7px 0;
           }
         `}</style>
       </div>
@@ -101,36 +122,55 @@ class Login extends React.Component {
     }
 
     return (
-      <div>
-        <input
-          name="email"
-          type="email"
-          placeholder="email"
-          value={this.state.email}
-          onChange={this.handleInputChange}
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="password"
-          value={this.state.password}
-          onChange={this.handleInputChange}
-        />
-        <input
-          name="passwordConfirm"
-          type="password"
-          placeholder="confirm password"
-          value={this.state.passwordConfirm}
-          onChange={this.handleInputChange}
-        />
-        <button onClick={this.onSignUpButtonClick}>Sign Up</button>
-        <button onClick={this.toggleLogin}>or Login</button>
+      <div className="form-holder">
+        <div className="input-element">
+          <Input
+            name="email"
+            type="email"
+            placeholder="email"
+            value={this.state.email}
+            onChange={this.handleInputChange}
+          />
+        </div>
+        <div className="input-element">
+          <Input
+            name="password"
+            type="password"
+            placeholder="password"
+            value={this.state.password}
+            onChange={this.handleInputChange}
+          />
+        </div>
+        <div className="input-element">
+          <Input
+            name="passwordConfirm"
+            type="password"
+            placeholder="confirm password"
+            value={this.state.passwordConfirm}
+            onChange={this.handleInputChange}
+          />
+          <span className="confirm-button">
+            <Button onClick={this.onSignUpButtonClick}>sign up</Button>
+          </span>
+        </div>
+        <div>
+          or <A onClick={this.toggleLogin}>login</A>
+        </div>
         <style jsx>{`
-          div {
+          .form-holder {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+          }
+
+          .confirm-button {
+            position: absolute;
+            margin-left: 7px;
+          }
+
+          .input-element {
+            margin: 7px 0;
           }
         `}</style>
       </div>
@@ -155,14 +195,42 @@ class Login extends React.Component {
           height: '100vh',
         }}
       >
-        <Logo size={150} />
-        <div>{appVersion}</div>
+        <div className="eye-logo">
+          <EyeLogo height={30} withText={true} />
+        </div>
+
+        <div className="logo">
+          <Logo size={170} />
+        </div>
         {this.renderLogin()}
         {this.renderSignUp()}
         {this.renderError()}
-        <Link href="/forgotPassword">
-          <a>Forgot your password?</a>
-        </Link>
+        <div className="forgot-password">
+          <Link href="/forgotPassword">
+            <A>forgot your password?</A>
+          </Link>
+        </div>
+        <style jsx>{`
+          .forgot-password {
+            position: absolute;
+            bottom: 10px;
+          }
+
+          .logo {
+            margin-bottom: 30px;
+          }
+
+          .eye-logo {
+            position: absolute;
+            top: 5px;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+          }
+        `}</style>
       </div>
     );
   }
