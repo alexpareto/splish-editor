@@ -195,6 +195,7 @@ class Login extends React.Component {
             alignItems: 'center',
             justifyContent: 'center',
             height: '100%',
+            overflow: 'visible',
           }}
         >
           <div className="eye-logo">

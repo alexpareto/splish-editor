@@ -7,6 +7,8 @@ import * as Actions from './actions';
 import * as ExportActions from '../exports/actions';
 import CinemagraphShortcuts from './cinemagraphShortcuts';
 
+import Holder from '../../components/holder';
+
 class Cinemagraph extends React.Component {
   constructor(props) {
     super(props);
@@ -19,50 +21,51 @@ class Cinemagraph extends React.Component {
 
   render() {
     return (
-      <div
-        style={{
-          height: '100vh',
-          width: '100vw',
-          marginLeft: '-8px',
-          userSelect: 'none',
-        }}
-        onKeyDown={event => {
-          this.shortcuts.keyStroke(event, this.props.cinemagraph);
-        }}
-        tabIndex="0"
-      >
-        <NavBar
-          selectCinemagraphVideo={this.props.selectCinemagraphVideo}
-          startExportingCinemagraph={this.props.startExportingCinemagraph}
-          cinemagraphShareComplete={this.props.cinemagraphShareComplete}
-          showExportModal={this.props.cinemagraph.showExportModal}
-          isRendering={this.props.cinemagraph.isRendering}
-          updateCinemagraphBrushBlur={this.props.updateCinemagraphBrushBlur}
-          updateCinemagraphBrushSize={this.props.updateCinemagraphBrushSize}
-          selectCinemagraphBrushTool={this.props.selectCinemagraphBrushTool}
-          selectCinemagraphEraseTool={this.props.selectCinemagraphEraseTool}
-          exports={this.props.exports}
-          brushSize={this.props.cinemagraph.brushSize}
-          brushBlur={this.props.cinemagraph.brushBlur}
-          tool={this.props.cinemagraph.tool}
-        />
-        <CinemagraphCanvas
-          initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
-          videoSrc={this.props.cinemagraph.videoPath}
-          boundingRect={this.props.cinemagraph.boundingRect}
-          isRendering={this.props.cinemagraph.isRendering}
-          videoDimensions={this.props.cinemagraph.videoDimensions}
-          cinemagraphExportComplete={this.props.cinemagraphExportComplete}
-          uploadExportRequest={this.props.uploadExportRequest}
-          brushSize={this.props.cinemagraph.brushSize}
-          brushBlur={this.props.cinemagraph.brushBlur}
-          addCinemagraphBrushStroke={this.props.addCinemagraphBrushStroke}
-          startCinemagraphPreview={this.props.startCinemagraphPreview}
-          preview={this.props.cinemagraph.preview}
-          tool={this.props.cinemagraph.tool}
-        />
-        <Trimmer />
-      </div>
+      <Holder>
+        <div
+          style={{
+            height: '100%',
+            width: '100%',
+            userSelect: 'none',
+          }}
+          onKeyDown={event => {
+            this.shortcuts.keyStroke(event, this.props.cinemagraph);
+          }}
+          tabIndex="0"
+        >
+          <NavBar
+            selectCinemagraphVideo={this.props.selectCinemagraphVideo}
+            startExportingCinemagraph={this.props.startExportingCinemagraph}
+            cinemagraphShareComplete={this.props.cinemagraphShareComplete}
+            showExportModal={this.props.cinemagraph.showExportModal}
+            isRendering={this.props.cinemagraph.isRendering}
+            updateCinemagraphBrushBlur={this.props.updateCinemagraphBrushBlur}
+            updateCinemagraphBrushSize={this.props.updateCinemagraphBrushSize}
+            selectCinemagraphBrushTool={this.props.selectCinemagraphBrushTool}
+            selectCinemagraphEraseTool={this.props.selectCinemagraphEraseTool}
+            exports={this.props.exports}
+            brushSize={this.props.cinemagraph.brushSize}
+            brushBlur={this.props.cinemagraph.brushBlur}
+            tool={this.props.cinemagraph.tool}
+          />
+          <CinemagraphCanvas
+            initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
+            videoSrc={this.props.cinemagraph.videoPath}
+            boundingRect={this.props.cinemagraph.boundingRect}
+            isRendering={this.props.cinemagraph.isRendering}
+            videoDimensions={this.props.cinemagraph.videoDimensions}
+            cinemagraphExportComplete={this.props.cinemagraphExportComplete}
+            uploadExportRequest={this.props.uploadExportRequest}
+            brushSize={this.props.cinemagraph.brushSize}
+            brushBlur={this.props.cinemagraph.brushBlur}
+            addCinemagraphBrushStroke={this.props.addCinemagraphBrushStroke}
+            startCinemagraphPreview={this.props.startCinemagraphPreview}
+            preview={this.props.cinemagraph.preview}
+            tool={this.props.cinemagraph.tool}
+          />
+          <Trimmer />
+        </div>
+      </Holder>
     );
   }
 }

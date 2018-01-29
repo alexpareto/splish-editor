@@ -12,7 +12,7 @@ class PreviewToggle extends React.Component {
     return (
       <IconButton
         onClick={onClick}
-        stroke={globalStyles.background}
+        stroke={globalStyles.accent}
         name={name}
         backgroundColor={globalStyles.secondary}
       />

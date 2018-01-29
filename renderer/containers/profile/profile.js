@@ -212,6 +212,7 @@ class Profile extends React.Component {
             display: inline-flex;
             box-sizing: border-box;
             padding: 20px;
+            margin-top: 40px;
             width: 69%;
             height: 100%;
             overflow: scroll;
