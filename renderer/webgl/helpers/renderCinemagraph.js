@@ -135,7 +135,7 @@ class Preview {
     this.start();
   };
 
-  update = (newPoint, brushSize, brushBlur) => {
+  update = (newPoint, brushSize, brushBlur, brushTool) => {
     const normalizedPoint = this.normalizedPoint(
       newPoint[0],
       newPoint[1],
@@ -148,7 +148,7 @@ class Preview {
       brushSize * this.videoWidth / this.boundingRect.width;
 
     let blur = 21 - 2 * brushBlur;
-    
+
     let l = this.brushedImage.data.length / 4;
     for (let i = 0; i < l; i++) {
       const x = i % this.videoWidth;
@@ -160,12 +160,24 @@ class Preview {
         const normalizedDistance =
           Math.pow(dist / normalizedBrushSize, blur) * 255.0;
 
-        this.brushedImage.data[i * 4 + 3] = Math.min(
-          this.brushedImage.data[i * 4 + 3],
-          normalizedDistance,
-        );
+        const opacity =
+          brushTool == 'eraser'
+            ? Math.min(this.brushedImage.data[i * 4 + 3], normalizedDistance)
+            : Math.max(
+                this.brushedImage.data[i * 4 + 3],
+                255.0 - normalizedDistance,
+              );
+        this.brushedImage.data[i * 4 + 3] = opacity;
       }
     }
+  };
+
+  setMask = mask => {
+    this.brushedImage.data.set(mask);
+  };
+
+  getMask = () => {
+    return new Uint8ClampedArray(this.brushedImage.data);
   };
 
   render = () => {

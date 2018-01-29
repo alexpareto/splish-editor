@@ -54,11 +54,6 @@ class VectorCanvas extends React.Component {
       let data = [{ x: mouse[0], y: mouse[1] }, {}];
       this.setState({ data, isDown: true });
     } else {
-      let circle = this.state.svg.append('circle');
-      circle
-        .attr('cx', mouse[0])
-        .attr('cy', mouse[1])
-        .attr('r', 3);
       this.props.addAnchor({ x: mouse[0], y: mouse[1] });
     }
   };
@@ -83,26 +78,12 @@ class VectorCanvas extends React.Component {
 
   onMouseUp = mouse => {
     if (this.props.currentTool == 'vector') {
-      let path = this.state.svg.append('path');
-      let dx = mouse[0] - this.state.data[0].x;
-      let dy = mouse[1] - this.state.data[0].y;
-      let d = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-      let headLength = 5;
-      let headWidth = 3;
-      let p = [mouse[0] - dx * headLength / d, mouse[1] - dy * headLength / d];
-      let p1 = [p[0] - dy * headWidth / d, p[1] + dx * headWidth / d];
-      let p2 = [p[0] + dy * headWidth / d, p[1] - dx * headWidth / d];
-      let dataPath = [
-        { x: p1[0], y: p1[1] },
-        { x: mouse[0], y: mouse[1] },
-        { x: p2[0], y: p2[1] },
-      ];
-      path
-        .attr('d', this.lineFunction(dataPath))
-        .attr('stroke', 'red')
-        .attr('fill', 'none');
       this.props.addVector([
-        { x: this.state.data[0].x, y: this.state.data[0].y },
+        {
+          x: this.state.data[0].x,
+          y: this.state.data[0].y,
+          path: this.state.path,
+        },
         { x: mouse[0], y: mouse[1] },
       ]);
     }

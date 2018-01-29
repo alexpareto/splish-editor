@@ -1,6 +1,5 @@
 import React from 'react';
 import * as globalStyles from '../globalStyles';
-import Preview from '../webgl/helpers/renderCinemagraph';
 import AnimationDebugger from './animationDebugger';
 import BrushCanvas from './brushCanvas';
 import fs from 'fs';
@@ -12,40 +11,48 @@ class CinemagraphPreview extends React.Component {
       hasLoaded: false,
       hasSelectedVideo: false,
     };
+
+    this.mask = [];
   }
 
   componentDidUpdate() {
     if (this.state.hasSelectedVideo && !this.state.hasLoaded) {
-      this.preview = new Preview(
-        this.props.boundingRect,
-        // callback for when the video completes capture
-        // Read file and send it to s3, also notify redux
-        // to stop capturing the video b/c export is done
-        filePath => {
-          fs.readFile(filePath, (err, data) => {
-            const file = new File([data], 'output.mp4', {
-              type: 'video/mp4',
-            });
-
-            this.props.uploadExportRequest(file);
+      this.props.startCinemagraphPreview(filePath => {
+        fs.readFile(filePath, (err, data) => {
+          const file = new File([data], 'output.mp4', {
+            type: 'video/mp4',
           });
-          this.props.cinemagraphExportComplete();
-        },
-      );
+
+          this.props.uploadExportRequest(file);
+        });
+        this.props.cinemagraphExportComplete();
+      });
       this.setState({ hasLoaded: true });
     }
 
     if (this.props.isRendering) {
       setTimeout(() => {
-        this.preview.capture();
+        this.props.preview.capture();
       }, 300);
       return;
     }
   }
 
   onBrush = brushPoint => {
-    // console.log("BRUSHING WITH BRUSH SIZE, BLUR: ", this.props.brushSize, this.props.brushBlur);
-    this.preview.update(brushPoint, this.props.brushSize, this.props.brushBlur);
+    this.props.preview.update(
+      brushPoint,
+      this.props.brushSize,
+      this.props.brushBlur,
+      this.props.tool,
+    );
+  };
+
+  onStrokeStart = () => {
+    this.mask = this.props.preview.getMask();
+  };
+
+  onStrokeEnd = () => {
+    this.props.addCinemagraphBrushStroke(this.mask);
   };
 
   render() {
@@ -77,6 +84,8 @@ class CinemagraphPreview extends React.Component {
         <BrushCanvas
           height={this.props.boundingRect.height}
           onBrush={this.onBrush}
+          onStrokeStart={this.onStrokeStart}
+          onStrokeEnd={this.onStrokeEnd}
         />
         {video}
         <canvas

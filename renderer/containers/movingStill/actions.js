@@ -15,6 +15,8 @@ export const actionTypes = {
   MOVING_STILL_EXPORT_COMPLETE: 'MOVING_STILL_EXPORT_COMPLETE',
   MOVING_STILL_SHARE_COMPLETE: 'MOVING_STILL_SHARE_COMPLETE',
   UPDATE_MOVING_STILL_DURATION: 'UPDATE_MOVING_STILL_DURATION',
+  REMOVE_ANCHOR: 'REMOVE_ANCHOR',
+  REMOVE_VECTOR: 'REMOVE_VECTOR',
 };
 
 // ACTIONS
@@ -46,12 +48,12 @@ export const selectVectorTool = () => {
   return { type: actionTypes.SELECT_VECTOR_TOOL };
 };
 
-export const addAnchor = anchor => {
-  return { type: actionTypes.ADD_ANCHOR, anchor };
+export const addAnchor = (isUndo, isRedo, anchor) => {
+  return { type: actionTypes.ADD_ANCHOR, anchor, isUndo, isRedo };
 };
 
-export const addVector = vector => {
-  return { type: actionTypes.ADD_VECTOR, vector };
+export const addVector = (isUndo, isRedo, vector) => {
+  return { type: actionTypes.ADD_VECTOR, vector, isUndo, isRedo };
 };
 
 export const updateAnimationParams = params => {
@@ -72,4 +74,20 @@ export const movingStillShareComplete = () => {
 
 export const updateMovingStillDuration = duration => {
   return { type: actionTypes.UPDATE_MOVING_STILL_DURATION, duration };
+};
+
+export const undoMovingStill = actionObject => {
+  return { type: actionTypes.UNDO_MOVING_STILL, actionObject };
+};
+
+export const redoMovingStill = actionObject => {
+  return { type: actionTypes.REDO_MOVING_STILL, actionObject };
+};
+
+export const removeAnchor = (isUndo, isRedo, anchor) => {
+  return { type: actionTypes.REMOVE_ANCHOR, anchor, isUndo, isRedo };
+};
+
+export const removeVector = (isUndo, isRedo, vector) => {
+  return { type: actionTypes.REMOVE_VECTOR, vector, isUndo, isRedo };
 };

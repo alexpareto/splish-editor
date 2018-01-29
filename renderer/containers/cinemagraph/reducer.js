@@ -1,12 +1,16 @@
 import { actionTypes } from './actions';
 import * as globalStyles from '../../globalStyles';
+import Preview from '../../webgl/helpers/renderCinemagraph';
+import getHistory from '../../lib/getHistory';
+import * as Actions from './actions';
 
 const initialState = {
-  undoStack: [],
-  redoStack: [],
+  history: {
+    undoStack: [],
+    redoStack: [],
+  },
   videoPath: '',
   boundingRect: {},
-  brushPoints: [],
   brushBlur: 5,
   brushSize: 50,
   videoDimensions: {
@@ -15,10 +19,11 @@ const initialState = {
   },
   showExportModal: false,
   isRendering: false,
+  tool: 'eraser',
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
-  let lc, mask;
+  let preview, history, actionObject, prevMask, nextMask, tool;
   switch (action.type) {
     case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
       const videoPath = 'file://' + action.files[0];
@@ -43,6 +48,12 @@ export const cinemagraphReducer = (state = initialState, action) => {
           height: naturalHeight,
         },
       };
+    case actionTypes.START_CINEMAGRAPH_PREVIEW:
+      preview = new Preview(state.boundingRect, action.callback);
+      return {
+        ...state,
+        preview,
+      };
     case actionTypes.UPDATE_CINEMAGRAPH_BRUSH_SIZE:
       return {
         ...state,
@@ -52,6 +63,45 @@ export const cinemagraphReducer = (state = initialState, action) => {
       return {
         ...state,
         brushBlur: action.brushBlur,
+      };
+    case actionTypes.ADD_CINEMAGRAPH_BRUSH_STROKE:
+      prevMask = action.mask;
+      preview = state.preview;
+
+      // perform the drawing
+      if (action.isUndo || action.isRedo) {
+        nextMask = action.mask;
+        prevMask = preview.getMask();
+        preview.setMask(nextMask);
+      }
+
+      actionObject = {
+        action: Actions.removeCinemagraphBrushStroke,
+        arg1: prevMask,
+      };
+
+      history = getHistory(state.history, action, actionObject);
+
+      return {
+        ...state,
+        history,
+      };
+    case actionTypes.REMOVE_CINEMAGRAPH_BRUSH_STROKE:
+      nextMask = action.mask;
+      preview = state.preview;
+
+      actionObject = {
+        action: Actions.addCinemagraphBrushStroke,
+        arg1: preview.getMask(),
+      };
+
+      preview.setMask(nextMask);
+
+      history = getHistory(state.history, action, actionObject);
+
+      return {
+        ...state,
+        history,
       };
     case actionTypes.START_EXPORTING_CINEMAGRAPH:
       return {
@@ -68,6 +118,16 @@ export const cinemagraphReducer = (state = initialState, action) => {
       return {
         ...state,
         showExportModal: false,
+      };
+    case actionTypes.SELECT_CINEMAGRAPH_BRUSH_TOOL:
+      return {
+        ...state,
+        tool: 'brush',
+      };
+    case actionTypes.SELECT_CINEMAGRAPH_ERASE_TOOL:
+      return {
+        ...state,
+        tool: 'eraser',
       };
     default:
       return state;
