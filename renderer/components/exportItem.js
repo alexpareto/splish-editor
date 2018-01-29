@@ -2,7 +2,7 @@ import * as globalStyles from '../globalStyles';
 
 export default props => {
   return (
-    <div {...props}>
+    <div>
       <video autoPlay="true" loop="true" height={props.height}>
         <source src={props.videoUrl} />
       </video>
@@ -15,6 +15,8 @@ export default props => {
           font-family: ${globalStyles.fontFamily};
           transition: all 0.2s ease;
           box-shadow: ${globalStyles.lighterBoxShadow};
+          height: 200px;
+          margin: 5px;
         }
 
         div:hover {

@@ -114,8 +114,9 @@ class Profile extends React.Component {
 
     return (
       <div>
-        <div className="name">
-          <span>
+        <div className="name-holder">
+          <img className="proficon" src="/static/icons/splish-proficon.png" />
+          <span className="name">
             {this.props.user.first_name ? this.props.user.first_name : 'Alex'}{' '}
             {this.props.user.last_name ? this.props.user.last_name : 'Pareto'}
           </span>
@@ -130,11 +131,17 @@ class Profile extends React.Component {
           </Link>
         </div>
         <style jsx>{`
-          .change-button {
-            margin: 7px 0;
+          .proficon {
+            height: 50px;
+            width: 50px;
+            margin-right: 20px;
           }
 
-          .name {
+          .change-button {
+            margin: 20px 0;
+          }
+
+          .name-holder {
             font-size: 24px;
             margin-bottom: 20px;
             height: 50px;
@@ -160,7 +167,8 @@ class Profile extends React.Component {
         <style jsx>{`
           .profile-holder {
             width: 30%;
-            display: flex;
+            box-sizing: border-box;
+            display: inline-flex;
             flex-direction: column;
             justify-content: center;
             height: 100vh;
@@ -168,8 +176,12 @@ class Profile extends React.Component {
           }
 
           .export-holder {
-            width: 70%;
+            display: inline-flex;
+            box-sizing: border-box;
+            padding: 20px;
+            width: 69%;
             height: 100vh;
+            overflow: scroll;
           }
         `}</style>
       </div>

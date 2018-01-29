@@ -57,7 +57,9 @@ class Exports extends React.Component {
             .holder {
               display: flex;
               flex-direction: row;
-              flex-wrap: true;
+              flex-wrap: wrap;
+              align-items: center;
+              justify-content: space-around;
             }
           `}
         </style>
