@@ -3,7 +3,7 @@ import EyeLogo from './eyelogo';
 
 export default props => {
   return (
-    <div className="loading">
+    <div className="loading logoAnimation">
       <EyeLogo withText={true} height={40} />
       <style jsx>{`
         .loading {
@@ -15,6 +15,26 @@ export default props => {
           display: flex;
           align-items: center;
           justify-content: center;
+        }
+
+        .logoAnimation {
+          animation: filter-animation 0.5s infinite;
+          animation-direction: alternate-reverse;
+          filter: brightness(75%);
+        }
+
+        @-webkit-keyframes filter-animation {
+          0% {
+            filter: brightness(75%);
+          }
+
+          50% {
+            filter: brightness(85%);
+          }
+
+          100% {
+            filter: brightness(100%);
+          }
         }
       `}</style>
     </div>

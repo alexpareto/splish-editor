@@ -75,6 +75,12 @@ export default class MyDocument extends Document {
             fontSize: globalStyles.globalFontSize,
           }}
         >
+          <div
+            style={{
+              height: '20px',
+              '-webkit-app-region': 'drag',
+            }}
+          />
           {this.props.customValue}
           <Main />
           <NextScript />
