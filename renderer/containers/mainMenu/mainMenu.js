@@ -11,6 +11,7 @@ import Logo from '../../components/logo.js';
 import Button from '../../components/button.js';
 import EyeLogo from '../../components/eyelogo.js';
 import Loading from '../../components/loading';
+import Holder from '../../components/holder';
 
 class MainMenu extends React.Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class MainMenu extends React.Component {
       return <Loading />;
     }
     return (
-      <div className="holder">
+      <Holder>
         <div className="eye-logo">
           <EyeLogo height={30} withText={true} />
         </div>
@@ -72,10 +73,11 @@ class MainMenu extends React.Component {
 
             .button-holder {
               width: 30%;
-              display: flex;
+              display: inline-flex;
+              box-sizing: border-box;
               flex-direction: column;
               justify-content: center;
-              height: 100vh;
+              height: 100%;
               padding-left: 50px;
             }
 
@@ -104,7 +106,7 @@ class MainMenu extends React.Component {
             }
           `}
         </style>
-      </div>
+      </Holder>
     );
   }
 }

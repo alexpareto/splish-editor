@@ -7,6 +7,7 @@ import Logo from '../../components/logo';
 import Input from '../../components/input';
 import Button from '../../components/button';
 import A from '../../components/a';
+import Holder from '../../components/holder';
 
 export default class extends React.Component {
   constructor(props) {
@@ -87,54 +88,56 @@ export default class extends React.Component {
 
   render() {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-        }}
-      >
-        <Logo size={150} />
-        <p>
-          Type in your email and we'll send a link for you to reset your
-          password.
-        </p>
-        <div className="input-element">
-          <Input
-            name="email"
-            type="email"
-            placeholder="email"
-            value={this.state.email}
-            onChange={this.handleInputChange}
-          />
-          <span className="confirm-button">
-            <Button onClick={this.requestEmail}>get email</Button>
-          </span>
-        </div>
-        {this.renderError()}
-        {this.renderSuccess()}
-        <div className="back-link">
-          <Link href="/login">
-            <A>back to login</A>
-          </Link>
-        </div>
-        <style jsx>{`
-          .input-element {
-            margin: 7px 0;
-          }
+      <Holder>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+          }}
+        >
+          <Logo size={150} />
+          <p>
+            Type in your email and we'll send a link for you to reset your
+            password.
+          </p>
+          <div className="input-element">
+            <Input
+              name="email"
+              type="email"
+              placeholder="email"
+              value={this.state.email}
+              onChange={this.handleInputChange}
+            />
+            <span className="confirm-button">
+              <Button onClick={this.requestEmail}>get email</Button>
+            </span>
+          </div>
+          {this.renderError()}
+          {this.renderSuccess()}
+          <div className="back-link">
+            <Link href="/login">
+              <A>back to login</A>
+            </Link>
+          </div>
+          <style jsx>{`
+            .input-element {
+              margin: 7px 0;
+            }
 
-          .confirm-button {
-            margin-left: 7px;
-          }
+            .confirm-button {
+              margin-left: 7px;
+            }
 
-          .back-link {
-            position: absolute;
-            bottom: 10px;
-          }
-        `}</style>
-      </div>
+            .back-link {
+              position: absolute;
+              bottom: 10px;
+            }
+          `}</style>
+        </div>
+      </Holder>
     );
   }
 }

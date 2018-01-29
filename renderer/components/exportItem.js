@@ -16,7 +16,7 @@ export default props => {
           transition: all 0.2s ease;
           box-shadow: ${globalStyles.lighterBoxShadow};
           height: 200px;
-          margin: 5px;
+          margin: 10px;
         }
 
         div:hover {
