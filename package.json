@@ -1,6 +1,6 @@
 {
-  "name": "splish-desktop",
-  "version": "0.4.0",
+  "name": "Splish",
+  "version": "0.4.1",
   "description": "Desktop Micro-Video Editor",
   "main": "main/main.js",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "repository": "https://github.com/barooapp/splish-desktop",
   "keywords": ["Splish", "Micro-video", "Editor", "Moving Photos"],
-  "author": "Zac Denham",
+  "author": "Baroo Reality, Inc.",
   "license": "CC0-1.0",
   "devDependencies": {
     "babel-eslint": "^8.2.1",
@@ -72,7 +72,12 @@
       "category": "public.app-category.video",
       "type": "distribution"
     },
-    "files": ["**/*", "!renderer", "renderer/out"],
+    "files": [
+      "**/*",
+      "!renderer",
+      "renderer/out",
+      "!renderer/out/static/temp/"
+    ],
     "publish": {
       "provider": "github",
       "repo": "splish-desktop",
