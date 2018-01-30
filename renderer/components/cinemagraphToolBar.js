@@ -9,6 +9,8 @@ import Slider from 'rc-slider';
 import Link from 'next/link';
 import Head from 'next/head';
 
+import EyeLogo from './eyelogo';
+
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
@@ -46,33 +48,34 @@ class NavBar extends React.Component {
         </Head>
         <div className="flex">
           {exportModal}
-          <Link href="/mainMenu" prefetch>
-            <a>
-              <IconButton
-                stroke={globalStyles.background}
-                name="leftChevron"
-                backgroundColor={globalStyles.secondary}
-              />
-            </a>
-          </Link>
+          <img className="icon" src="/static/icons/splish-solidlogo.png" />
+
           <FileSelection
             type="video"
             filesHandler={this.props.selectCinemagraphVideo}
           />
-          <IconButton
-            stroke={globalStyles.background}
-            name={this.props.tool == 'eraser' ? 'plusCircle' : 'minusCircle'}
-            backgroundColor={globalStyles.secondary}
-            onClick={this.toggleTool}
-          />
-          <IconButton
-            stroke={globalStyles.background}
-            name="share"
-            backgroundColor={globalStyles.secondary}
-            onClick={this.props.startExportingCinemagraph}
-          />
+          <div className="share-button">
+            <IconButton
+              stroke={globalStyles.accent}
+              name="share"
+              backgroundColor={globalStyles.secondary}
+              onClick={this.props.startExportingCinemagraph}
+            />
+          </div>
           <div className="sliders">
+            <div className="tool-button">
+              <IconButton
+                stroke={globalStyles.accent}
+                name={
+                  this.props.tool == 'eraser' ? 'plusCircle' : 'minusCircle'
+                }
+                backgroundColor={globalStyles.secondary}
+                onClick={this.toggleTool}
+              />
+            </div>
             <div className="slider">
+              <span className="slider-label">size</span>
+
               <Slider
                 min={1}
                 step={1}
@@ -85,9 +88,10 @@ class NavBar extends React.Component {
                   this.props.updateCinemagraphBrushSize(brushSize * 5);
                 }}
               />
-              <span className="label">Brush Size: {this.state.brushSize} </span>
+              <span className="level-label">{this.state.brushSize}px</span>
             </div>
             <div className="slider">
+              <span className="slider-label">blur</span>
               <Slider
                 min={1}
                 step={1}
@@ -100,48 +104,93 @@ class NavBar extends React.Component {
                   this.props.updateCinemagraphBrushBlur(brushBlur);
                 }}
               />
-              <span className="label">Brush Blur: {this.state.brushBlur} </span>
+              <span className="level-label">{this.state.brushBlur}0%</span>
             </div>
+          </div>
+          <div>
+            <Link href="/mainMenu" prefetch>
+              <div className="eye-back">
+                <EyeLogo height={30} withText={false} />
+                <span>home</span>
+              </div>
+            </Link>
           </div>
         </div>
         <style jsx>
           {`
-          .flex {
-            display:flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-          }
+            .tool-button {
+              margin: 0 10px;
+            }
+            .icon {
+              height: 30px;
+              margin: 10px;
+            }
 
-          .slider {
-            margin-left: 10px;
-            margin-right: 10px;
-          }
+            .share-button {
+              position: absolute;
+              top: 150px;
+              z-index: 1;
+              right: 20px;
+            }
 
-          .sliders {
-            display:flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-          }
+            .eye-back {
+              position: absolute;
+              top: 0;
+              right: 0;
+              display: inline-flex;
+              box-sizing: border-box;
+              padding: 10px 15px;
+              flex-direction: row;
+              align-items: center;
+              justify-content: center;
+            }
 
-          .label {
-            display: flex;
-            width: 150px;
-            justify-content: center;
-            align-items: center;
-          }
+            .eye-back:hover {
+              cursor: pointer;
+            }
 
-          .container { 
-            left; 0; 
-            top: 0;
-            margin-left: -8px;
-            margin-top: -8px;
-            height: 45px;
-            width: 100vw;
-            border-bottom: 1px solid ${globalStyles.primary};
-            background-color: ${globalStyles.background};
-          };`}
+            .flex {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              height: 100%;
+            }
+
+            .slider {
+              margin-left: 10px;
+              margin-right: 10px;
+              width: 150px;
+              position: relative;
+            }
+
+            .sliders {
+              display: flex;
+              align-items: center;
+              justify-content: space-around;
+              height: 100%;
+            }
+
+            .slider-label {
+              position: absolute;
+              top: -17px;
+            }
+
+            .level-label {
+              position: absolute;
+              right: 0;
+              margin: 5px 0;
+            }
+
+            .container {
+              height: 100px;
+              width: 100%;
+              position: relative;
+              border-bottom: 1px solid ${globalStyles.primary};
+              background-color: ${globalStyles.background};
+              box-shadow: ${globalStyles.lighterBoxShadow};
+              z-index: 1;
+            }
+          `}
         </style>
       </div>
     );

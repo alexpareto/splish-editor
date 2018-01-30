@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import * as Actions from './actions';
 import * as ExportActions from '../exports/actions';
 import MovingStillShortcuts from './movingStillShortcuts';
+import Holder from '../../components/holder';
 
 class MovingStill extends React.Component {
   constructor(props) {
@@ -20,60 +21,61 @@ class MovingStill extends React.Component {
     const showPreview = this.props.movingStill.viewMode == 'preview';
 
     return (
-      <div
-        style={{
-          height: '100vh',
-          width: '100vw',
-          marginLeft: '-8px',
-          userSelect: 'none',
-        }}
-        onKeyDown={event => {
-          this.shortcuts.keyStroke(event, this.props.movingStill);
-        }}
-        tabIndex="0"
-      >
-        <ToolBar
-          selectMovingStillImage={this.props.selectMovingStillImage}
-          viewMode={this.props.movingStill.viewMode}
-          initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
-          selectAnchorTool={this.props.selectAnchorTool}
-          selectVectorTool={this.props.selectVectorTool}
-          isInitialized={this.props.movingStill.isInitialized}
-          startMovingStillPreviewMode={this.props.startMovingStillPreviewMode}
-          startMovingStillEditMode={this.props.startMovingStillEditMode}
-          startExportingMovingStill={this.props.startExportingMovingStill}
-          showExportModal={this.props.movingStill.showExportModal}
-          movingStillShareComplete={this.props.movingStillShareComplete}
-          isRendering={this.props.movingStill.isRendering}
-          updateMovingStillDuration={this.props.updateMovingStillDuration}
-          exports={this.props.exports}
-          duration={this.props.movingStill.duration}
-        />
-        <MovingStillPreview
-          display={showPreview}
-          isRendering={this.props.movingStill.isRendering}
-          imgSrc={this.props.movingStill.imgPath}
-          anchors={this.props.movingStill.anchors}
-          vectors={this.props.movingStill.vectors}
-          imgDimensions={this.props.movingStill.imgDimensions}
-          animationParams={this.props.movingStill.animationParams}
-          updateAnimationParams={this.props.updateAnimationParams}
-          boundingRect={this.props.movingStill.boundingRect}
-          isRendering={this.props.movingStill.isRendering}
-          movingStillExportComplete={this.props.movingStillExportComplete}
-          uploadExportRequest={this.props.uploadExportRequest}
-          duration={this.props.movingStill.duration}
-        />
-        <VectorCanvas
-          display={!showPreview}
-          currentTool={this.props.movingStill.currentTool}
-          imgSrc={this.props.movingStill.imgPath}
-          isInitialized={this.props.movingStill.isInitialized}
-          imageHeight={this.props.movingStill.imageHeight}
-          addVector={this.props.addVector}
-          addAnchor={this.props.addAnchor}
-        />
-      </div>
+      <Holder>
+        <div
+          style={{
+            height: '100%',
+            width: '100%',
+            userSelect: 'none',
+          }}
+          onKeyDown={event => {
+            this.shortcuts.keyStroke(event, this.props.movingStill);
+          }}
+          tabIndex="0"
+        >
+          <ToolBar
+            selectMovingStillImage={this.props.selectMovingStillImage}
+            viewMode={this.props.movingStill.viewMode}
+            initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
+            selectAnchorTool={this.props.selectAnchorTool}
+            selectVectorTool={this.props.selectVectorTool}
+            isInitialized={this.props.movingStill.isInitialized}
+            startMovingStillPreviewMode={this.props.startMovingStillPreviewMode}
+            startMovingStillEditMode={this.props.startMovingStillEditMode}
+            startExportingMovingStill={this.props.startExportingMovingStill}
+            showExportModal={this.props.movingStill.showExportModal}
+            movingStillShareComplete={this.props.movingStillShareComplete}
+            isRendering={this.props.movingStill.isRendering}
+            updateMovingStillDuration={this.props.updateMovingStillDuration}
+            exports={this.props.exports}
+            duration={this.props.movingStill.duration}
+          />
+          <MovingStillPreview
+            display={showPreview}
+            isRendering={this.props.movingStill.isRendering}
+            imgSrc={this.props.movingStill.imgPath}
+            anchors={this.props.movingStill.anchors}
+            vectors={this.props.movingStill.vectors}
+            imgDimensions={this.props.movingStill.imgDimensions}
+            animationParams={this.props.movingStill.animationParams}
+            updateAnimationParams={this.props.updateAnimationParams}
+            boundingRect={this.props.movingStill.boundingRect}
+            isRendering={this.props.movingStill.isRendering}
+            movingStillExportComplete={this.props.movingStillExportComplete}
+            uploadExportRequest={this.props.uploadExportRequest}
+            duration={this.props.movingStill.duration}
+          />
+          <VectorCanvas
+            display={!showPreview}
+            currentTool={this.props.movingStill.currentTool}
+            imgSrc={this.props.movingStill.imgPath}
+            isInitialized={this.props.movingStill.isInitialized}
+            imageHeight={this.props.movingStill.imageHeight}
+            addVector={this.props.addVector}
+            addAnchor={this.props.addAnchor}
+          />
+        </div>
+      </Holder>
     );
   }
 }

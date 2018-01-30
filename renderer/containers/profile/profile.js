@@ -13,6 +13,7 @@ import A from '../../components/a';
 import Input from '../../components/input';
 import Exports from '../exports/exports';
 import EyeLogo from '../../components/eyelogo';
+import Holder from '../../components/holder';
 
 class Profile extends React.Component {
   async componentDidMount() {
@@ -130,11 +131,11 @@ class Profile extends React.Component {
         </div>
         <div>{this.props.user.email}</div>
         <div className="change-button">
-          <Button onClick={this.showUpdate}>Change</Button>
+          <Button onClick={this.showUpdate}>change</Button>
         </div>
         <div>
           <Link href="/mainMenu" prefetch>
-            <A>Back to main menu</A>
+            <A>back to main menu</A>
           </Link>
         </div>
 
@@ -164,11 +165,10 @@ class Profile extends React.Component {
 
   render() {
     return (
-      <div className="holder">
+      <Holder>
         <div className="eye-logo">
           <EyeLogo height={30} withText={true} />
         </div>
-
         <div className="profile-holder">
           {this.renderUpdateView()}
           {this.renderNormalView()}
@@ -182,9 +182,10 @@ class Profile extends React.Component {
         <style jsx>{`
           .eye-logo {
             position: absolute;
-            top: 5px;
+            top: 0;
             left: 0;
             right: 0;
+            padding: 5px;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -197,9 +198,9 @@ class Profile extends React.Component {
             display: inline-flex;
             flex-direction: column;
             justify-content: center;
-            height: 100vh;
+            height: 100%;
             padding-left: 50px;
-            position: relative;
+            vertical-align: top;
           }
 
           .logout {
@@ -211,12 +212,14 @@ class Profile extends React.Component {
             display: inline-flex;
             box-sizing: border-box;
             padding: 20px;
+            margin-top: 40px;
             width: 69%;
-            height: 100vh;
+            height: 100%;
             overflow: scroll;
+            vertical-align: top;
           }
         `}</style>
-      </div>
+      </Holder>
     );
   }
 }

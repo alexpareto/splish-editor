@@ -43,7 +43,7 @@ class FileSelection extends React.Component {
     return (
       <div onClick={this.openFileDialog}>
         <IconButton
-          stroke={globalStyles.background}
+          stroke={globalStyles.accent}
           name="plus"
           backgroundColor={globalStyles.secondary}
         />

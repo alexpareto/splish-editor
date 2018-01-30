@@ -58,8 +58,9 @@ class Exports extends React.Component {
               display: flex;
               flex-direction: row;
               flex-wrap: wrap;
-              align-items: center;
               justify-content: space-around;
+              align-items: center;
+              align-content: flex-start;
             }
           `}
         </style>

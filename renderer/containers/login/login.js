@@ -12,6 +12,7 @@ import Input from '../../components/input.js';
 import Button from '../../components/button.js';
 import A from '../../components/a.js';
 import EyeLogo from '../../components/eyelogo';
+import Holder from '../../components/holder';
 
 class Login extends React.Component {
   async componentDidMount() {
@@ -186,52 +187,55 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-        }}
-      >
-        <div className="eye-logo">
-          <EyeLogo height={30} withText={true} />
-        </div>
+      <Holder>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            overflow: 'visible',
+          }}
+        >
+          <div className="eye-logo">
+            <EyeLogo height={30} withText={true} />
+          </div>
 
-        <div className="logo">
-          <Logo size={170} />
-        </div>
-        {this.renderLogin()}
-        {this.renderSignUp()}
-        {this.renderError()}
-        <div className="forgot-password">
-          <Link href="/forgotPassword">
-            <A>forgot your password?</A>
-          </Link>
-        </div>
-        <style jsx>{`
-          .forgot-password {
-            position: absolute;
-            bottom: 10px;
-          }
+          <div className="logo">
+            <Logo size={170} />
+          </div>
+          {this.renderLogin()}
+          {this.renderSignUp()}
+          {this.renderError()}
+          <div className="forgot-password">
+            <Link href="/forgotPassword">
+              <A>forgot your password?</A>
+            </Link>
+          </div>
+          <style jsx>{`
+            .forgot-password {
+              position: absolute;
+              bottom: 10px;
+            }
 
-          .logo {
-            margin-bottom: 30px;
-          }
+            .logo {
+              margin-bottom: 30px;
+            }
 
-          .eye-logo {
-            position: absolute;
-            top: 5px;
-            left: 0;
-            right: 0;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-          }
-        `}</style>
-      </div>
+            .eye-logo {
+              position: absolute;
+              top: 5px;
+              left: 0;
+              right: 0;
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: center;
+            }
+          `}</style>
+        </div>
+      </Holder>
     );
   }
 }

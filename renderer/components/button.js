@@ -6,12 +6,16 @@ export default props => {
       {props.children}
       <style jsx>{`
         button {
-          height: 30px;
+          height: ${props.height ? props.height : 30}px;
           background: ${globalStyles.backgroundAccent};
           color: ${globalStyles.textColor};
           border-style: none;
           box-sizing: border-box;
           padding: 7px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          stroke: ${props.stroke}
           font-size: 14px;
           font-family: ${globalStyles.fontFamily};
           transition: all 0.2s ease;
