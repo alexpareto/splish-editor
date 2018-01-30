@@ -48,6 +48,7 @@ class Exports extends React.Component {
             <ExportItem
               key={exportObject.id}
               videoUrl={exportObject.video_url}
+              shareLink={'https://splish.io/e/' + exportObject.public_id}
               height="200px"
             />
           );
