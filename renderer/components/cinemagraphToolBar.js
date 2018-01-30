@@ -185,7 +185,6 @@ class NavBar extends React.Component {
               height: 100px;
               width: 100%;
               position: relative;
-              border-bottom: 1px solid ${globalStyles.primary};
               background-color: ${globalStyles.background};
               box-shadow: ${globalStyles.lighterBoxShadow};
               z-index: 1;
