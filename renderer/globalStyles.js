@@ -1,4 +1,4 @@
-export const primary = '#000';
+export const primary = '#fff';
 export const secondary = '#6369D1';
 export const accent = '#fff';
 export const background = '#333333';
