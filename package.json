@@ -17,7 +17,7 @@
   },
   "repository": "https://github.com/barooapp/splish-desktop",
   "keywords": ["Splish", "Micro-video", "Editor", "Moving Photos"],
-  "author": "Zac Denham",
+  "author": "Baroo Reality, Inc.",
   "license": "CC0-1.0",
   "devDependencies": {
     "babel-eslint": "^8.2.1",
