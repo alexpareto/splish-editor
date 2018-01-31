@@ -46,8 +46,8 @@ class NavBar extends React.Component {
             href="/static/css/rcSlider.css"
           />
         </Head>
+        {exportModal}
         <div className="flex">
-          {exportModal}
           <img className="icon" src="/static/icons/splish-solidlogo.png" />
 
           <FileSelection
@@ -184,7 +184,6 @@ class NavBar extends React.Component {
             .container {
               height: 100px;
               width: 100%;
-              position: relative;
               background-color: ${globalStyles.background};
               box-shadow: ${globalStyles.lighterBoxShadow};
               z-index: 1;

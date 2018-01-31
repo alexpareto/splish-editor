@@ -1,6 +1,9 @@
 import React from 'react';
 import * as globalStyles from '../globalStyles';
 
+import Loading from './loading';
+import Button from './button';
+
 class ExportModal extends React.Component {
   constructor(props) {
     super(props);
@@ -10,41 +13,30 @@ class ExportModal extends React.Component {
     };
   }
 
-  render() {
-    const stage0 =
-      this.state.exportStage == 0 ? (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-          }}
-        >
-          What do you want to call your splish?
-          <button
-            onClick={() => {
-              this.setState({ exportStage: 1 });
-            }}
-          >
-            next
-          </button>
-        </div>
-      ) : null;
-
-    const stage1 =
-      this.state.exportStage == 1 ? (
+  renderMain = () => {
+    if (this.props.isRendering) {
+      return (
         <div>
-          Choose your license from these three options! AKA waste more time
-          while your video renders MUAHAHAHA!
-          <button
-            onClick={() => {
-              this.setState({ exportStage: 2 });
-            }}
-          >
-            next
-          </button>
+          <span className="render-text">
+            one second while we render your splish...
+          </span>
+          <Loading />
+          <style jsx>{`
+            div {
+              position: relative;
+              height: 100%;
+              width: 100%;
+              text-align: center;
+            }
+
+            span {
+              display: inline-block;
+              margin: 30px;
+            }
+          `}</style>
         </div>
-      ) : null;
+      );
+    }
 
     // get the export link from the first of the exports
     // TODO (zac/alex) instead get the public ID from the response
@@ -53,34 +45,51 @@ class ExportModal extends React.Component {
       ? `https://splish.io/e/${this.props.exports[0].public_id}`
       : null;
 
-    let stage2 =
-      this.props.isRendering || !shareLink ? (
-        <div>RENDERING YOUR SPLISH...</div>
-      ) : (
-        <div>
-          Use this here link to share your splish on the interwebs!
-          <span style={{ userSelect: 'auto' }}> {shareLink} </span>
-          <button onClick={this.props.movingStillShareComplete}>done</button>
-        </div>
-      );
+    return (
+      <div>
+        <span>All rendered! Share your splish with this link:</span>
+        <span style={{ userSelect: 'auto' }}> {shareLink} </span>
+        <Button onClick={this.props.onComplete}>done</Button>
+        <style jsx>{`
+          div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+          }
 
-    stage2 = this.state.exportStage == 2 ? stage2 : null;
+          span {
+            margin: 5px 0;
+          }
+        `}</style>
+      </div>
+    );
+  };
 
+  render() {
     return (
       <div className="container">
-        {stage0}
-        {stage1}
-        {stage2}
+        <div className="dialog">{this.renderMain()}</div>
         <style jsx>{`
+          .dialog {
+            width: 400px;
+            height: 200px;
+            background-color: ${globalStyles.background};
+            box-shadow: ${globalStyles.heavierBoxShadow};
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
           .container {
-            background-color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.2);
             position: absolute;
             display: flex;
-            align-items: center;
             justify-content: center;
-            width: 400px;
-            height: 400px;
-            top: 0px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             z-index: 300000;
           }
         `}</style>

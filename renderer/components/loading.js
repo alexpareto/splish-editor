@@ -18,18 +18,18 @@ export default props => {
         }
 
         .logoAnimation {
-          animation: filter-animation 0.5s infinite;
+          animation: 0.4s infinite filter-animation;
           animation-direction: alternate-reverse;
-          filter: brightness(75%);
+          filter: brightness(50%);
         }
 
-        @-webkit-keyframes filter-animation {
+        @keyframes filter-animation {
           0% {
-            filter: brightness(75%);
+            filter: brightness(50%);
           }
 
           50% {
-            filter: brightness(85%);
+            filter: brightness(75%);
           }
 
           100% {
