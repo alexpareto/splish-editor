@@ -130,6 +130,11 @@ export const cinemagraphReducer = (state = initialState, action) => {
         ...state,
         tool: 'eraser',
       };
+    case actionTypes.TOGGLE_CINEMAGRAPH_OVERLAY:
+      return {
+        ...state,
+        showOverlay: !state.showOverlay,
+      };
     default:
       return state;
   }

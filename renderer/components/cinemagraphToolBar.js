@@ -73,6 +73,14 @@ class NavBar extends React.Component {
                 onClick={this.toggleTool}
               />
             </div>
+            <div className="tool-button">
+              <IconButton
+                stroke={globalStyles.accent}
+                name={this.props.showOverlay ? 'x' : 'droplet'}
+                backgroundColor={globalStyles.secondary}
+                onClick={this.props.toggleCinemagraphOverlay}
+              />
+            </div>
             <div className="slider">
               <span className="slider-label">size</span>
 

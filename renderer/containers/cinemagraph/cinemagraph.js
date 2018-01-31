@@ -47,6 +47,7 @@ class Cinemagraph extends React.Component {
             brushSize={this.props.cinemagraph.brushSize}
             brushBlur={this.props.cinemagraph.brushBlur}
             toggleCinemagraphOverlay={this.props.toggleCinemagraphOverlay}
+            showOverlay={this.props.cinemagraph.showOverlay}
             tool={this.props.cinemagraph.tool}
           />
           <CinemagraphCanvas

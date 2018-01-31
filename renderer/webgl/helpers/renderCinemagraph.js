@@ -5,6 +5,8 @@ import getShader from './getShader';
 import loadProgram from './loadProgram';
 import createImageGrid from './createImageGrid';
 import TarToMp4 from './tarToMp4';
+import * as globalStyles from '../../globalStyles';
+import hexToRGB from '';
 
 class Preview {
   constructor(boundingRect, exportCallback) {
