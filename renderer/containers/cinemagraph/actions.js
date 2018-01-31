@@ -13,6 +13,7 @@ export const actionTypes = {
   SELECT_CINEMAGRAPH_ERASE_TOOL: 'SELECT_CINEMAGRAPH_ERASE_TOOL',
   SELECT_CINEMAGRAPH_BRUSH_TOOL: 'SELECT_CINEMAGRAPH_BRUSH_TOOL',
   START_CINEMAGRAPH_PREVIEW: 'START_CINEMAGRAPH_PREVIEW',
+  TOGGLE_CINEMAGRAPH_OVERLAY: 'TOGGLE_CINEMAGRAPH_OVERLAY',
 };
 
 export const selectCinemagraphVideo = files => {
@@ -85,4 +86,8 @@ export const removeCinemagraphBrushStroke = (isUndo, isRedo, mask) => {
 
 export const startCinemagraphPreview = callback => {
   return { type: actionTypes.START_CINEMAGRAPH_PREVIEW, callback };
+};
+
+export const toggleCinemagraphOverlay = () => {
+  return { type: actionTypes.TOGGLE_CINEMAGRAPH_OVERLAY };
 };

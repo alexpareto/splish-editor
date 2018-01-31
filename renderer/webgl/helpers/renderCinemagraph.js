@@ -98,9 +98,15 @@ class Preview {
         'u_image1',
       );
 
+      this.pictureprogram.show_overlay = gl.getUniformLocation(
+        this.pictureprogram,
+        'show_overlay',
+      );
+
       // Set the texture to use.
       gl.uniform1i(this.pictureprogram.u_image0, 0);
       gl.uniform1i(this.pictureprogram.u_image1, 1);
+      gl.uniform1i(this.pictureprogram.show_overlay, 2);
     } catch (e) {
       console.log('ERROR MAKING SHADERS: ', e);
       return;
@@ -243,6 +249,11 @@ class Preview {
     gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
     gl.enableVertexAttribArray(this.texCoordLocation);
+
+    gl.uniform1i(
+      gl.getUniformLocation(this.pictureprogram, 'show_overlay'),
+      true,
+    );
 
     gl.drawArrays(gl.TRIANGLES, 0, resolution * resolution * 2 * 3);
   };

@@ -1,6 +1,7 @@
 export const primary = '#fff';
 export const secondary = '#6369D1';
 export const accent = '#fff';
+export const action = '#3268E8';
 export const background = '#333333';
 export const backgroundLight = '#444343';
 export const backgroundAccent = '#666666';

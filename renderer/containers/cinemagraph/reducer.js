@@ -17,6 +17,7 @@ const initialState = {
     width: 0,
     height: 0,
   },
+  showOverlay: false,
   showExportModal: false,
   isRendering: false,
   tool: 'eraser',
