@@ -54,7 +54,7 @@ class MainMenu extends React.Component {
           <Link href="/movingStill" prefetch>
             <div className="action-button">
               <img className="icon" src="/static/icons/splish-liquidlogo.png" />
-              <span>liquigrapher</span>
+              <span>animagrapher</span>
             </div>
           </Link>
         </div>
@@ -82,11 +82,11 @@ class MainMenu extends React.Component {
             }
 
             .action-button {
-              height: 80px;
+              height: 100px;
               font-size: 24px;
               font-weight: normal;
               cursor: pointer;
-              line-height: 80px;
+              line-height: 100px;
               display: flex;
               flex-direction: row;
               align-items: center;
