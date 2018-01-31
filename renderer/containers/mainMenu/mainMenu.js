@@ -48,13 +48,13 @@ class MainMenu extends React.Component {
           <Link href="/cinemagraph" prefetch>
             <div className="action-button">
               <img className="icon" src="/static/icons/splish-solidlogo.png" />
-              <span>cinemagraph</span>
+              <span>cinemagrapher</span>
             </div>
           </Link>
           <Link href="/movingStill" prefetch>
             <div className="action-button">
               <img className="icon" src="/static/icons/splish-liquidlogo.png" />
-              <span>animagraph</span>
+              <span>animagrapher</span>
             </div>
           </Link>
         </div>
