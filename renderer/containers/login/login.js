@@ -6,6 +6,8 @@ import Router from 'next/router';
 import * as Actions from './actions.js';
 import checkLoggedIn from '../../lib/checkLoggedIn.js';
 import redirect from '../../lib/redirect.js';
+import validateEmail from '../../lib/validateEmail';
+import * as globalStyles from '../../globalStyles';
 
 import Logo from '../../components/logo.js';
 import Input from '../../components/input.js';
@@ -30,6 +32,8 @@ class Login extends React.Component {
       password: '',
       passwordConfirm: '',
       showLogin: true,
+      hasError: false,
+      errorMessage: '',
     };
   }
 
@@ -52,6 +56,8 @@ class Login extends React.Component {
   toggleLogin = event => {
     this.setState({
       showLogin: !this.state.showLogin,
+      hasError: false,
+      errorMessage: '',
     });
   };
 
@@ -60,7 +66,27 @@ class Login extends React.Component {
   };
 
   onSignUpButtonClick = event => {
+    // reset local error messages
+    this.setState({
+      hasError: false,
+      errorMessage: '',
+    });
+
+    // check for valid password
     if (this.state.password !== this.state.passwordConfirm) {
+      this.setState({
+        errorMessage: 'Passwords do not match',
+        hasError: true,
+      });
+      return;
+    }
+
+    // check for valid email
+    if (!validateEmail(this.state.email)) {
+      this.setState({
+        errorMessage: 'Invalid email',
+        hasError: true,
+      });
       return;
     }
     this.props.signUpUser(this.state.email, this.state.password);
@@ -179,10 +205,33 @@ class Login extends React.Component {
   };
 
   renderError = () => {
-    if (!this.props.hasError) {
+    // check for server errors and local errors
+    if (this.state.hasError) {
+      return (
+        <div>
+          <span>{this.state.errorMessage}</span>
+          <style jsx>{`
+            div {
+              color: ${globalStyles.errorColor};
+            }
+          `}</style>
+        </div>
+      );
+    } else if (this.props.hasError) {
+      return (
+        <div>
+          <span>{this.props.errorMessage}</span>
+          <style jsx>{`
+            div {
+              color: ${globalStyles.errorColor};
+            }
+          `}</style>
+        </div>
+      );
+    } else {
+      console.log('cunt whore');
       return null;
     }
-    return <div>{this.props.errorMessage}</div>;
   };
 
   render() {
@@ -207,7 +256,7 @@ class Login extends React.Component {
           </div>
           {this.renderLogin()}
           {this.renderSignUp()}
-          {this.renderError()}
+          <div className="errorMessage">{this.renderError()}</div>
           <div className="forgot-password">
             <Link href="/forgotPassword">
               <A>forgot your password?</A>
@@ -217,6 +266,10 @@ class Login extends React.Component {
             .forgot-password {
               position: absolute;
               bottom: 10px;
+            }
+
+            .errorMessage {
+              margin: 10px;
             }
 
             .logo {
