@@ -7,6 +7,8 @@ import checkLoggedIn from '../../lib/checkLoggedIn.js';
 import redirect from '../../lib/redirect.js';
 import { logoutUser } from '../login/actions.js';
 import * as Actions from './actions.js';
+import validateEmail from '../../lib/validateEmail';
+import * as globalStyles from '../../globalStyles';
 
 import Button from '../../components/button';
 import A from '../../components/a';
@@ -28,9 +30,9 @@ class Profile extends React.Component {
     super(props);
 
     this.state = {
-      email: '',
-      password: '',
       showUpdateView: false,
+      errorMessage: '',
+      hasError: false,
     };
   }
 
@@ -54,9 +56,17 @@ class Profile extends React.Component {
   };
 
   confirmUpdate = () => {
+    this.setState({ hasError: false, errorMessage: '' });
+
+    if (!validateEmail(this.state.email)) {
+      this.setState({ hasError: true, errorMessage: 'Invalid email' });
+      return;
+    }
     const data = new FormData();
     data.append('first_name', this.state.first_name);
     data.append('last_name', this.state.last_name);
+    data.append('email', this.state.email);
+
     this.props.updateUser(data);
 
     this.setState({
@@ -73,12 +83,31 @@ class Profile extends React.Component {
       return this.renderLoading();
     }
 
+    const errorMessage = this.state.hasError ? (
+      <div className="input-element">
+        <span className="error">{this.state.errorMessage}</span>
+        <style jsx>{`
+          .error {
+            color: ${globalStyles.errorColor};
+          }
+        `}</style>
+      </div>
+    ) : null;
+
     return (
       <div>
         <div className="input-element">
           <Input
+            name="email"
+            placeholder="email"
+            value={this.state.email}
+            onChange={this.handleInputChange}
+          />
+        </div>
+        <div className="input-element">
+          <Input
             name="first_name"
-            placeholder="First Name"
+            placeholder="first name"
             value={this.state.first_name}
             onChange={this.handleInputChange}
           />
@@ -86,11 +115,12 @@ class Profile extends React.Component {
         <div className="input-element">
           <Input
             name="last_name"
-            placeholder="Last Name"
+            placeholder="last name"
             value={this.state.last_name}
             onChange={this.handleInputChange}
           />
         </div>
+        {errorMessage}
         <div className="input-element">
           <Button onClick={this.confirmUpdate}>save</Button>
         </div>
@@ -108,6 +138,7 @@ class Profile extends React.Component {
       showUpdateView: true,
       first_name: this.props.user.first_name,
       last_name: this.props.user.last_name,
+      email: this.props.user.email,
     });
   };
 
