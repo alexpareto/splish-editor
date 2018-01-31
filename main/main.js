@@ -73,17 +73,6 @@ autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
 autoUpdater.on('error', message => {
   console.error('There was a problem updating the application');
   console.error(message);
-
-  // TODO: HANDLE THIS FOR PRODUCTION
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Ok'],
-    title: 'There was a problem updating the application',
-    message: 'Update Error',
-    detail: '' + message,
-  };
-
-  dialog.showMessageBox(dialogOpts, response => {});
 });
 
 // This method will be called when Electron has finished
