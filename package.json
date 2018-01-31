@@ -76,7 +76,8 @@
       "**/*",
       "!renderer",
       "renderer/out",
-      "!renderer/out/static/temp/"
+      "!renderer/out/static/temp/",
+      "build/icon.*"
     ],
     "publish": {
       "provider": "github",
