@@ -1,6 +1,6 @@
 {
   "name": "Splish",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Desktop Micro-Video Editor",
   "main": "main/main.js",
   "scripts": {
