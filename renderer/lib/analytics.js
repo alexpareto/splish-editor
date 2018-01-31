@@ -10,7 +10,6 @@ export const initGA = () => {
 };
 
 export const logPageView = () => {
-  console.log(window.location.pathname);
   ReactGA.set({ page: window.location.pathname });
   ReactGA.pageview(window.location.pathname);
 };
