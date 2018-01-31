@@ -242,7 +242,7 @@ class Profile extends React.Component {
           .export-holder {
             display: inline-flex;
             box-sizing: border-box;
-            padding: 40px 20px;
+            padding: 80px 20px;
             width: 69%;
             height: 100%;
             overflow: scroll;

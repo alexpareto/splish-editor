@@ -247,12 +247,8 @@ class Login extends React.Component {
             overflow: 'visible',
           }}
         >
-          <div className="eye-logo">
-            <EyeLogo height={30} withText={true} />
-          </div>
-
           <div className="logo">
-            <Logo size={170} />
+            <EyeLogo height={40} withText={true} />
           </div>
           {this.renderLogin()}
           {this.renderSignUp()}
