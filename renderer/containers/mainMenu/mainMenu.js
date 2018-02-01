@@ -72,10 +72,14 @@ class MainMenu extends React.Component {
       } = electron.screen.getPrimaryDisplay().workAreaSize;
 
       let bounds = win.getBounds();
+
+      let minWidth = Math.floor(width / 2);
+      let minHeight = Math.floor(width * 3 / 4);
+
       bounds.x = Math.floor((width - winWidth) / 2);
       bounds.y = Math.floor((height - winHeight) / 2);
-      bounds.width = winWidth;
-      bounds.height = winHeight;
+      bounds.width = Math.max(winWidth, minWidth);
+      bounds.height = Math.max(winHeight, minHeight);
 
       win.setBounds(bounds, true);
     });
