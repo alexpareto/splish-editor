@@ -93,8 +93,8 @@ class CinemagraphPreview extends React.Component {
             zIndex: 1,
             position: 'absolute',
           }}
-          width={this.props.videoDimensions.width}
-          height={this.props.videoDimensions.height}
+          width={this.props.previewDimensions.width}
+          height={this.props.previewDimensions.height}
           id="cinemagraphcanvas"
         />
         <canvas
@@ -104,8 +104,8 @@ class CinemagraphPreview extends React.Component {
             zIndex: -1,
             position: 'absolute',
           }}
-          width={this.props.videoDimensions.width}
-          height={this.props.videoDimensions.height}
+          width={this.props.previewDimensions.width}
+          height={this.props.previewDimensions.height}
           id="2dcinemagraph"
         />
         <style jsx>{`
