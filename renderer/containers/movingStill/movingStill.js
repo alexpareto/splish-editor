@@ -69,7 +69,7 @@ class MovingStill extends React.Component {
             currentTool={this.props.movingStill.currentTool}
             imgSrc={this.props.movingStill.imgPath}
             isInitialized={this.props.movingStill.isInitialized}
-            imageHeight={this.props.movingStill.imageHeight}
+            boundingRect={this.props.movingStill.boundingRect}
             addVector={this.props.addVector}
             addAnchor={this.props.addAnchor}
           />

@@ -16,8 +16,8 @@ import * as CinemagraphActions from '../cinemagraph/actions';
 import * as MovingStillActions from '../movingStill/actions';
 import FileSelection from '../../components/fileSelection';
 import ffmpeg from 'fluent-ffmpeg';
-import getBoundingRect from '../../lib/getBoundingRect';
-import electron from 'electron';
+import { getBoundingRect, setWindowSize } from '../../lib/windowSizeHelpers';
+import sizeOf from 'image-size';
 
 class MainMenu extends React.Component {
   constructor(props) {
@@ -44,7 +44,6 @@ class MainMenu extends React.Component {
         height: metadata.streams[0].coded_height,
       };
 
-      console.log('Natural: ', naturalDimensions);
       const hPadding = 120;
       const vPadding = 180;
       const headerSize = 100; // height of toolbar at top
@@ -63,30 +62,38 @@ class MainMenu extends React.Component {
 
       Router.push('/cinemagraph');
 
-      const win = electron.remote.getCurrentWindow();
-      const winWidth = Math.floor(boundingRect.width + hPadding);
-      const winHeight = Math.floor(boundingRect.height + vPadding);
-      const {
-        width,
-        height,
-      } = electron.screen.getPrimaryDisplay().workAreaSize;
-
-      let bounds = win.getBounds();
-
-      let minWidth = Math.floor(width / 2);
-      let minHeight = Math.floor(width * 3 / 4);
-
-      bounds.x = Math.floor((width - winWidth) / 2);
-      bounds.y = Math.floor((height - winHeight) / 2);
-      bounds.width = Math.max(winWidth, minWidth);
-      bounds.height = Math.max(winHeight, minHeight);
-
-      win.setBounds(bounds, true);
+      setWindowSize(boundingRect, hPadding, vPadding);
     });
   };
 
   initializeAndOpenMovingStill = files => {
-    // this.props.selectMovingStillImage(files, dimensions);
+    const imgPath = 'file://' + files[0];
+    sizeOf(files[0], (err, dimensions) => {
+      const naturalDimensions = {
+        width: dimensions.width,
+        height: dimensions.height,
+      };
+
+      const hPadding = 120;
+      const vPadding = 180;
+      const headerSize = 100; // height of toolbar at top
+      const boundingRect = getBoundingRect(
+        naturalDimensions,
+        hPadding,
+        vPadding,
+        headerSize,
+      );
+
+      this.props.selectMovingStillImage(
+        imgPath,
+        naturalDimensions,
+        boundingRect,
+      );
+
+      Router.push('/movingStill');
+
+      setWindowSize(boundingRect, hPadding, vPadding);
+    });
   };
 
   render() {
@@ -116,7 +123,7 @@ class MainMenu extends React.Component {
           </FileSelection>
           <FileSelection
             type="img"
-            filesHandler={this.props.initializeAndOpenMovingStill}
+            filesHandler={this.initializeAndOpenMovingStill}
           >
             <div className="action-button">
               <img className="icon" src="/static/icons/splish-liquidlogo.png" />

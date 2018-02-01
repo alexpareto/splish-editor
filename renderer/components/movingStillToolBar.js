@@ -125,9 +125,9 @@ class NavBar extends React.Component {
 
             .share-button {
               position: absolute;
-              top: 150px;
+              top: 110px;
               z-index: 1;
-              right: 20px;
+              right: 10px;
             }
 
             .eye-back {

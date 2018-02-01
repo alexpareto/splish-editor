@@ -12,7 +12,6 @@ const initialState = {
   imgPath: '',
   isInitialized: false,
   vectorCanvas: {},
-  imageHeight: 0,
   imgDimensions: {
     height: 0,
     width: 0,
@@ -48,30 +47,16 @@ export const movingStillReducer = (state = initialState, action) => {
     removeIndex;
   switch (action.type) {
     case actionTypes.SELECT_MOVING_STILL_IMAGE:
-      const imgPath = 'file://' + action.files[0];
       return {
         ...state,
-        imgPath,
+        imgPath: action.imgPath,
+        boundingRect: action.boundingRect,
+        imgDimensions: action.naturalDimensions,
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       let vectorCanvas = d3.select('#movingStillSVG');
-      const img = document.getElementById('movingStillImage');
-
-      const imageHeight = img.clientHeight;
-
-      const naturalWidth =
-        img.naturalWidth % 2 == 0 ? img.naturalWidth : img.naturalWidth + 1;
-
-      const naturalHeight =
-        img.naturalHeight % 2 == 0 ? img.naturalHeight : img.naturalHeight + 1;
-
       return {
         ...state,
-        imageHeight,
-        imgDimensions: {
-          height: naturalHeight,
-          width: naturalWidth,
-        },
         isInitialized: true,
         currentTool: action.tool,
         vectorCanvas,
