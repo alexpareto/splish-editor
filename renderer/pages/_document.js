@@ -83,7 +83,7 @@ export default class MyDocument extends Document {
           <div
             style={{
               height: '20px',
-              '-webkit-app-region': 'drag',
+              WebkitAppRegion: 'drag',
             }}
           />
           {this.props.customValue}

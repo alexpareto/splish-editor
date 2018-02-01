@@ -2,11 +2,19 @@ import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
 import tar from 'tar-fs';
 import stream from 'stream';
+const electron = require('electron');
 
 class TarToMp4 {
   constructor(tarBlob) {
+    const remote = electron.remote || false;
+
+    if (!remote) {
+      return;
+    }
+
     console.log('Converting Tar to MP4');
-    const directory = './renderer/static/temp/frames';
+    const directory =
+      remote.app.getPath('temp') + '/renderer/static/temp/frames';
     // local state
     this.exportRequested = false;
     this.bufferStreamCompleted = false;
@@ -20,7 +28,8 @@ class TarToMp4 {
         }
       }
 
-      const frameDir = './renderer/static/temp/frames';
+      const frameDir =
+        remote.app.getPath('temp') + '/renderer/static/temp/frames';
 
       let url = window.URL.createObjectURL(tarBlob);
 
@@ -56,14 +65,27 @@ class TarToMp4 {
   // export to local file system
   export = (filePath, callback) => {
     console.log('EXPORTING');
+    const remote = electron.remote || false;
+
+    if (!remote) {
+      return;
+    }
+
+    const ffmpegPath = remote.getGlobal('ffmpegpath');
+    filePath = remote.app.getPath('temp') + '/renderer/static/temp/';
+
     this.exportPath = filePath;
     this.exportRequested = true;
     this.exportCallback = callback;
 
     if (this.bufferStreamCompleted) {
       let command = ffmpeg();
+      command.setFfmpegPath(ffmpegPath);
       command
-        .input('./renderer/static/temp/frames/0000%03d.jpg')
+        .input(
+          remote.app.getPath('temp') +
+            '/renderer/static/temp/frames/0000%03d.jpg',
+        )
         .output(filePath + 'output.mp4')
         .on('end', () => {
           this.exportCallback(filePath + 'output.mp4');
