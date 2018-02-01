@@ -1,6 +1,6 @@
 {
   "name": "Splish",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "description": "Desktop Micro-Video Editor",
   "main": "main/main.js",
   "scripts": {
@@ -40,11 +40,13 @@
     "redux-logger": "^3.0.6"
   },
   "dependencies": {
+    "@exponent/electron-cookies": "^2.0.0",
     "app-root-path": "^2.0.1",
     "d3": "^4.12.2",
     "electron-is-dev": "^0.3.0",
     "electron-next": "^3.1.3",
     "es6-promise": "^4.2.1",
+    "ffmpeg-static": "^2.1.0",
     "fluent-ffmpeg": "^2.1.2",
     "image-size": "^0.6.2",
     "next": "beta",
@@ -52,9 +54,9 @@
     "next-redux-wrapper": "^1.3.5",
     "rc-slider": "^8.6.0",
     "react": "^16.2.0",
-    "react-apollo": "^2.0.4",
     "react-clipboard.js": "^1.1.3",
     "react-dom": "^16.2.0",
+    "react-ga": "^2.4.1",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
@@ -71,8 +73,8 @@
       "**/*",
       "!renderer",
       "renderer/out",
-      "!renderer/out/static/temp/",
-      "build/icon.*"
+      "build/icon.*",
+      "!renderer/out/static/temp/"
     ],
     "publish": {
       "provider": "github",

@@ -156,8 +156,8 @@ class Profile extends React.Component {
         <div className="name-holder">
           <img className="proficon" src="/static/icons/splish-proficon.png" />
           <span className="name">
-            {this.props.user.first_name ? this.props.user.first_name : 'Alex'}{' '}
-            {this.props.user.last_name ? this.props.user.last_name : 'Pareto'}
+            {this.props.user.first_name ? this.props.user.first_name : ''}{' '}
+            {this.props.user.last_name ? this.props.user.last_name : ''}
           </span>
         </div>
         <div>{this.props.user.email}</div>
