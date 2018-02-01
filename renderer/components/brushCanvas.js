@@ -62,8 +62,12 @@ class brushCanvas extends React.Component {
         <style jsx>
           {`
             .d3SVG {
-              width: 800px;
-              height: ${this.props.height}px;
+              width: ${this.props.boundingRect.width}px;
+              height: ${this.props.boundingRect.height}px;
+              margin: auto;
+              top: ${this.props.boundingRect.y}px;
+              left: 0;
+              right: 0;
               z-index: 3;
               position: absolute;
               user-select: none;

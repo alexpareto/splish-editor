@@ -57,10 +57,10 @@ class CinemagraphPreview extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="container">
         <div className="overlay" />
         <BrushCanvas
-          height={this.props.boundingRect.height}
+          boundingRect={this.props.boundingRect}
           onBrush={this.onBrush}
           onStrokeStart={this.onStrokeStart}
           onStrokeEnd={this.onStrokeEnd}
@@ -75,7 +75,7 @@ class CinemagraphPreview extends React.Component {
           src={this.props.videoSrc}
           width={this.props.boundingRect.width}
           autoPlay={true}
-          onPlay={startPreview}
+          onPlay={this.startPreview}
           muted={true}
           loop
         />
@@ -83,6 +83,10 @@ class CinemagraphPreview extends React.Component {
           style={{
             width: `${this.props.boundingRect.width}px`,
             height: `${this.props.boundingRect.height}px`,
+            margin: 'auto',
+            top: `${this.props.boundingRect.y}px`,
+            left: 0,
+            right: 0,
             zIndex: 1,
             position: 'absolute',
           }}

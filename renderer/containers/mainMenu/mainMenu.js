@@ -17,6 +17,7 @@ import * as MovingStillActions from '../movingStill/actions';
 import FileSelection from '../../components/fileSelection';
 import ffmpeg from 'fluent-ffmpeg';
 import getBoundingRect from '../../lib/getBoundingRect';
+import electron from 'electron';
 
 class MainMenu extends React.Component {
   constructor(props) {
@@ -43,13 +44,40 @@ class MainMenu extends React.Component {
         height: metadata.streams[0].coded_height,
       };
 
-      const boundingRect = getBoundingRect(naturalDimensions);
+      console.log('Natural: ', naturalDimensions);
+      const hPadding = 120;
+      const vPadding = 180;
+      const headerSize = 100; // height of toolbar at top
+      const boundingRect = getBoundingRect(
+        naturalDimensions,
+        hPadding,
+        vPadding,
+        headerSize,
+      );
 
       this.props.selectCinemagraphVideo(
         videoPath,
         naturalDimensions,
         boundingRect,
       );
+
+      Router.push('/cinemagraph');
+
+      const win = electron.remote.getCurrentWindow();
+      const winWidth = Math.floor(boundingRect.width + hPadding);
+      const winHeight = Math.floor(boundingRect.height + vPadding);
+      const {
+        width,
+        height,
+      } = electron.screen.getPrimaryDisplay().workAreaSize;
+
+      let bounds = win.getBounds();
+      bounds.x = Math.floor((width - winWidth) / 2);
+      bounds.y = Math.floor((height - winHeight) / 2);
+      bounds.width = winWidth;
+      bounds.height = winHeight;
+
+      win.setBounds(bounds, true);
     });
   };
 
