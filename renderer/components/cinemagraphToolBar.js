@@ -49,11 +49,6 @@ class NavBar extends React.Component {
         {exportModal}
         <div className="flex">
           <img className="icon" src="/static/icons/splish-solidlogo.png" />
-
-          <FileSelection
-            type="video"
-            filesHandler={this.props.selectCinemagraphVideo}
-          />
           <div className="share-button">
             <IconButton
               stroke={globalStyles.accent}

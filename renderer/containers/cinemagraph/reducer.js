@@ -27,27 +27,11 @@ export const cinemagraphReducer = (state = initialState, action) => {
   let preview, history, actionObject, prevMask, nextMask, tool;
   switch (action.type) {
     case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
-      const videoPath = 'file://' + action.files[0];
       return {
         ...state,
-        videoPath,
-      };
-    case actionTypes.INITIALIZE_CINEMAGRAPH_CANVAS:
-      const vid = document.getElementById('cinemagraphVideo');
-      const clientWidth = vid.clientWidth;
-      const clientHeight = vid.clientHeight;
-      const naturalWidth = vid.videoWidth;
-      const naturalHeight = vid.videoHeight;
-      return {
-        ...state,
-        boundingRect: {
-          width: clientWidth,
-          height: clientHeight,
-        },
-        videoDimensions: {
-          width: naturalWidth,
-          height: naturalHeight,
-        },
+        videoDimensions: action.naturalDimensions,
+        boundingRect: action.boundingRect,
+        videoPath: action.videoPath,
       };
     case actionTypes.START_CINEMAGRAPH_PREVIEW:
       preview = new Preview(state.boundingRect, action.callback);

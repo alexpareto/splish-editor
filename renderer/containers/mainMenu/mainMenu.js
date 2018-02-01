@@ -12,6 +12,11 @@ import Button from '../../components/button.js';
 import EyeLogo from '../../components/eyelogo.js';
 import Loading from '../../components/loading';
 import Holder from '../../components/holder';
+import * as CinemagraphActions from '../cinemagraph/actions';
+import * as MovingStillActions from '../movingStill/actions';
+import FileSelection from '../../components/fileSelection';
+import ffmpeg from 'fluent-ffmpeg';
+import getBoundingRect from '../../lib/getBoundingRect';
 
 class MainMenu extends React.Component {
   constructor(props) {
@@ -29,6 +34,29 @@ class MainMenu extends React.Component {
     }
   }
 
+  // get all the dimensions
+  initializeAndOpenCinemagraph = files => {
+    const videoPath = 'file://' + files[0];
+    ffmpeg.ffprobe(videoPath, (err, metadata) => {
+      const naturalDimensions = {
+        width: metadata.streams[0].coded_width,
+        height: metadata.streams[0].coded_height,
+      };
+
+      const boundingRect = getBoundingRect(naturalDimensions);
+
+      this.props.selectCinemagraphVideo(
+        videoPath,
+        naturalDimensions,
+        boundingRect,
+      );
+    });
+  };
+
+  initializeAndOpenMovingStill = files => {
+    // this.props.selectMovingStillImage(files, dimensions);
+  };
+
   render() {
     if (this.state.loading) {
       return <Loading />;
@@ -45,18 +73,24 @@ class MainMenu extends React.Component {
               <span>profile</span>
             </div>
           </Link>
-          <Link href="/cinemagraph" prefetch>
+          <FileSelection
+            type="video"
+            filesHandler={this.initializeAndOpenCinemagraph}
+          >
             <div className="action-button">
               <img className="icon" src="/static/icons/splish-solidlogo.png" />
               <span>cinemagrapher</span>
             </div>
-          </Link>
-          <Link href="/movingStill" prefetch>
+          </FileSelection>
+          <FileSelection
+            type="img"
+            filesHandler={this.props.initializeAndOpenMovingStill}
+          >
             <div className="action-button">
               <img className="icon" src="/static/icons/splish-liquidlogo.png" />
               <span>animagrapher</span>
             </div>
-          </Link>
+          </FileSelection>
         </div>
         <style jsx>
           {`
@@ -116,6 +150,22 @@ const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => {
   return {
     logout: () => dispatch(logoutUser()),
+    selectCinemagraphVideo: (videoPath, naturalDimensions, boundingRect) =>
+      dispatch(
+        CinemagraphActions.selectCinemagraphVideo(
+          videoPath,
+          naturalDimensions,
+          boundingRect,
+        ),
+      ),
+    selectMovingStillImage: (imgPath, naturalDimensions, boundingRect) =>
+      dispatch(
+        MovingStillActions.selectMovingStillImage(
+          imgPath,
+          naturalDimensions,
+          boundingRect,
+        ),
+      ),
   };
 };
 

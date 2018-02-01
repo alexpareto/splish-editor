@@ -56,11 +56,6 @@ class NavBar extends React.Component {
         <div className="flex">
           {exportModal}
           <img className="icon" src="/static/icons/splish-liquidlogo.png" />
-
-          <FileSelection
-            type="img"
-            filesHandler={this.props.selectMovingStillImage}
-          />
           <div className="controls">
             <IconButton
               onClick={this.vectorClicked}
