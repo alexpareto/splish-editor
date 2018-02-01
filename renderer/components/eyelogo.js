@@ -8,7 +8,7 @@ export default props => {
         src="/static/icons/splish-eyelogo.png"
         height={props.height}
       />
-      {props.withText ? <span className="logo-text">splish</span> : null}
+      {props.withText ? <span className="text">splish</span> : null}
       <style jsx>{`
         .holder {
           display: flex;
@@ -20,12 +20,12 @@ export default props => {
           margin-right: 7px;
         }
 
-        .logo-text {
+        .text {
           font-weight: bold;
         }
       `}</style>
       <style jsx>{`
-        .logo-text {
+        .text {
           font-size: ${props.height - 5}px;
         }
         .holder {
