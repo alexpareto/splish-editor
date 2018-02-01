@@ -2,6 +2,7 @@ import { actionTypes } from './actions';
 import * as globalStyles from '../../globalStyles';
 import Preview from '../../webgl/helpers/renderCinemagraph';
 import getHistory from '../../lib/getHistory';
+import throttleQuality from '../../lib/throttleQuality';
 import * as Actions from './actions';
 
 const initialState = {
@@ -10,15 +11,19 @@ const initialState = {
     redoStack: [],
   },
   videoPath: '',
+  brushBlur: 5,
+  brushSize: 50,
   boundingRect: {
     x: 0,
     y: 0,
     width: 0,
     height: 0,
   },
-  brushBlur: 5,
-  brushSize: 50,
-  videoDimensions: {
+  previewDimensions: {
+    width: 0,
+    height: 0,
+  },
+  renderDimensions: {
     width: 0,
     height: 0,
   },
@@ -32,11 +37,12 @@ export const cinemagraphReducer = (state = initialState, action) => {
   let preview, history, actionObject, prevMask, nextMask, tool;
   switch (action.type) {
     case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
+      const previewDimensions = throttleQuality(action.naturalDimensions, '4K');
       return {
         ...state,
-        videoDimensions: action.naturalDimensions,
         boundingRect: action.boundingRect,
         videoPath: action.videoPath,
+        previewDimensions,
       };
     case actionTypes.START_CINEMAGRAPH_PREVIEW:
       preview = new Preview(state.boundingRect, action.callback);

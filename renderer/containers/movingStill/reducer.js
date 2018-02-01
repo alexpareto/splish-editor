@@ -3,6 +3,7 @@ import * as globalStyles from '../../globalStyles';
 import * as Actions from './actions';
 import * as d3 from 'd3';
 import getHistory from '../../lib/getHistory';
+import throttleQuality from '../../lib/throttleQuality';
 
 const initialState = {
   history: {
@@ -12,10 +13,6 @@ const initialState = {
   imgPath: '',
   isInitialized: false,
   vectorCanvas: {},
-  imgDimensions: {
-    height: 0,
-    width: 0,
-  },
   currentTool: '',
   viewMode: 'edit',
   anchors: [],
@@ -23,6 +20,16 @@ const initialState = {
   boundingRect: {
     width: 0,
     height: 0,
+    x: 0,
+    y: 0,
+  },
+  previewDimensions: {
+    height: 0,
+    width: 0,
+  },
+  renderDimensions: {
+    height: 0,
+    width: 0,
   },
   animationParams: {
     dragDistance: 4.0,
@@ -47,11 +54,13 @@ export const movingStillReducer = (state = initialState, action) => {
     removeIndex;
   switch (action.type) {
     case actionTypes.SELECT_MOVING_STILL_IMAGE:
+      // throttle preview to 2k to prevent crashes
+      const previewDimensions = throttleQuality(action.naturalDimensions, '2K');
       return {
         ...state,
         imgPath: action.imgPath,
         boundingRect: action.boundingRect,
-        imgDimensions: action.naturalDimensions,
+        previewDimensions,
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       let vectorCanvas = d3.select('#movingStillSVG');

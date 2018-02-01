@@ -76,8 +76,11 @@ class CinemagraphPreview extends React.Component {
           width={this.props.boundingRect.width}
           autoPlay={true}
           onPlay={this.startPreview}
-          muted={true}
           loop
+          // need to include both cuz handled
+          // differently on client and server
+          muted={true}
+          muted
         />
         <canvas
           style={{
@@ -90,8 +93,8 @@ class CinemagraphPreview extends React.Component {
             zIndex: 1,
             position: 'absolute',
           }}
-          width={this.props.videoDimensions.width}
-          height={this.props.videoDimensions.height}
+          width={this.props.previewDimensions.width}
+          height={this.props.previewDimensions.height}
           id="cinemagraphcanvas"
         />
         <canvas
@@ -101,8 +104,8 @@ class CinemagraphPreview extends React.Component {
             zIndex: -1,
             position: 'absolute',
           }}
-          width={this.props.videoDimensions.width}
-          height={this.props.videoDimensions.height}
+          width={this.props.previewDimensions.width}
+          height={this.props.previewDimensions.height}
           id="2dcinemagraph"
         />
         <style jsx>{`

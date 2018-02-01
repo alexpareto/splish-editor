@@ -55,7 +55,7 @@ class Cinemagraph extends React.Component {
             videoSrc={this.props.cinemagraph.videoPath}
             boundingRect={this.props.cinemagraph.boundingRect}
             isRendering={this.props.cinemagraph.isRendering}
-            videoDimensions={this.props.cinemagraph.videoDimensions}
+            previewDimensions={this.props.cinemagraph.previewDimensions}
             cinemagraphExportComplete={this.props.cinemagraphExportComplete}
             uploadExportRequest={this.props.uploadExportRequest}
             brushSize={this.props.cinemagraph.brushSize}
