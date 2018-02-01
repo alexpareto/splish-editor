@@ -6,12 +6,19 @@ import loadProgram from './loadProgram';
 import createImageGrid from './createImageGrid';
 import TarToMp4 from './tarToMp4';
 import * as globalStyles from '../../globalStyles';
-import hexToRGB from '';
+import hexToRGB from '../../lib/hexToRGB';
 
 class Preview {
   constructor(boundingRect, exportCallback) {
     this.boundingRect = boundingRect;
     this.exportCallback = exportCallback;
+    this.overlayColor = hexToRGB(globalStyles.action);
+
+    // normalize color
+    this.overlayColor.r = this.overlayColor.r / 255.0;
+    this.overlayColor.g = this.overlayColor.g / 255.0;
+    this.overlayColor.b = this.overlayColor.b / 255.0;
+    this.showOverlay = false;
 
     this.canvas = document.getElementById('cinemagraphcanvas');
     this.gl = this.canvas.getContext('webgl');
@@ -66,7 +73,15 @@ class Preview {
     let gl = this.gl;
     try {
       let vertexshader = getShader(gl, cinemagraphVertexShader, 'vertex');
-      let fragmentshader = getShader(gl, cinemagraphFragShader, 'frag');
+      let fragmentshader = getShader(
+        gl,
+        cinemagraphFragShader(
+          this.overlayColor.r.toFixed(5).toString(),
+          this.overlayColor.g.toFixed(5).toString(),
+          this.overlayColor.b.toFixed(5).toString(),
+        ),
+        'frag',
+      );
 
       this.pictureprogram = loadProgram(gl, vertexshader, fragmentshader);
       gl.useProgram(this.pictureprogram);
@@ -141,6 +156,10 @@ class Preview {
     gl.bindTexture(gl.TEXTURE_2D, this.imgTexture);
 
     this.start();
+  };
+
+  setShowOverlay = newOverlay => {
+    this.showOverlay = newOverlay;
   };
 
   update = (newPoint, brushSize, brushBlur, brushTool) => {
@@ -254,7 +273,7 @@ class Preview {
 
     gl.uniform1i(
       gl.getUniformLocation(this.pictureprogram, 'show_overlay'),
-      true,
+      this.showOverlay,
     );
 
     gl.drawArrays(gl.TRIANGLES, 0, resolution * resolution * 2 * 3);
