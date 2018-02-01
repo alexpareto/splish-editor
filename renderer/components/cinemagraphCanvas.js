@@ -76,8 +76,11 @@ class CinemagraphPreview extends React.Component {
           width={this.props.boundingRect.width}
           autoPlay={true}
           onPlay={this.startPreview}
-          muted={true}
           loop
+          // need to include both cuz handled
+          // differently on client and server
+          muted={true}
+          muted
         />
         <canvas
           style={{
