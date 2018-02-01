@@ -10,15 +10,19 @@ const initialState = {
     redoStack: [],
   },
   videoPath: '',
+  brushBlur: 5,
+  brushSize: 50,
   boundingRect: {
     x: 0,
     y: 0,
     width: 0,
     height: 0,
   },
-  brushBlur: 5,
-  brushSize: 50,
-  videoDimensions: {
+  previewDimensions: {
+    width: 0,
+    height: 0,
+  },
+  renderDimensions: {
     width: 0,
     height: 0,
   },

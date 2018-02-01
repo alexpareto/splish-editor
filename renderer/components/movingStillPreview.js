@@ -58,7 +58,6 @@ class MovingStillPreview extends React.Component {
   }
 
   render() {
-    console.log('BOUNDING RECT in PREVIEW: ', this.props.boundingRect);
     let height =
       800 * this.props.boundingRect.height / this.props.boundingRect.width;
 
@@ -74,8 +73,8 @@ class MovingStillPreview extends React.Component {
             right: 0,
             position: 'absolute',
           }}
-          width={this.props.imgDimensions.width}
-          height={this.props.imgDimensions.height}
+          width={this.props.previewDimensions.width}
+          height={this.props.previewDimensions.height}
           id="webglcanvas"
         />
         <canvas
@@ -85,8 +84,8 @@ class MovingStillPreview extends React.Component {
             position: 'absolute',
           }}
           id="2dcanvas"
-          width={this.props.imgDimensions.width}
-          height={this.props.imgDimensions.height}
+          width={this.props.previewDimensions.width}
+          height={this.props.previewDimensions.height}
         />
       </div>
     );
