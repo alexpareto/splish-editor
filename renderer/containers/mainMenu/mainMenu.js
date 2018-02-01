@@ -6,6 +6,7 @@ import Router from 'next/router';
 import checkLoggedIn from '../../lib/checkLoggedIn.js';
 import redirect from '../../lib/redirect.js';
 import * as globalStyles from '../../globalStyles';
+import getFfmpeg from '../../lib/getFfmpeg';
 
 import Logo from '../../components/logo.js';
 import Button from '../../components/button.js';
@@ -15,11 +16,8 @@ import Holder from '../../components/holder';
 import * as CinemagraphActions from '../cinemagraph/actions';
 import * as MovingStillActions from '../movingStill/actions';
 import FileSelection from '../../components/fileSelection';
-import ffmpeg from 'fluent-ffmpeg';
 import { getBoundingRect, setWindowSize } from '../../lib/windowSizeHelpers';
 import sizeOf from 'image-size';
-
-const electron = require('electron');
 
 class MainMenu extends React.Component {
   constructor(props) {
@@ -39,19 +37,9 @@ class MainMenu extends React.Component {
 
   // get all the dimensions
   initializeAndOpenCinemagraph = files => {
-    const remote = electron.remote || false;
-
-    if (!remote) {
-      return;
-    }
-
     const videoPath = 'file://' + files[0];
 
-    const ffmpegPath = remote.getGlobal('ffmpegpath');
-    const ffprobePath = remote.getGlobal('ffprobepath');
-
-    ffmpeg.setFfmpegPath(ffmpegPath);
-    ffmpeg.setFfprobePath(ffprobePath);
+    const ffmpeg = getFfmpeg();
     ffmpeg.ffprobe(videoPath, (err, metadata) => {
       if (err) {
         console.error(err);

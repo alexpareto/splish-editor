@@ -1,7 +1,8 @@
-import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
 import tar from 'tar-fs';
 import stream from 'stream';
+import getFfmpeg from '../../lib/getFfmpeg';
+
 const electron = require('electron');
 
 class TarToMp4 {
@@ -71,7 +72,6 @@ class TarToMp4 {
       return;
     }
 
-    const ffmpegPath = remote.getGlobal('ffmpegpath');
     filePath = remote.app.getPath('temp') + '/renderer/static/temp/';
 
     this.exportPath = filePath;
@@ -79,8 +79,8 @@ class TarToMp4 {
     this.exportCallback = callback;
 
     if (this.bufferStreamCompleted) {
+      const ffmpeg = getFfmpeg();
       let command = ffmpeg();
-      command.setFfmpegPath(ffmpegPath);
       command
         .input(
           remote.app.getPath('temp') +
