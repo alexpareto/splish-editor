@@ -34,7 +34,6 @@ class MovingStill extends React.Component {
           tabIndex="0"
         >
           <ToolBar
-            selectMovingStillImage={this.props.selectMovingStillImage}
             viewMode={this.props.movingStill.viewMode}
             initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
             selectAnchorTool={this.props.selectAnchorTool}
@@ -70,7 +69,7 @@ class MovingStill extends React.Component {
             currentTool={this.props.movingStill.currentTool}
             imgSrc={this.props.movingStill.imgPath}
             isInitialized={this.props.movingStill.isInitialized}
-            imageHeight={this.props.movingStill.imageHeight}
+            boundingRect={this.props.movingStill.boundingRect}
             addVector={this.props.addVector}
             addAnchor={this.props.addAnchor}
           />
@@ -84,8 +83,6 @@ const mapDispatchToProps = dispatch => {
   return {
     initializeMovingStillCanvas: tool =>
       dispatch(Actions.initializeMovingStillCanvas(tool)),
-    selectMovingStillImage: files =>
-      dispatch(Actions.selectMovingStillImage(files)),
     startMovingStillPreviewMode: () =>
       dispatch(Actions.startMovingStillPreviewMode()),
     startMovingStillEditMode: () =>

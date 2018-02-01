@@ -36,6 +36,10 @@ function createWindow() {
     titleBarStyle: 'hidden',
   });
 
+  let bounds = mainWindow.getBounds();
+
+  mainWindow.center();
+
   // and load the index.html of the app.
   const devPath = 'http://localhost:8000/mainMenu';
   const prodPath = url.format({

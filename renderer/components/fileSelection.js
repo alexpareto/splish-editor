@@ -36,19 +36,14 @@ class FileSelection extends React.Component {
       default:
         files = remote.dialog.showOpenDialog();
     }
-    this.props.filesHandler(files);
+
+    if (files) {
+      this.props.filesHandler(files);
+    }
   };
 
   render() {
-    return (
-      <div onClick={this.openFileDialog}>
-        <IconButton
-          stroke={globalStyles.accent}
-          name="plus"
-          backgroundColor={globalStyles.secondary}
-        />
-      </div>
-    );
+    return <div onClick={this.openFileDialog}>{this.props.children}</div>;
   }
 }
 

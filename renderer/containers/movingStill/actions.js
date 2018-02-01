@@ -24,8 +24,17 @@ export const initializeMovingStillCanvas = tool => {
   return { type: actionTypes.INITIALIZE_MOVING_STILL_CANVAS, tool };
 };
 
-export const selectMovingStillImage = files => {
-  return { type: actionTypes.SELECT_MOVING_STILL_IMAGE, files };
+export const selectMovingStillImage = (
+  imgPath,
+  naturalDimensions,
+  boundingRect,
+) => {
+  return {
+    type: actionTypes.SELECT_MOVING_STILL_IMAGE,
+    imgPath,
+    naturalDimensions,
+    boundingRect,
+  };
 };
 
 export const startMovingStillEditMode = () => {

@@ -50,16 +50,18 @@ class VectorCanvas extends React.Component {
     });
 
   onMouseDown = mouse => {
-    if (this.props.currentTool == 'vector') {
-      let data = [{ x: mouse[0], y: mouse[1] }, {}];
-      this.setState({ data, isDown: true });
-    } else {
-      this.props.addAnchor({ x: mouse[0], y: mouse[1] });
+    if (this.props.isInitialized) {
+      if (this.props.currentTool == 'vector') {
+        let data = [{ x: mouse[0], y: mouse[1] }, {}];
+        this.setState({ data, isDown: true });
+      } else {
+        this.props.addAnchor({ x: mouse[0], y: mouse[1] });
+      }
     }
   };
 
   onMouseMove = mouse => {
-    if (this.state.isDown) {
+    if (this.state.isDown && this.props.isInitialized) {
       let path = this.state.path;
       if (!path) {
         path = this.state.svg.append('path');
@@ -77,37 +79,49 @@ class VectorCanvas extends React.Component {
   };
 
   onMouseUp = mouse => {
-    if (this.props.currentTool == 'vector') {
-      this.props.addVector([
-        {
-          x: this.state.data[0].x,
-          y: this.state.data[0].y,
-          path: this.state.path,
-        },
-        { x: mouse[0], y: mouse[1] },
-      ]);
+    if (this.props.isInitialized) {
+      if (this.props.currentTool == 'vector') {
+        this.props.addVector([
+          {
+            x: this.state.data[0].x,
+            y: this.state.data[0].y,
+            path: this.state.path,
+          },
+          { x: mouse[0], y: mouse[1] },
+        ]);
+      }
+      this.setState({ data: [], isDown: false, path: null });
     }
-    this.setState({ data: [], isDown: false, path: null });
   };
 
   render() {
-    const img = this.props.imgSrc ? (
-      <img
-        id="movingStillImage"
-        style={{
-          width: '800px',
-          position: 'absolute',
-        }}
-        src={this.props.imgSrc}
-      />
-    ) : null;
-
     const display = this.props.display ? 'block' : 'none';
 
     return (
       <div className="container" id="movingStillContainer">
-        <svg className="d3SVG" id="movingStillSVG" />
-        {img}
+        <svg
+          className="d3SVG"
+          id="movingStillSVG"
+          style={{
+            margin: 'auto',
+            top: `${this.props.boundingRect.y}px`,
+            left: 0,
+            right: 0,
+          }}
+        />
+        <img
+          id="movingStillImage"
+          style={{
+            width: `${this.props.boundingRect.width}px`,
+            height: `${this.props.boundingRect.height}px`,
+            margin: 'auto',
+            top: `${this.props.boundingRect.y}px`,
+            left: 0,
+            right: 0,
+            position: 'absolute',
+          }}
+          src={this.props.imgSrc}
+        />
         <style jsx>
           {`
             .container {
@@ -116,8 +130,8 @@ class VectorCanvas extends React.Component {
               display: ${display};
             }
             .d3SVG {
-              width: 800px;
-              height: ${this.props.imageHeight}px;
+              width: ${this.props.boundingRect.width}px;
+              height: ${this.props.boundingRect.height}px;
               z-index: 30000;
               position: absolute;
               user-select: none;

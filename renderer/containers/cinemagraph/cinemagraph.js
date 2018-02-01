@@ -75,10 +75,6 @@ class Cinemagraph extends React.Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    selectCinemagraphVideo: files =>
-      dispatch(Actions.selectCinemagraphVideo(files)),
-    initializeCinemagraphCanvas: callback =>
-      dispatch(Actions.initializeCinemagraphCanvas(callback)),
     startExportingCinemagraph: () =>
       dispatch(Actions.startExportingCinemagraph()),
     uploadExportRequest: file =>

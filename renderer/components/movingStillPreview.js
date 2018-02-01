@@ -1,7 +1,6 @@
 import React from 'react';
 import * as globalStyles from '../globalStyles';
 import Preview from '../webgl/helpers/previewMovingStill';
-import AnimationDebugger from './animationDebugger';
 import fs from 'fs';
 
 class MovingStillPreview extends React.Component {
@@ -59,19 +58,20 @@ class MovingStillPreview extends React.Component {
   }
 
   render() {
+    console.log('BOUNDING RECT in PREVIEW: ', this.props.boundingRect);
     let height =
       800 * this.props.boundingRect.height / this.props.boundingRect.width;
 
     return (
       <div>
-        <AnimationDebugger
-          animationParams={this.props.animationParams}
-          updateAnimationParams={this.props.updateAnimationParams}
-        />
         <canvas
           style={{
-            width: '800px',
-            height: `${height}px`,
+            width: `${this.props.boundingRect.width}px`,
+            height: `${this.props.boundingRect.height}px`,
+            margin: 'auto',
+            top: `${this.props.boundingRect.y}px`,
+            left: 0,
+            right: 0,
             position: 'absolute',
           }}
           width={this.props.imgDimensions.width}

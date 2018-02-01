@@ -1,6 +1,5 @@
 export const actionTypes = {
   SELECT_CINEMAGRAPH_VIDEO: 'SELECT_CINEMAGRAPH_VIDEO',
-  INITIALIZE_CINEMAGRAPH_CANVAS: 'INITIALIZE_CINEMAGRAPH_CANVAS',
   UNDO_CINEMAGRAPH: 'UNDO_CINEMAGRAPH',
   REDO_CINEMAGRAPH: 'REDO_CINEMAGRAPH',
   UPDATE_CINEMAGRAPH_BRUSH_SIZE: 'UPDATE_CINEMAGRAPH_BRUSH_SIZE',
@@ -16,8 +15,17 @@ export const actionTypes = {
   TOGGLE_CINEMAGRAPH_OVERLAY: 'TOGGLE_CINEMAGRAPH_OVERLAY',
 };
 
-export const selectCinemagraphVideo = files => {
-  return { type: actionTypes.SELECT_CINEMAGRAPH_VIDEO, files: files };
+export const selectCinemagraphVideo = (
+  videoPath,
+  naturalDimensions,
+  boundingRect,
+) => {
+  return {
+    type: actionTypes.SELECT_CINEMAGRAPH_VIDEO,
+    videoPath,
+    naturalDimensions,
+    boundingRect,
+  };
 };
 
 export const selectCinemagraphBrushTool = () => {
@@ -38,10 +46,6 @@ export const updateCinemagraphBrushSize = brushSize => {
 
 export const updateCinemagraphBrushBlur = brushBlur => {
   return { type: actionTypes.UPDATE_CINEMAGRAPH_BRUSH_BLUR, brushBlur };
-};
-
-export const initializeCinemagraphCanvas = () => {
-  return { type: actionTypes.INITIALIZE_CINEMAGRAPH_CANVAS };
 };
 
 export const startExportingCinemagraph = () => {

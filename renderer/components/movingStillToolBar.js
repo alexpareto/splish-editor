@@ -56,11 +56,6 @@ class NavBar extends React.Component {
         <div className="flex">
           {exportModal}
           <img className="icon" src="/static/icons/splish-liquidlogo.png" />
-
-          <FileSelection
-            type="img"
-            filesHandler={this.props.selectMovingStillImage}
-          />
           <div className="controls">
             <IconButton
               onClick={this.vectorClicked}
@@ -130,9 +125,9 @@ class NavBar extends React.Component {
 
             .share-button {
               position: absolute;
-              top: 150px;
+              top: 110px;
               z-index: 1;
-              right: 20px;
+              right: 10px;
             }
 
             .eye-back {

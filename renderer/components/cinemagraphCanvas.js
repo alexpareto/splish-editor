@@ -9,32 +9,16 @@ class CinemagraphPreview extends React.Component {
     super(props);
     this.state = {
       hasLoaded: false,
-      hasSelectedVideo: false,
     };
 
     this.mask = [];
   }
 
   componentDidUpdate() {
-    if (this.state.hasSelectedVideo && !this.state.hasLoaded) {
-      this.props.startCinemagraphPreview(filePath => {
-        fs.readFile(filePath, (err, data) => {
-          const file = new File([data], 'output.mp4', {
-            type: 'video/mp4',
-          });
-
-          this.props.uploadExportRequest(file);
-        });
-        this.props.cinemagraphExportComplete();
-      });
-      this.setState({ hasLoaded: true });
-    }
-
     if (this.props.isRendering) {
       setTimeout(() => {
         this.props.preview.capture();
       }, 300);
-      return;
     }
   }
 
@@ -55,43 +39,54 @@ class CinemagraphPreview extends React.Component {
     this.props.addCinemagraphBrushStroke(this.mask);
   };
 
-  render() {
-    const video = this.props.videoSrc ? (
-      <video
-        style={{
-          zIndex: -1,
-          position: 'absolute',
-        }}
-        className="cinemagraphVideo"
-        id="cinemagraphVideo"
-        src={this.props.videoSrc}
-        width="800px"
-        autoPlay={true}
-        onPlay={() => {
-          if (!this.state.hasLoaded) {
-            this.props.initializeCinemagraphCanvas();
-            this.setState({ hasSelectedVideo: true });
-          }
-        }}
-        muted={true}
-        loop
-      />
-    ) : null;
+  startPreview = () => {
+    if (!this.state.hasLoaded) {
+      this.props.startCinemagraphPreview(filePath => {
+        fs.readFile(filePath, (err, data) => {
+          const file = new File([data], 'output.mp4', {
+            type: 'video/mp4',
+          });
 
+          this.props.uploadExportRequest(file);
+        });
+        this.props.cinemagraphExportComplete();
+      });
+      this.setState({ hasLoaded: true });
+    }
+  };
+
+  render() {
     return (
-      <div>
+      <div className="container">
         <div className="overlay" />
         <BrushCanvas
-          height={this.props.boundingRect.height}
+          boundingRect={this.props.boundingRect}
           onBrush={this.onBrush}
           onStrokeStart={this.onStrokeStart}
           onStrokeEnd={this.onStrokeEnd}
         />
-        {video}
+        <video
+          style={{
+            zIndex: -1,
+            position: 'absolute',
+          }}
+          className="cinemagraphVideo"
+          id="cinemagraphVideo"
+          src={this.props.videoSrc}
+          width={this.props.boundingRect.width}
+          autoPlay={true}
+          onPlay={this.startPreview}
+          muted={true}
+          loop
+        />
         <canvas
           style={{
-            width: '800px',
+            width: `${this.props.boundingRect.width}px`,
             height: `${this.props.boundingRect.height}px`,
+            margin: 'auto',
+            top: `${this.props.boundingRect.y}px`,
+            left: 0,
+            right: 0,
             zIndex: 1,
             position: 'absolute',
           }}
@@ -101,7 +96,7 @@ class CinemagraphPreview extends React.Component {
         />
         <canvas
           style={{
-            width: '800px',
+            width: `${this.props.boundingRect.width}px`,
             height: `${this.props.boundingRect.height}px`,
             zIndex: -1,
             position: 'absolute',
