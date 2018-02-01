@@ -16,7 +16,13 @@ const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path');
 const url = require('url');
+
+// Set up ffmpeg and ffprobe global paths
 global.ffmpegpath = require('ffmpeg-static').path.replace(
+  'app.asar',
+  'app.asar.unpacked',
+);
+global.ffprobepath = require('ffprobe-static').path.replace(
   'app.asar',
   'app.asar.unpacked',
 );
@@ -53,7 +59,7 @@ function createWindow() {
   mainWindow.loadURL(entry);
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {

@@ -19,6 +19,8 @@ import ffmpeg from 'fluent-ffmpeg';
 import { getBoundingRect, setWindowSize } from '../../lib/windowSizeHelpers';
 import sizeOf from 'image-size';
 
+const electron = require('electron');
+
 class MainMenu extends React.Component {
   constructor(props) {
     super(props);
@@ -37,8 +39,23 @@ class MainMenu extends React.Component {
 
   // get all the dimensions
   initializeAndOpenCinemagraph = files => {
+    const remote = electron.remote || false;
+
+    if (!remote) {
+      return;
+    }
+
     const videoPath = 'file://' + files[0];
+
+    const ffmpegPath = remote.getGlobal('ffmpegpath');
+    const ffprobePath = remote.getGlobal('ffprobepath');
+
+    ffmpeg.setFfmpegPath(ffmpegPath);
+    ffmpeg.setFfprobePath(ffprobePath);
     ffmpeg.ffprobe(videoPath, (err, metadata) => {
+      if (err) {
+        console.error(err);
+      }
       const naturalDimensions = {
         width: metadata.streams[0].coded_width,
         height: metadata.streams[0].coded_height,
