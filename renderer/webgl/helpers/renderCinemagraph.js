@@ -171,30 +171,50 @@ class Preview {
     );
 
     // normalize brush size based off of actual image width
-    let normalizedBrushSize =
-      brushSize * this.videoWidth / this.boundingRect.width;
+    let normalizedBrushSize = Math.ceil(
+      brushSize * this.videoWidth / this.boundingRect.width,
+    );
+
+    const minX = Math.floor(
+      Math.max(normalizedPoint.x - normalizedBrushSize, 0),
+    );
+    const maxX = Math.min(
+      normalizedPoint.x + normalizedBrushSize,
+      this.videoWidth,
+    );
+    const minY = Math.floor(
+      Math.max(normalizedPoint.y - normalizedBrushSize, 0),
+    );
+    const maxY = Math.min(
+      normalizedPoint.y + normalizedBrushSize,
+      this.videoHeight,
+    );
 
     let blur = 21 - 2 * brushBlur;
 
-    let l = this.brushedImage.data.length / 4;
-    for (let i = 0; i < l; i++) {
-      const x = i % this.videoWidth;
-      const y = Math.min(i / this.videoWidth);
-      let dist = Math.sqrt(
-        Math.pow(normalizedPoint.x - x, 2) + Math.pow(normalizedPoint.y - y, 2),
-      );
-      if (dist < normalizedBrushSize) {
-        const normalizedDistance =
-          Math.pow(dist / normalizedBrushSize, blur) * 255.0;
+    // only iterate over the coordinates within
+    // the square of brush size
+    for (let y = 0; y < maxY; y++) {
+      for (let x = 0; x < maxX; x++) {
+        const i = this.videoWidth * y + x;
+        // console.log("I: ", i);
+        let dist = Math.sqrt(
+          Math.pow(normalizedPoint.x - x, 2) +
+            Math.pow(normalizedPoint.y - y, 2),
+        );
+        if (dist < normalizedBrushSize) {
+          const normalizedDistance =
+            Math.pow(dist / normalizedBrushSize, blur) * 255.0;
 
-        const opacity =
-          brushTool == 'eraser'
-            ? Math.min(this.brushedImage.data[i * 4 + 3], normalizedDistance)
-            : Math.max(
-                this.brushedImage.data[i * 4 + 3],
-                255.0 - normalizedDistance,
-              );
-        this.brushedImage.data[i * 4 + 3] = opacity;
+          const opacity =
+            brushTool == 'eraser'
+              ? Math.min(this.brushedImage.data[i * 4 + 3], normalizedDistance)
+              : Math.max(
+                  this.brushedImage.data[i * 4 + 3],
+                  255.0 - normalizedDistance,
+                );
+          this.brushedImage.data[i * 4 + 3] = opacity;
+        }
       }
     }
   };
