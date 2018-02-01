@@ -70,7 +70,13 @@
       "category": "public.app-category.video",
       "type": "distribution"
     },
-    "files": ["**/*", "!renderer", "renderer/out", "build/icon.*"],
+    "files": [
+      "**/*",
+      "!renderer",
+      "renderer/out",
+      "build/icon.*",
+      "!renderer/out/static/temp/"
+    ],
     "publish": {
       "provider": "github",
       "repo": "splish-desktop",
