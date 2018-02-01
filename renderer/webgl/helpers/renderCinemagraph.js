@@ -5,11 +5,20 @@ import getShader from './getShader';
 import loadProgram from './loadProgram';
 import createImageGrid from './createImageGrid';
 import TarToMp4 from './tarToMp4';
+import * as globalStyles from '../../globalStyles';
+import hexToRGB from '../../lib/hexToRGB';
 
 class Preview {
   constructor(boundingRect, exportCallback) {
     this.boundingRect = boundingRect;
     this.exportCallback = exportCallback;
+    this.overlayColor = hexToRGB(globalStyles.action);
+
+    // normalize color
+    this.overlayColor.r = this.overlayColor.r / 255.0;
+    this.overlayColor.g = this.overlayColor.g / 255.0;
+    this.overlayColor.b = this.overlayColor.b / 255.0;
+    this.showOverlay = false;
 
     this.canvas = document.getElementById('cinemagraphcanvas');
     this.gl = this.canvas.getContext('webgl');
@@ -64,7 +73,15 @@ class Preview {
     let gl = this.gl;
     try {
       let vertexshader = getShader(gl, cinemagraphVertexShader, 'vertex');
-      let fragmentshader = getShader(gl, cinemagraphFragShader, 'frag');
+      let fragmentshader = getShader(
+        gl,
+        cinemagraphFragShader(
+          this.overlayColor.r.toFixed(5).toString(),
+          this.overlayColor.g.toFixed(5).toString(),
+          this.overlayColor.b.toFixed(5).toString(),
+        ),
+        'frag',
+      );
 
       this.pictureprogram = loadProgram(gl, vertexshader, fragmentshader);
       gl.useProgram(this.pictureprogram);
@@ -98,9 +115,15 @@ class Preview {
         'u_image1',
       );
 
+      this.pictureprogram.show_overlay = gl.getUniformLocation(
+        this.pictureprogram,
+        'show_overlay',
+      );
+
       // Set the texture to use.
       gl.uniform1i(this.pictureprogram.u_image0, 0);
       gl.uniform1i(this.pictureprogram.u_image1, 1);
+      gl.uniform1i(this.pictureprogram.show_overlay, 2);
     } catch (e) {
       console.log('ERROR MAKING SHADERS: ', e);
       return;
@@ -135,6 +158,10 @@ class Preview {
     this.start();
   };
 
+  setShowOverlay = newOverlay => {
+    this.showOverlay = newOverlay;
+  };
+
   update = (newPoint, brushSize, brushBlur, brushTool) => {
     const normalizedPoint = this.normalizedPoint(
       newPoint[0],
@@ -144,30 +171,50 @@ class Preview {
     );
 
     // normalize brush size based off of actual image width
-    let normalizedBrushSize =
-      brushSize * this.videoWidth / this.boundingRect.width;
+    let normalizedBrushSize = Math.ceil(
+      brushSize * this.videoWidth / this.boundingRect.width,
+    );
+
+    const minX = Math.floor(
+      Math.max(normalizedPoint.x - normalizedBrushSize, 0),
+    );
+    const maxX = Math.min(
+      normalizedPoint.x + normalizedBrushSize,
+      this.videoWidth,
+    );
+    const minY = Math.floor(
+      Math.max(normalizedPoint.y - normalizedBrushSize, 0),
+    );
+    const maxY = Math.min(
+      normalizedPoint.y + normalizedBrushSize,
+      this.videoHeight,
+    );
 
     let blur = 21 - 2 * brushBlur;
 
-    let l = this.brushedImage.data.length / 4;
-    for (let i = 0; i < l; i++) {
-      const x = i % this.videoWidth;
-      const y = Math.min(i / this.videoWidth);
-      let dist = Math.sqrt(
-        Math.pow(normalizedPoint.x - x, 2) + Math.pow(normalizedPoint.y - y, 2),
-      );
-      if (dist < normalizedBrushSize) {
-        const normalizedDistance =
-          Math.pow(dist / normalizedBrushSize, blur) * 255.0;
+    // only iterate over the coordinates within
+    // the square of brush size
+    for (let y = 0; y < maxY; y++) {
+      for (let x = 0; x < maxX; x++) {
+        const i = this.videoWidth * y + x;
+        // console.log("I: ", i);
+        let dist = Math.sqrt(
+          Math.pow(normalizedPoint.x - x, 2) +
+            Math.pow(normalizedPoint.y - y, 2),
+        );
+        if (dist < normalizedBrushSize) {
+          const normalizedDistance =
+            Math.pow(dist / normalizedBrushSize, blur) * 255.0;
 
-        const opacity =
-          brushTool == 'eraser'
-            ? Math.min(this.brushedImage.data[i * 4 + 3], normalizedDistance)
-            : Math.max(
-                this.brushedImage.data[i * 4 + 3],
-                255.0 - normalizedDistance,
-              );
-        this.brushedImage.data[i * 4 + 3] = opacity;
+          const opacity =
+            brushTool == 'eraser'
+              ? Math.min(this.brushedImage.data[i * 4 + 3], normalizedDistance)
+              : Math.max(
+                  this.brushedImage.data[i * 4 + 3],
+                  255.0 - normalizedDistance,
+                );
+          this.brushedImage.data[i * 4 + 3] = opacity;
+        }
       }
     }
   };
@@ -243,6 +290,11 @@ class Preview {
     gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
     gl.enableVertexAttribArray(this.texCoordLocation);
+
+    gl.uniform1i(
+      gl.getUniformLocation(this.pictureprogram, 'show_overlay'),
+      this.showOverlay,
+    );
 
     gl.drawArrays(gl.TRIANGLES, 0, resolution * resolution * 2 * 3);
   };

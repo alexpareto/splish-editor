@@ -46,6 +46,8 @@ class Cinemagraph extends React.Component {
             exports={this.props.exports}
             brushSize={this.props.cinemagraph.brushSize}
             brushBlur={this.props.cinemagraph.brushBlur}
+            toggleCinemagraphOverlay={this.props.toggleCinemagraphOverlay}
+            showOverlay={this.props.cinemagraph.showOverlay}
             tool={this.props.cinemagraph.tool}
           />
           <CinemagraphCanvas
@@ -61,6 +63,7 @@ class Cinemagraph extends React.Component {
             addCinemagraphBrushStroke={this.props.addCinemagraphBrushStroke}
             startCinemagraphPreview={this.props.startCinemagraphPreview}
             preview={this.props.cinemagraph.preview}
+            showOverlay={this.props.cinemagraph.showOverlay}
             tool={this.props.cinemagraph.tool}
           />
           <Trimmer />
@@ -100,6 +103,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.selectCinemagraphBrushTool()),
     selectCinemagraphEraseTool: () =>
       dispatch(Actions.selectCinemagraphEraseTool()),
+    toggleCinemagraphOverlay: () =>
+      dispatch(Actions.toggleCinemagraphOverlay()),
   };
 };
 
