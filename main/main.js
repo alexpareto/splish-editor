@@ -15,6 +15,10 @@ const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path');
 const url = require('url');
+global.ffmpegpath = require('ffmpeg-static').path.replace(
+  'app.asar',
+  'app.asar.unpacked',
+);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
