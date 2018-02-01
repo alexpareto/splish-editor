@@ -8,6 +8,7 @@ import Input from '../../components/input';
 import Button from '../../components/button';
 import A from '../../components/a';
 import Holder from '../../components/holder';
+import EyeLogo from '../../components/eyelogo';
 
 export default class extends React.Component {
   constructor(props) {
@@ -98,7 +99,7 @@ export default class extends React.Component {
             height: '100%',
           }}
         >
-          <Logo size={150} />
+          <EyeLogo height={40} withText={true} />
           <p>
             Type in your email and we'll send a link for you to reset your
             password.
@@ -125,6 +126,8 @@ export default class extends React.Component {
           <style jsx>{`
             .input-element {
               margin: 7px 0;
+              display: flex;
+              flex-direction: row;
             }
 
             .confirm-button {
