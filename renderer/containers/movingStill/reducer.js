@@ -60,7 +60,7 @@ export const movingStillReducer = (state = initialState, action) => {
         ...state,
         imgPath: action.imgPath,
         boundingRect: action.boundingRect,
-        previewDimensions,
+        previewDimensions: action.naturalDimensions,
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       let vectorCanvas = d3.select('#movingStillSVG');
