@@ -107,8 +107,10 @@ export const cinemagraphReducer = (state = initialState, action) => {
         history,
       };
     case actionTypes.START_EXPORTING_CINEMAGRAPH:
+      state.preview.setShowOverlay(false);
       return {
         ...state,
+        showOverlay: false,
         isRendering: true,
         showExportModal: true,
       };
