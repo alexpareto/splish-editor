@@ -20,6 +20,7 @@ export default (naturalDimensions, quality) => {
       naturalDimensions.width % 2 == 0
         ? naturalDimensions.width
         : naturalDimensions.width + 1;
+    
     let evenHeight =
       naturalDimensions.height % 2 == 0
         ? naturalDimensions.height

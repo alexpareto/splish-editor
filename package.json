@@ -59,6 +59,7 @@
     "react-dom": "^16.2.0",
     "react-ga": "^2.4.1",
     "react-redux": "^5.0.6",
+    "react-visibility-sensor": "^3.11.0",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
     "tar-fs": "^1.16.0",

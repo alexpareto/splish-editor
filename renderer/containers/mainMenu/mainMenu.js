@@ -7,6 +7,7 @@ import checkLoggedIn from '../../lib/checkLoggedIn.js';
 import redirect from '../../lib/redirect.js';
 import * as globalStyles from '../../globalStyles';
 import getFfmpeg from '../../lib/getFfmpeg';
+import * as api from '../../lib/api';
 
 import Logo from '../../components/logo.js';
 import Button from '../../components/button.js';
@@ -37,6 +38,13 @@ class MainMenu extends React.Component {
 
   // get all the dimensions
   initializeAndOpenCinemagraph = files => {
+    // hit endpoint to track start project
+    api.call('exports/start', 'POST').then(res => {
+      if (res.ok) {
+        console.log('all good fam');
+      }
+    });
+
     const videoPath = 'file://' + files[0];
 
     const ffmpeg = getFfmpeg();
@@ -82,6 +90,13 @@ class MainMenu extends React.Component {
   };
 
   initializeAndOpenMovingStill = files => {
+    // hit endpoint to track start project
+    api.call('exports/start', 'POST').then(res => {
+      if (res.ok) {
+        console.log('all good fam');
+      }
+    });
+
     const imgPath = 'file://' + files[0];
     sizeOf(files[0], (err, dimensions) => {
       const naturalDimensions = {
