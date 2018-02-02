@@ -3,12 +3,19 @@ import * as globalStyles from '../globalStyles';
 export default props => {
   return (
     <div className="holder">
-      <img
-        className="eyelogo"
-        src="/static/icons/splish-eyelogo.png"
-        height={props.height}
-      />
-      {props.withText ? <span className="text">splish</span> : null}
+      {props.withText ? (
+        <img
+          className="eyelogo"
+          src="/static/icons/splish-eyewords.png"
+          height={props.height}
+        />
+      ) : (
+        <img
+          className="eyelogo"
+          src="/static/icons/splish-eyelogo.png"
+          height={props.height}
+        />
+      )}
       <style jsx>{`
         .holder {
           display: flex;
