@@ -87,6 +87,8 @@ class TarToMp4 {
           remote.app.getPath('temp') +
             '/renderer/static/temp/frames/0000%03d.jpg',
         )
+        .inputFPS(25)
+        .fps(25)
         .output(filePath + 'output.mp4')
         .on('end', () => {
           this.exportCallback(filePath + 'output.mp4');
