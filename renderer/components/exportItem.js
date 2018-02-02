@@ -1,13 +1,36 @@
 import * as globalStyles from '../globalStyles';
 import Clipboard from 'react-clipboard.js';
+import VisibilitySensor from 'react-visibility-sensor';
 
 class ExportItem extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isVisible: false,
+      hasLoaded: false,
+    };
+  }
+
   playVideo = () => {
     this.video.play();
   };
 
   pauseVideo = () => {
     this.video.pause();
+  };
+
+  componentDidUpdate = () => {
+    if (this.state.isVisible && !this.state.hasLoaded) {
+      this.video.load();
+      this.setState({
+        hasLoaded: true,
+      });
+    }
+  };
+
+  onVisibilityChange = isVisible => {
+    this.setState({ isVisible });
   };
 
   render() {
@@ -18,10 +41,12 @@ class ExportItem extends React.Component {
           onMouseEnter={this.playVideo}
           onMouseLeave={this.pauseVideo}
         >
+          <VisibilitySensor onChange={this.onVisibilityChange} />
           <video
             loop
             height={this.props.height}
             ref={video => (this.video = video)}
+            preload="none"
           >
             <source src={this.props.videoUrl} />
           </video>

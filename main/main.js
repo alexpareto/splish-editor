@@ -93,6 +93,10 @@ autoUpdater.on('error', message => {
 });
 
 const setUpMenu = () => {
+  if (isDev) {
+    // don't set up menu on dev so we can use dev features
+    return;
+  }
   var template = [
     {
       label: 'Application',
