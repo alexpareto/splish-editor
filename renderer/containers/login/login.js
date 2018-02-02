@@ -229,7 +229,6 @@ class Login extends React.Component {
         </div>
       );
     } else {
-      console.log('cunt whore');
       return null;
     }
   };

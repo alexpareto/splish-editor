@@ -37,6 +37,9 @@ export const cinemagraphReducer = (state = initialState, action) => {
   let preview, history, actionObject, prevMask, nextMask, tool;
   switch (action.type) {
     case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
+      //reset state
+      state = initialState;
+
       const previewDimensions = throttleQuality(action.naturalDimensions, '2K');
       return {
         ...state,

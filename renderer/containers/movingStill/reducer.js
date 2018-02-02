@@ -54,6 +54,9 @@ export const movingStillReducer = (state = initialState, action) => {
     removeIndex;
   switch (action.type) {
     case actionTypes.SELECT_MOVING_STILL_IMAGE:
+      //reset state
+      state = initialState;
+
       // throttle preview to 2k to prevent crashes
       const previewDimensions = throttleQuality(action.naturalDimensions, '2K');
       return {
