@@ -43,7 +43,7 @@ class Preview {
     //state
     this.isCapturing = false;
     this.captureProgress = 0;
-    this.framerate = 24;
+    this.framerate = 25;
     this.previewRate = 60;
     this.isPlaying = false;
 
@@ -56,7 +56,7 @@ class Preview {
     this.capturer = new CCapture({
       format: 'jpg',
       verbose: true,
-      framerate: 23,
+      framerate: 25,
       display: false,
       quality: 99,
     });
