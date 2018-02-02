@@ -295,7 +295,6 @@ class Preview {
       this.captureProgress++;
       if (this.captureProgress > framerate * this.duration) {
         this.isCapturing = false;
-        this.stopped = true;
         this.capturer.stop();
         this.capturer.save(blob => {
           let ttMp4 = new TarToMp4(blob);
