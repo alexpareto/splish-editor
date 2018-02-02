@@ -53,6 +53,8 @@ class MainMenu extends React.Component {
         console.error(err);
       }
 
+      console.log('METADATA: ', metadata);
+
       let naturalDimensions;
       for (let i = 0; i < 4; i++) {
         naturalDimensions = {

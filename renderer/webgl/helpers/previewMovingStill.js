@@ -42,7 +42,7 @@ class Preview {
     //state
     this.isCapturing = false;
     this.captureProgress = 0;
-    this.framerate = 24;
+    this.framerate = 25;
     this.previewRate = 60;
     this.isPlaying = false;
 
@@ -55,6 +55,7 @@ class Preview {
     this.capturer = new CCapture({
       format: 'jpg',
       verbose: true,
+      framerate: 25,
       display: false,
       quality: 99,
     });
@@ -293,14 +294,13 @@ class Preview {
     if (this.isCapturing) {
       this.captureProgress++;
       if (this.captureProgress > framerate * this.duration) {
+        this.isCapturing = false;
         this.capturer.stop();
         this.capturer.save(blob => {
           let ttMp4 = new TarToMp4(blob);
-
           // export mp4 to temporary storage (for now)
           ttMp4.export('./renderer/static/temp/', this.exportCallback);
         });
-        this.isCapturing = false;
       }
     }
 
