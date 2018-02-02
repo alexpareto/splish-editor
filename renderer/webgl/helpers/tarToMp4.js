@@ -81,6 +81,7 @@ class TarToMp4 {
     if (this.bufferStreamCompleted) {
       const ffmpeg = getFfmpeg();
       let command = ffmpeg();
+      console.log('OUR REPO: ', remote.app.getPath('temp'));
       command
         .input(
           remote.app.getPath('temp') +
