@@ -16,6 +16,15 @@ export default (naturalDimensions, quality) => {
   const naturalPixels = naturalDimensions.width * naturalDimensions.height;
 
   if (naturalPixels <= MAX_PIXELS) {
+    let evenWidth =
+      naturalDimensions.width % 2 == 0
+        ? naturalDimensions.width
+        : naturalDimensions.width + 1;
+    let evenheight =
+      naturalDimensions.height % 2 == 0
+        ? naturalDimensions.height
+        : naturalDimensions.height + 1;
+
     return naturalDimensions;
   }
 
@@ -23,8 +32,14 @@ export default (naturalDimensions, quality) => {
   let throttleHeight = Math.sqrt(MAX_PIXELS / aspectRatio);
   let throttleWidth = throttleHeight * aspectRatio;
 
+  let evenWidth = Math.floor(throttleWidth);
+  let evenHeight = Math.floor(throttleHeight);
+
+  evenWidth = evenWidth % 2 == 0 ? evenWidth : evenWidth - 1;
+  evenHeight = evenHeight % 2 == 0 ? evenHeight : evenHeight - 1;
+
   return {
-    width: Math.floor(throttleWidth),
-    height: Math.floor(throttleHeight),
+    width: evenWidth,
+    height: evenHeight,
   };
 };
