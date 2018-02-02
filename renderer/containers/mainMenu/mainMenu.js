@@ -44,10 +44,18 @@ class MainMenu extends React.Component {
       if (err) {
         console.error(err);
       }
-      const naturalDimensions = {
-        width: metadata.streams[0].coded_width,
-        height: metadata.streams[0].coded_height,
-      };
+
+      let naturalDimensions;
+      for (let i = 0; i < 4; i++) {
+        naturalDimensions = {
+          width: metadata.streams[i].coded_width,
+          height: metadata.streams[i].coded_height,
+        };
+
+        if (naturalDimensions.width && naturalDimensions.height) {
+          break;
+        }
+      }
 
       const hPadding = 120;
       const vPadding = 180;

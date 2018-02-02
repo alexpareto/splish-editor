@@ -9,7 +9,7 @@ import * as globalStyles from '../../globalStyles';
 import hexToRGB from '../../lib/hexToRGB';
 
 class Preview {
-  constructor(boundingRect, exportCallback) {
+  constructor(boundingRect, exportCallback, previewDimensions) {
     this.boundingRect = boundingRect;
     this.exportCallback = exportCallback;
     this.overlayColor = hexToRGB(globalStyles.action);
@@ -35,9 +35,8 @@ class Preview {
 
     this.video = document.getElementById('cinemagraphVideo');
     this.duration = this.video.duration;
-    console.log('DURATION: ', this.duration);
-    this.videoWidth = this.video.videoWidth;
-    this.videoHeight = this.video.videoHeight;
+    this.videoWidth = previewDimensions.width;
+    this.videoHeight = previewDimensions.height;
     this.vidTexture = this.gl.createTexture();
     this.imgTexture = this.gl.createTexture();
     this.originalImage = [];

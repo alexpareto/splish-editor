@@ -37,7 +37,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
   let preview, history, actionObject, prevMask, nextMask, tool;
   switch (action.type) {
     case actionTypes.SELECT_CINEMAGRAPH_VIDEO:
-      const previewDimensions = throttleQuality(action.naturalDimensions, '4K');
+      const previewDimensions = throttleQuality(action.naturalDimensions, '2K');
       return {
         ...state,
         boundingRect: action.boundingRect,
@@ -45,7 +45,11 @@ export const cinemagraphReducer = (state = initialState, action) => {
         previewDimensions,
       };
     case actionTypes.START_CINEMAGRAPH_PREVIEW:
-      preview = new Preview(state.boundingRect, action.callback);
+      preview = new Preview(
+        state.boundingRect,
+        action.callback,
+        state.previewDimensions,
+      );
       return {
         ...state,
         preview,
