@@ -8,7 +8,7 @@ const app = electron.app;
 const Menu = electron.Menu;
 
 // auto update modules
-const autoUpdater = electron.autoUpdater;
+const autoUpdater = require('electron-updater').autoUpdater;
 const dialog = electron.dialog;
 
 // Module to create native browser window.
@@ -92,6 +92,15 @@ autoUpdater.on('error', message => {
   console.error(message);
 });
 
+autoUpdater.on('update-available', message => {
+  console.log('An update is available!');
+});
+
+if (isDev) {
+  autoUpdater.logger = require('electron-log');
+  autoUpdater.logger.transports.file.level = 'info';
+}
+
 const setUpMenu = () => {
   if (isDev) {
     // don't set up menu on dev so we can use dev features
@@ -166,9 +175,6 @@ app.on('activate', function() {
 // check for updates on start
 function listenForUpdates() {
   if (!isDev) {
-    const server = 'https://desktop-update.splish.io';
-    const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
-    autoUpdater.setFeedURL(feed);
     setInterval(() => {
       autoUpdater.checkForUpdates();
     }, 60000);
