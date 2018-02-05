@@ -25,8 +25,6 @@ class UploadVideoStream {
         }
       }
     });
-
-    console.log('WRITING TO ', this.dir);
   }
 
   addFrame = (dataUrl, count) => {
@@ -46,6 +44,7 @@ class UploadVideoStream {
       .fps(25)
       .output(this.dir + 'output.mp4')
       .on('end', () => {
+        console.log('UPLOADING');
         this.exportCallback(this.dir + 'output.mp4');
       })
       .run();
