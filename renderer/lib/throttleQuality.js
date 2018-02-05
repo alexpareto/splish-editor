@@ -7,10 +7,10 @@ export default (naturalDimensions, quality) => {
       MAX_PIXELS = 3840 * 2160;
       break;
     case '2K':
-      MAX_PIXELS = 2048 * 1080;
+      MAX_PIXELS = 1920 * 1080;
       break;
     default:
-      MAX_PIXELS = 2048 * 1080;
+      MAX_PIXELS = 1920 * 1080;
   }
 
   const naturalPixels = naturalDimensions.width * naturalDimensions.height;
@@ -20,7 +20,7 @@ export default (naturalDimensions, quality) => {
       naturalDimensions.width % 2 == 0
         ? naturalDimensions.width
         : naturalDimensions.width + 1;
-    
+
     let evenHeight =
       naturalDimensions.height % 2 == 0
         ? naturalDimensions.height
