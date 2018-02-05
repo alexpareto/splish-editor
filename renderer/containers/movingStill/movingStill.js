@@ -48,6 +48,7 @@ class MovingStill extends React.Component {
             updateMovingStillDuration={this.props.updateMovingStillDuration}
             exports={this.props.exports}
             duration={this.props.movingStill.duration}
+            resetMovingStillState={this.props.resetMovingStillState}
           />
           <MovingStillPreview
             display={showPreview}
@@ -108,6 +109,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.undoMovingStill(actionObject)),
     redoMovingStill: actionObject =>
       dispatch(Actions.redoMovingStill(actionObject)),
+    resetMovingStillState: () => dispatch(Actions.resetMovingStillState()),
   };
 };
 

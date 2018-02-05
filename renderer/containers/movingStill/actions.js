@@ -17,6 +17,7 @@ export const actionTypes = {
   UPDATE_MOVING_STILL_DURATION: 'UPDATE_MOVING_STILL_DURATION',
   REMOVE_ANCHOR: 'REMOVE_ANCHOR',
   REMOVE_VECTOR: 'REMOVE_VECTOR',
+  RESET_MOVING_STILL_STATE: 'RESET_MOVING_STILL_STATE',
 };
 
 // ACTIONS
@@ -99,4 +100,8 @@ export const removeAnchor = (isUndo, isRedo, anchor) => {
 
 export const removeVector = (isUndo, isRedo, vector) => {
   return { type: actionTypes.REMOVE_VECTOR, vector, isUndo, isRedo };
+};
+
+export const resetMovingStillState = () => {
+  return { type: actionTypes.RESET_MOVING_STILL_STATE };
 };
