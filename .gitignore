@@ -7,3 +7,4 @@ renderer/out/
 dist/
 
 .DS_Store
+yarn-error.log
