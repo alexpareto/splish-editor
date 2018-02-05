@@ -96,8 +96,10 @@ autoUpdater.on('update-available', message => {
   console.log('An update is available!');
 });
 
-autoUpdater.logger = require('electron-log');
-autoUpdater.logger.transports.file.level = 'info';
+if (isDev) {
+  autoUpdater.logger = require('electron-log');
+  autoUpdater.logger.transports.file.level = 'info';
+}
 
 const setUpMenu = () => {
   if (isDev) {
