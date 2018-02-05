@@ -81,6 +81,7 @@ class TarToMp4 {
     if (this.bufferStreamCompleted) {
       const ffmpeg = getFfmpeg();
       let command = ffmpeg();
+      console.log('STARTING FFMPEG');
       command
         .input(
           remote.app.getPath('temp') +
@@ -90,6 +91,7 @@ class TarToMp4 {
         .fps(25)
         .output(filePath + 'output.mp4')
         .on('end', () => {
+          console.log('FINISHED FFMPEG');
           this.exportCallback(filePath + 'output.mp4');
         })
         .run();

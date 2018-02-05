@@ -1032,13 +1032,9 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
 
-base64-js@1.2.0:
+base64-js@1.2.0, base64-js@^1.0.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.2.0.tgz#a39992d723584811982be5e290bb6a53d86700f1"
-
-base64-js@^1.0.2:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.2.1.tgz#a91947da1f4a516ea38e5b4ec0ec3773675e0886"
 
 bcrypt-pbkdf@^1.0.0:
   version "1.0.1"
@@ -6976,6 +6972,6 @@ yauzl@2.4.1:
   dependencies:
     fd-slicer "~1.0.1"
 
-zcapture.js@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/zcapture.js/-/zcapture.js-0.0.2.tgz#8aff9c8fa150c0c34ec994f98031446fdac2a668"
+zcapture.js@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/zcapture.js/-/zcapture.js-0.0.9.tgz#cd8c735e125d711b082c94de82138ede6a1b9e2b"

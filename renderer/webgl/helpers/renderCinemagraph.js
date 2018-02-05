@@ -4,9 +4,9 @@ import fs from 'fs';
 import getShader from './getShader';
 import loadProgram from './loadProgram';
 import createImageGrid from './createImageGrid';
-import TarToMp4 from './tarToMp4';
 import * as globalStyles from '../../globalStyles';
 import hexToRGB from '../../lib/hexToRGB';
+import VideoUploader from '../../lib/videoUploader';
 
 class Preview {
   constructor(boundingRect, exportCallback, previewDimensions) {
@@ -48,6 +48,8 @@ class Preview {
       CCapture = require('zcapture.js');
     }
 
+    this.videoUploader = new VideoUploader(this.exportCallback);
+
     this.capturer = new CCapture({
       format: 'jpg',
       verbose: true,
@@ -55,6 +57,7 @@ class Preview {
       framerate: this.framerate,
       quality: 99,
       syncVideo: this.video,
+      handleData: this.videoUploader.addFrame,
     });
 
     this.init();
@@ -312,13 +315,8 @@ class Preview {
       this.captureProgress++;
       if (this.captureProgress > this.framerate * this.duration) {
         this.capturer.stop();
-        this.capturer.save(blob => {
-          let ttMp4 = new TarToMp4(blob);
-
-          // export mp4 to temporary storage (for now)
-          ttMp4.export('./renderer/static/temp/', this.exportCallback);
-        });
         this.isCapturing = false;
+        this.videoUploader.upload();
       }
     }
 
