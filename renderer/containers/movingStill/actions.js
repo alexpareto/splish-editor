@@ -7,6 +7,7 @@ export const actionTypes = {
   START_MOVING_STILL_EDIT_MODE: 'START_MOVING_STILL_EDIT_MODE',
   SELECT_VECTOR_TOOL: 'SELECT_VECTOR_TOOL',
   SELECT_ANCHOR_TOOL: 'SELECT_ANCHOR_TOOL',
+  SELECT_SELECTION_TOOL: 'SELECT_SELECTION_TOOL',
   RENDER_MOVING_STILL: 'RENDER_MOVING_STILL',
   ADD_ANCHOR: 'ADD_ANCHOR',
   ADD_VECTOR: 'ADD_VECTOR',
@@ -17,6 +18,8 @@ export const actionTypes = {
   UPDATE_MOVING_STILL_DURATION: 'UPDATE_MOVING_STILL_DURATION',
   REMOVE_ANCHOR: 'REMOVE_ANCHOR',
   REMOVE_VECTOR: 'REMOVE_VECTOR',
+  MAKE_SELECTION: 'MAKE_SELECTION',
+  DELETE_SELECTION: 'DELETE_SELECTION',
 };
 
 // ACTIONS
@@ -99,4 +102,16 @@ export const removeAnchor = (isUndo, isRedo, anchor) => {
 
 export const removeVector = (isUndo, isRedo, vector) => {
   return { type: actionTypes.REMOVE_VECTOR, vector, isUndo, isRedo };
+};
+
+export const makeSelection = corners => {
+  return { type: actionTypes.MAKE_SELECTION, corners };
+};
+
+export const deleteSelection = () => {
+  return { type: actionTypes.DELETE_SELECTION };
+};
+
+export const selectSelectionTool = () => {
+  return { type: actionTypes.SELECT_SELECTION_TOOL };
 };

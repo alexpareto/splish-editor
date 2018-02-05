@@ -46,6 +46,7 @@ class MovingStill extends React.Component {
             movingStillShareComplete={this.props.movingStillShareComplete}
             isRendering={this.props.movingStill.isRendering}
             updateMovingStillDuration={this.props.updateMovingStillDuration}
+            selectSelectionTool={this.props.selectSelectionTool}
             exports={this.props.exports}
             duration={this.props.movingStill.duration}
           />
@@ -108,6 +109,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.undoMovingStill(actionObject)),
     redoMovingStill: actionObject =>
       dispatch(Actions.redoMovingStill(actionObject)),
+    selectSelectionTool: () => dispatch(Action.selectSelectionTool()),
   };
 };
 

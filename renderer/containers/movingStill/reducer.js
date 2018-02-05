@@ -17,6 +17,7 @@ const initialState = {
   viewMode: 'edit',
   anchors: [],
   vectors: [],
+  selection: null,
   boundingRect: {
     width: 0,
     height: 0,
@@ -283,6 +284,21 @@ export const movingStillReducer = (state = initialState, action) => {
       return {
         ...state,
         duration: action.duration,
+      };
+    case actionTypes.SELECT_SELECTION_TOOL:
+      return {
+        ...state,
+        currentTool: 'selector',
+      };
+    case actionTypes.MAKE_SELECTION:
+      return {
+        ...state,
+        selection: null,
+      };
+    case actionTypes.DELETE_SELECTION:
+      return {
+        ...state,
+        selection: null,
       };
     default:
       return state;

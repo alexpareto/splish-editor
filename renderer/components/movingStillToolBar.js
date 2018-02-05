@@ -60,6 +60,12 @@ class NavBar extends React.Component {
             <IconButton
               onClick={this.vectorClicked}
               stroke={globalStyles.accent}
+              name="cursor"
+              backgroundColor={globalStyles.secondary}
+            />
+            <IconButton
+              onClick={this.vectorClicked}
+              stroke={globalStyles.accent}
               name="arrowDownLeft"
               backgroundColor={globalStyles.secondary}
             />
