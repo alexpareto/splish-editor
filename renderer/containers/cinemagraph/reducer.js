@@ -31,6 +31,8 @@ const initialState = {
   showExportModal: false,
   isRendering: false,
   tool: 'eraser',
+  thumbnailsLoaded: false,
+  numThumbnails: 0,
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
@@ -46,6 +48,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
         boundingRect: action.boundingRect,
         videoPath: action.videoPath,
         previewDimensions,
+        numbThumbnails: action.numThumbnails,
       };
     case actionTypes.START_CINEMAGRAPH_PREVIEW:
       preview = new Preview(
@@ -144,6 +147,23 @@ export const cinemagraphReducer = (state = initialState, action) => {
     case actionTypes.RESET_CINEMAGRAPH_STATE:
       state.preview.stop();
       return initialState;
+    case actionTypes.LOAD_THUMBNAILS:
+      return {
+        ...state,
+        thumbnailsLoaded: true,
+      };
+    case actionTypes.CINEMAGRAPH_TRIM_FRONT:
+      return {
+        ...state,
+      };
+    case actionTypes.CINEMAGRAPH_TRIM_BACK:
+      return {
+        ...state,
+      };
+    case actionTypes.CINEMAGRAPH_SET_STILL_FRAME:
+      return {
+        ...state,
+      };
     default:
       return state;
   }

@@ -14,18 +14,24 @@ export const actionTypes = {
   START_CINEMAGRAPH_PREVIEW: 'START_CINEMAGRAPH_PREVIEW',
   TOGGLE_CINEMAGRAPH_OVERLAY: 'TOGGLE_CINEMAGRAPH_OVERLAY',
   RESET_CINEMAGRAPH_STATE: 'RESET_CINEMAGRAPH_STATE',
+  LOAD_THUMBNAILS: 'LOAD_THUMBNAILS',
+  CINEMAGRAPH_TRIM_FRONT: 'TRIM_FRONT',
+  CINEMAGRAPH_TRIM_BACK: 'TRIM_BACK',
+  CINEMAGRAPH_SET_STILL_FRAME: 'CINEMAGRAPH_SET_STILL_FRAME',
 };
 
 export const selectCinemagraphVideo = (
   videoPath,
   naturalDimensions,
   boundingRect,
+  numThumbnails,
 ) => {
   return {
     type: actionTypes.SELECT_CINEMAGRAPH_VIDEO,
     videoPath,
     naturalDimensions,
     boundingRect,
+    numThumbnails,
   };
 };
 
@@ -99,4 +105,20 @@ export const toggleCinemagraphOverlay = () => {
 
 export const resetCinemagraphState = () => {
   return { type: actionTypes.RESET_CINEMAGRAPH_STATE };
+};
+
+export const loadThumbnails = () => {
+  return { type: actionTypes.LOAD_THUMBNAILS };
+};
+
+export const cinemagraphTrimFront = time => {
+  return { type: actionTypes.CINEMAGRAPH_TRIM_FRONT, time };
+};
+
+export const cinemagraphTrimBack = time => {
+  return { type: actionTypes.CINEMAGRAPH_TRIM_BACK, time };
+};
+
+export const cinemagraphSetStillFrame = time => {
+  return { type: actionTypes.CINEMAGRAPH, time };
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from '../../components/cinemagraphToolBar';
 import CinemagraphCanvas from '../../components/cinemagraphCanvas';
-import Trimmer from '../../components/trimmer';
+import CinemagraphTrimmer from '../../components/cinemagraphTrimmer';
 import { connect } from 'react-redux';
 import * as Actions from './actions';
 import * as ExportActions from '../exports/actions';
@@ -67,7 +67,11 @@ class Cinemagraph extends React.Component {
             showOverlay={this.props.cinemagraph.showOverlay}
             tool={this.props.cinemagraph.tool}
           />
-          <Trimmer />
+          <CinemagraphTrimmer
+            thumbnailsLoaded={this.props.cinemagraph.thumbnailsLoaded}
+            numThumbnails={this.props.cinemagraph.numThumbnails}
+            videoDimensions={this.props.cinemagraph.previewDimensions}
+          />
         </div>
       </Holder>
     );

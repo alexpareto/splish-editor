@@ -111,7 +111,7 @@ class CinemagraphPreview extends React.Component {
         <style jsx>{`
           .overlay {
             z-index: 0;
-            background-color: #ffffff;
+            background-color: ${globalStyles.background};
             width: 100%;
             height: 100vh;
             position: absolute;

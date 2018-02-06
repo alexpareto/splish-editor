@@ -79,8 +79,6 @@ class MainMenu extends React.Component {
 
       const dir = remote.app.getPath('temp') + 'thumbnails/';
 
-      console.log('WRITING THUMBNAILS TO: ', dir);
-
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
       }
@@ -93,33 +91,36 @@ class MainMenu extends React.Component {
         }
         let command = ffmpeg();
 
+        // load 3 thumbnails per second of video
         command
           .input(videoPath)
           .withInputFps(25)
           .fps(3)
-          .output(dir + '%03d.jpg')
+          .output(dir + '%02d.jpg')
           .on('end', () => {
-            console.log('WROTE IMAGES');
+            this.props.loadThumbnails();
           })
           .run();
       });
 
-      const numThumbNails = Math.floor(duration);
+      const numThumbnails = Math.floor(duration) * 3;
       const hPadding = 120;
-      const vPadding = 180;
+      const vPadding = 220;
       const headerSize = 100; // height of toolbar at top
+      const footerSize = 60;
       const boundingRect = getBoundingRect(
         naturalDimensions,
         hPadding,
         vPadding,
         headerSize,
+        footerSize,
       );
 
       this.props.selectCinemagraphVideo(
         videoPath,
         naturalDimensions,
         boundingRect,
-        numThumbNails,
+        numThumbnails,
       );
 
       Router.push('/cinemagraph');
@@ -146,11 +147,13 @@ class MainMenu extends React.Component {
       const hPadding = 120;
       const vPadding = 180;
       const headerSize = 100; // height of toolbar at top
+      const footerSize = 0;
       const boundingRect = getBoundingRect(
         naturalDimensions,
         hPadding,
         vPadding,
         headerSize,
+        footerSize,
       );
 
       this.props.selectMovingStillImage(
@@ -258,12 +261,18 @@ const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => {
   return {
     logout: () => dispatch(logoutUser()),
-    selectCinemagraphVideo: (videoPath, naturalDimensions, boundingRect) =>
+    selectCinemagraphVideo: (
+      videoPath,
+      naturalDimensions,
+      boundingRect,
+      numThumbnails,
+    ) =>
       dispatch(
         CinemagraphActions.selectCinemagraphVideo(
           videoPath,
           naturalDimensions,
           boundingRect,
+          numThumbnails,
         ),
       ),
     selectMovingStillImage: (imgPath, naturalDimensions, boundingRect) =>
@@ -274,6 +283,7 @@ const mapDispatchToProps = dispatch => {
           boundingRect,
         ),
       ),
+    loadThumbnails: () => dispatch(CinemagraphActions.loadThumbnails()),
   };
 };
 
