@@ -93,6 +93,18 @@ export const removeVector = (vectorList, vector) => {
   return vectorList;
 };
 
+export const drawAnchor = (vectorCanvas, anchor) => {
+  let circle = vectorCanvas.append('circle');
+  circle
+    .attr('cx', anchor.x)
+    .attr('cy', anchor.y)
+    .attr('r', 3);
+
+  anchor.component = circle;
+
+  return anchor;
+};
+
 export const removeAnchor = (anchorList, anchor) => {
   let removeIndex = anchorList.length - 1;
   for (let i = anchorList.length - 1; i >= 0; i--) {

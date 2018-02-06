@@ -104,17 +104,7 @@ export const movingStillReducer = (state = initialState, action) => {
       };
     case actionTypes.ADD_ANCHOR:
       anchors = state.anchors;
-      let circle = state.vectorCanvas.append('circle');
-      circle
-        .attr('cx', action.anchor.x)
-        .attr('cy', action.anchor.y)
-        .attr('r', 3);
-
-      anchor = {
-        x: action.anchor.x,
-        y: action.anchor.y,
-        component: circle,
-      };
+      anchor = DrawHelpers.drawAnchor(state.vectorCanvas, action.anchor);
 
       // define the opposite action
       actionObject = {
@@ -258,19 +248,74 @@ export const movingStillReducer = (state = initialState, action) => {
       vectors = state.vectors;
       anchors = state.anchors;
 
-      for (vector of state.selection.vectors) {
+      if (action.isUndo || action.isRedo) {
+        selection = action.selection;
+      } else {
+        selection = state.selection;
+      }
+
+      for (vector of selection.vectors) {
         vectors = DrawHelpers.removeVector(vectors, vector);
       }
 
-      for (anchor of state.selection.anchors) {
+      for (anchor of selection.anchors) {
         anchors = DrawHelpers.removeAnchor(anchors, anchor);
+      }
+
+      actionObject = {
+        action: Actions.addSelection,
+        arg1: selection,
+      };
+
+      history = getHistory(state.history, action, actionObject);
+
+      if (!action.isUndo && !action.isRedo) {
+        selection = { anchors: [], vectors: [] };
       }
 
       return {
         ...state,
+        history,
         vectors,
         anchors,
+        selection,
       };
+    case actionTypes.ADD_SELECTION:
+      selection = action.selection;
+      anchors = state.anchors;
+      vectors = state.vectors;
+      let nSelection = {
+        anchors: [],
+        vectors: [],
+      };
+
+      for (vector of selection.vectors) {
+        vector = DrawHelpers.drawVectorPath(state.vectorCanvas, vector);
+        vector = DrawHelpers.drawVectorHead(state.vectorCanvas, vector);
+        vectors.push(vector);
+        nSelection.vectors.push(vector);
+      }
+
+      for (anchor of selection.anchors) {
+        anchor = DrawHelpers.drawAnchor(state.vectorCanvas, anchor);
+        anchors.push(anchor);
+        nSelection.anchors.push(anchor);
+      }
+
+      actionObject = {
+        action: Actions.deleteSelection,
+        arg1: nSelection,
+      };
+
+      history = getHistory(state.history, action, actionObject);
+
+      return {
+        ...state,
+        history,
+        anchors,
+        vectors,
+      };
+
     default:
       return state;
   }

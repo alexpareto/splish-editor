@@ -20,6 +20,7 @@ export const actionTypes = {
   REMOVE_VECTOR: 'REMOVE_VECTOR',
   MAKE_SELECTION: 'MAKE_SELECTION',
   DELETE_SELECTION: 'DELETE_SELECTION',
+  ADD_SELECTION: 'ADD_SELECTION',
 };
 
 // ACTIONS
@@ -108,10 +109,14 @@ export const makeSelection = corners => {
   return { type: actionTypes.MAKE_SELECTION, corners };
 };
 
-export const deleteSelection = () => {
-  return { type: actionTypes.DELETE_SELECTION };
+export const deleteSelection = (isUndo, isRedo, selection) => {
+  return { type: actionTypes.DELETE_SELECTION, isUndo, isRedo, selection };
 };
 
 export const selectSelectionTool = () => {
   return { type: actionTypes.SELECT_SELECTION_TOOL };
+};
+
+export const addSelection = (isUndo, isRedo, selection) => {
+  return { type: actionTypes.ADD_SELECTION, isUndo, isRedo, selection };
 };

@@ -113,7 +113,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.redoMovingStill(actionObject)),
     selectSelectionTool: () => dispatch(Actions.selectSelectionTool()),
     makeSelection: corners => dispatch(Actions.makeSelection(corners)),
-    deleteSelection: () => dispatch(Actions.deleteSelection()),
+    deleteSelection: () =>
+      dispatch(Actions.deleteSelection(false, false, null)),
   };
 };
 
