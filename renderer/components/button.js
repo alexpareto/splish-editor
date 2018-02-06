@@ -1,10 +1,10 @@
 import * as globalStyles from '../globalStyles';
 
 export default props => {
-  let { isActive } = props;
+  let { isActive, ...otherProps } = props;
 
   return (
-    <button {...props}>
+    <button {...otherProps}>
       {props.children}
       <style jsx>{`
         button {
