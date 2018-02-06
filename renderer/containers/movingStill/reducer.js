@@ -53,7 +53,8 @@ export const movingStillReducer = (state = initialState, action) => {
     anchor,
     vectors,
     vector,
-    removeIndex;
+    removeIndex,
+    selection;
   switch (action.type) {
     case actionTypes.SELECT_MOVING_STILL_IMAGE:
       //reset state
@@ -292,13 +293,17 @@ export const movingStillReducer = (state = initialState, action) => {
         currentTool: 'selector',
       };
     case actionTypes.MAKE_SELECTION:
-      console.log('MAKING SELECTION WITH CORNERS: ', action.corners);
+      selection = [];
 
       for (anchor of state.anchors) {
         if (isBounded(action.corners, anchor)) {
           anchor.component
             .attr('stroke', globalStyles.action)
             .attr('fill', globalStyles.action);
+          selection.push({
+            type: 'anchor',
+            obj: anchor,
+          });
         } else {
           anchor.component
             .attr('stroke', globalStyles.anchorColor)
@@ -309,6 +314,10 @@ export const movingStillReducer = (state = initialState, action) => {
       for (vector of state.vectors) {
         if (isBounded(action.corners, vector[1])) {
           vector[1].path.attr('stroke', globalStyles.action);
+          selection.push({
+            type: 'vector',
+            obj: vector,
+          });
         } else {
           vector[1].path.attr('stroke', globalStyles.vectorHeadColor);
         }
@@ -316,7 +325,7 @@ export const movingStillReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        selection: null,
+        selection,
       };
     case actionTypes.DELETE_SELECTION:
       return {
