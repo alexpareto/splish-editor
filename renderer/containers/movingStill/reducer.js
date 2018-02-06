@@ -255,9 +255,21 @@ export const movingStillReducer = (state = initialState, action) => {
         selection,
       };
     case actionTypes.DELETE_SELECTION:
+      vectors = state.vectors;
+      anchors = state.anchors;
+
+      for (vector of state.selection.vectors) {
+        vectors = DrawHelpers.removeVector(vectors, vector);
+      }
+
+      for (anchor of state.selection.anchors) {
+        anchors = DrawHelpers.removeAnchor(anchors, anchor);
+      }
+
       return {
         ...state,
-        selection: null,
+        vectors,
+        anchors,
       };
     default:
       return state;

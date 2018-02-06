@@ -15,6 +15,7 @@ class MovingStill extends React.Component {
     this.shortcuts = new MovingStillShortcuts(
       this.props.undoMovingStill,
       this.props.redoMovingStill,
+      this.props.deleteSelection,
     );
   }
   render() {
@@ -112,6 +113,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.redoMovingStill(actionObject)),
     selectSelectionTool: () => dispatch(Actions.selectSelectionTool()),
     makeSelection: corners => dispatch(Actions.makeSelection(corners)),
+    deleteSelection: () => dispatch(Actions.deleteSelection()),
   };
 };
 

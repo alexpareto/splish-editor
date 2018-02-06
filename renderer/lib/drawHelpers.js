@@ -86,6 +86,7 @@ export const removeVector = (vectorList, vector) => {
   }
 
   vectorList.splice(removeIndex, 1);
+  console.log('ATTEMPTING TO REMOVE VECTOR: ', vector);
   vector[0].path.remove();
   vector[1].path.remove();
 
