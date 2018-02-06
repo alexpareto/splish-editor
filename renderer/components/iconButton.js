@@ -5,7 +5,7 @@ import Button from './button';
 
 export default props => {
   return (
-    <Button onClick={props.onClick} height={40}>
+    <Button onClick={props.onClick} height={40} isActive={props.isActive}>
       <Icon name={props.name} stroke={props.stroke} />
     </Button>
   );
