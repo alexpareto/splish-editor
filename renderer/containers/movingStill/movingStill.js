@@ -15,6 +15,7 @@ class MovingStill extends React.Component {
     this.shortcuts = new MovingStillShortcuts(
       this.props.undoMovingStill,
       this.props.redoMovingStill,
+      this.props.deleteSelection,
     );
   }
   render() {
@@ -46,6 +47,7 @@ class MovingStill extends React.Component {
             movingStillShareComplete={this.props.movingStillShareComplete}
             isRendering={this.props.movingStill.isRendering}
             updateMovingStillDuration={this.props.updateMovingStillDuration}
+            selectSelectionTool={this.props.selectSelectionTool}
             exports={this.props.exports}
             duration={this.props.movingStill.duration}
             resetMovingStillState={this.props.resetMovingStillState}
@@ -73,6 +75,7 @@ class MovingStill extends React.Component {
             boundingRect={this.props.movingStill.boundingRect}
             addVector={this.props.addVector}
             addAnchor={this.props.addAnchor}
+            makeSelection={this.props.makeSelection}
           />
         </div>
       </Holder>
@@ -109,6 +112,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.undoMovingStill(actionObject)),
     redoMovingStill: actionObject =>
       dispatch(Actions.redoMovingStill(actionObject)),
+    selectSelectionTool: () => dispatch(Actions.selectSelectionTool()),
+    makeSelection: corners => dispatch(Actions.makeSelection(corners)),
+    deleteSelection: () =>
+      dispatch(Actions.deleteSelection(false, false, null)),
     resetMovingStillState: () => dispatch(Actions.resetMovingStillState()),
   };
 };

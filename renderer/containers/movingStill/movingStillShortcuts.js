@@ -1,7 +1,8 @@
 class movingStillShortcuts {
-  constructor(undo, redo) {
+  constructor(undo, redo, deleteSelection) {
     this.undo = undo; // cmd + z
     this.redo = redo; // cmd + shft + z
+    this.deleteSelection = deleteSelection;
   }
 
   // logic for the key strokes goes here!
@@ -34,6 +35,14 @@ class movingStillShortcuts {
             console.log('NOTHING TO UNDO');
           }
           return;
+        default:
+          return;
+      }
+    } else {
+      switch (event.keyCode) {
+        case 8:
+          this.deleteSelection();
+          break;
         default:
           return;
       }

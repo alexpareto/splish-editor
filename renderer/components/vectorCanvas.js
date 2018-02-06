@@ -51,11 +51,19 @@ class VectorCanvas extends React.Component {
 
   onMouseDown = mouse => {
     if (this.props.isInitialized) {
-      if (this.props.currentTool == 'vector') {
-        let data = [{ x: mouse[0], y: mouse[1] }, {}];
-        this.setState({ data, isDown: true });
-      } else {
-        this.props.addAnchor({ x: mouse[0], y: mouse[1] });
+      let data;
+      switch (this.props.currentTool) {
+        case 'vector':
+          data = [{ x: mouse[0], y: mouse[1] }, {}];
+          this.setState({ data, isDown: true });
+          break;
+        case 'anchor':
+          this.props.addAnchor({ x: mouse[0], y: mouse[1] });
+          break;
+        case 'selector':
+          data = [{ x: mouse[0], y: mouse[1] }, {}, {}, {}, {}];
+          this.setState({ data, isDown: true });
+          break;
       }
     }
   };
@@ -63,32 +71,60 @@ class VectorCanvas extends React.Component {
   onMouseMove = mouse => {
     if (this.state.isDown && this.props.isInitialized) {
       let path = this.state.path;
-      if (!path) {
-        path = this.state.svg.append('path');
-        path
-          .attr('stroke', '#000')
-          .attr('stroke-width', 1)
-          .attr('stroke-dasharray', '3, 5')
-          .attr('stroke-linecap', 'round');
-        this.setState({ path });
-      }
       let data = this.state.data;
-      data[1] = { x: mouse[0], y: mouse[1] };
-      path.attr('d', this.lineFunction(data));
+      switch (this.props.currentTool) {
+        case 'vector':
+          if (!path) {
+            path = this.state.svg.append('path');
+            path
+              .attr('stroke', globalStyles.vectorPathColor)
+              .attr('stroke-width', 1)
+              .attr('stroke-dasharray', '3, 5')
+              .attr('stroke-linecap', 'round');
+            this.setState({ path });
+          }
+          data[1] = { x: mouse[0], y: mouse[1] };
+          path.attr('d', this.lineFunction(data));
+          break;
+        case 'selector':
+          if (!path) {
+            path = this.state.svg.append('path');
+            path
+              .attr('stroke', globalStyles.selectorOutlineColor)
+              .attr('stroke-width', 1)
+              .attr('stroke-dasharray', '3, 5')
+              .attr('stroke-linecap', 'round')
+              .attr('fill', 'none');
+            this.setState({ path });
+          }
+          data[1] = { x: data[0].x, y: mouse[1] };
+          data[2] = { x: mouse[0], y: mouse[1] };
+          data[3] = { x: mouse[0], y: data[0].y };
+          data[4] = { x: data[0].x, y: data[0].y };
+          path.attr('d', this.lineFunction(data));
+          break;
+      }
     }
   };
 
   onMouseUp = mouse => {
     if (this.props.isInitialized) {
-      if (this.props.currentTool == 'vector') {
-        this.props.addVector([
-          {
-            x: this.state.data[0].x,
-            y: this.state.data[0].y,
-            path: this.state.path,
-          },
-          { x: mouse[0], y: mouse[1] },
-        ]);
+      switch (this.props.currentTool) {
+        case 'vector':
+          this.props.addVector([
+            {
+              x: this.state.data[0].x,
+              y: this.state.data[0].y,
+              path: this.state.path,
+            },
+            { x: mouse[0], y: mouse[1] },
+          ]);
+          break;
+        case 'selector':
+          this.state.path.remove();
+          let corners = [this.state.data[0], this.state.data[2]];
+          this.props.makeSelection(corners);
+          break;
       }
       this.setState({ data: [], isDown: false, path: null });
     }
@@ -136,10 +172,6 @@ class VectorCanvas extends React.Component {
               position: absolute;
               user-select: none;
               cursor: crosshair;
-            }
-            path {
-              stroke-width: 2;
-              stroke: #000;
             }
           `}
         </style>
