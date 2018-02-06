@@ -76,13 +76,25 @@ export const movingStillReducer = (state = initialState, action) => {
         vectorCanvas,
       };
     case actionTypes.SELECT_VECTOR_TOOL:
+      DrawHelpers.clearSelection(state.anchors, state.vectors);
+      selection = {
+        anchors: [],
+        vectors: [],
+      };
       return {
         ...state,
+        selection,
         currentTool: 'vector',
       };
     case actionTypes.SELECT_ANCHOR_TOOL:
+      DrawHelpers.clearSelection(state.anchors, state.vectors);
+      selection = {
+        anchors: [],
+        vectors: [],
+      };
       return {
         ...state,
+        selection,
         currentTool: 'anchor',
       };
     case actionTypes.START_MOVING_STILL_PREVIEW_MODE:

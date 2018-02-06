@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import * as globalStyles from '../globalStyles';
 
 export const isBounded = (corners, point) => {
   const lowerX = corners[0].x < corners[1].x ? corners[0].x : corners[1].x;
@@ -117,4 +118,17 @@ export const removeAnchor = (anchorList, anchor) => {
   anchorList.splice(removeIndex, 1);
   anchor.component.remove();
   return anchorList;
+};
+
+export const clearSelection = (anchors, vectors) => {
+  let anchor, vector;
+  for (anchor of anchors) {
+    anchor.component
+      .attr('fill', globalStyles.anchorColor)
+      .attr('stroke', globalStyles.anchorColor);
+  }
+
+  for (vector of vectors) {
+    vector[1].path.attr('stroke', globalStyles.vectorHeadColor);
+  }
 };
