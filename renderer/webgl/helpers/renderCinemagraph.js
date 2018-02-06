@@ -21,6 +21,7 @@ class Preview {
     this.showOverlay = false;
 
     this.canvas = document.getElementById('cinemagraphcanvas');
+
     this.gl = this.canvas.getContext('webgl');
 
     //state
@@ -230,6 +231,7 @@ class Preview {
   };
 
   render = () => {
+    // no canvas set up so stop rendering
     const resolution = this.resolution;
     let gl = this.gl;
 
@@ -304,6 +306,11 @@ class Preview {
   start = () => {
     this.isPlaying = true;
     this.renderAnimationFrame();
+  };
+
+  stop = () => {
+    this.isPlaying = false;
+    this.video.pause();
   };
 
   renderAnimationFrame = time => {

@@ -327,7 +327,8 @@ export const movingStillReducer = (state = initialState, action) => {
         anchors,
         vectors,
       };
-
+    case actionTypes.RESET_MOVING_STILL_STATE:
+      return initialState;
     default:
       return state;
   }

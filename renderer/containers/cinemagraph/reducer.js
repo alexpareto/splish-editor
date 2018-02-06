@@ -141,6 +141,9 @@ export const cinemagraphReducer = (state = initialState, action) => {
         ...state,
         showOverlay,
       };
+    case actionTypes.RESET_CINEMAGRAPH_STATE:
+      state.preview.stop();
+      return initialState;
     default:
       return state;
   }

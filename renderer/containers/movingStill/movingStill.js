@@ -50,6 +50,7 @@ class MovingStill extends React.Component {
             selectSelectionTool={this.props.selectSelectionTool}
             exports={this.props.exports}
             duration={this.props.movingStill.duration}
+            resetMovingStillState={this.props.resetMovingStillState}
           />
           <MovingStillPreview
             display={showPreview}
@@ -115,6 +116,7 @@ const mapDispatchToProps = dispatch => {
     makeSelection: corners => dispatch(Actions.makeSelection(corners)),
     deleteSelection: () =>
       dispatch(Actions.deleteSelection(false, false, null)),
+    resetMovingStillState: () => dispatch(Actions.resetMovingStillState()),
   };
 };
 

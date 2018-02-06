@@ -21,6 +21,7 @@ export const actionTypes = {
   MAKE_SELECTION: 'MAKE_SELECTION',
   DELETE_SELECTION: 'DELETE_SELECTION',
   ADD_SELECTION: 'ADD_SELECTION',
+  RESET_MOVING_STILL_STATE: 'RESET_MOVING_STILL_STATE',
 };
 
 // ACTIONS
@@ -105,6 +106,7 @@ export const removeVector = (isUndo, isRedo, vector) => {
   return { type: actionTypes.REMOVE_VECTOR, vector, isUndo, isRedo };
 };
 
+
 export const makeSelection = corners => {
   return { type: actionTypes.MAKE_SELECTION, corners };
 };
@@ -119,4 +121,8 @@ export const selectSelectionTool = () => {
 
 export const addSelection = (isUndo, isRedo, selection) => {
   return { type: actionTypes.ADD_SELECTION, isUndo, isRedo, selection };
+};
+
+export const resetMovingStillState = () => {
+  return { type: actionTypes.RESET_MOVING_STILL_STATE };
 };

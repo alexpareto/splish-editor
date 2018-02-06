@@ -8,6 +8,9 @@ import Link from 'next/link';
 import ExportModal from './exportModal';
 import Slider from 'rc-slider';
 import Head from 'next/head';
+import Router from 'next/router';
+
+const electron = require('electron');
 
 import EyeLogo from './eyelogo';
 
@@ -40,6 +43,34 @@ class NavBar extends React.Component {
       this.props.selectSelectionTool();
     } else {
       this.props.initializeMovingStillCanvas('selector');
+    }
+  };
+
+  showQuitDialog = () => {
+    // first show confirm quit
+    const remote = electron.remote || false;
+
+    if (!remote) {
+      return null;
+    }
+    const dialog = remote.dialog;
+
+    if (dialog) {
+      const dialogOpts = {
+        type: 'info',
+        buttons: ['Continue', 'Cancel'],
+        title: 'Back to Main',
+        message: 'Are you sure you want to go back to the main menu?',
+        detail:
+          'You will lose your current progress on this Splish. All exports will remain.',
+      };
+
+      dialog.showMessageBox(dialogOpts, response => {
+        if (response === 0) {
+          Router.push('/mainMenu');
+          this.props.resetMovingStillState();
+        }
+      });
     }
   };
 
@@ -114,12 +145,10 @@ class NavBar extends React.Component {
             </div>
           </div>
           <div>
-            <Link href="/mainMenu" prefetch>
-              <div className="eye-back">
-                <EyeLogo height={30} withText={false} />
-                <span>home</span>
-              </div>
-            </Link>
+            <div className="eye-back" onClick={this.showQuitDialog}>
+              <EyeLogo height={30} withText={false} />
+              <span>home</span>
+            </div>
           </div>
         </div>
         <style jsx>
