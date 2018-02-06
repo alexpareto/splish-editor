@@ -73,6 +73,7 @@ class MovingStill extends React.Component {
             boundingRect={this.props.movingStill.boundingRect}
             addVector={this.props.addVector}
             addAnchor={this.props.addAnchor}
+            makeSelection={this.props.makeSelection}
           />
         </div>
       </Holder>
@@ -109,7 +110,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.undoMovingStill(actionObject)),
     redoMovingStill: actionObject =>
       dispatch(Actions.redoMovingStill(actionObject)),
-    selectSelectionTool: () => dispatch(Action.selectSelectionTool()),
+    selectSelectionTool: () => dispatch(Actions.selectSelectionTool()),
+    makeSelection: corners => dispatch(Actions.makeSelection(corners)),
   };
 };
 

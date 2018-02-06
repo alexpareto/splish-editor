@@ -13,3 +13,7 @@ export const lighterBoxShadow =
   '0 3px 10px 0 rgba(0, 0, 0, 0.6), 0 1px 2px 0 rgba(0, 0, 0, 0.3)';
 export const globalFontSize = '14px';
 export const errorColor = 'red';
+export const vectorPathColor = '#000';
+export const vectorHeadColor = 'red';
+export const anchorColor = '#000';
+export const selectorOutlineColor = '#000';

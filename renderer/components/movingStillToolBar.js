@@ -35,6 +35,14 @@ class NavBar extends React.Component {
     }
   };
 
+  selectorClicked = () => {
+    if (this.props.isInitialized) {
+      this.props.selectSelectionTool();
+    } else {
+      this.props.initializeMovingStillCanvas('selector');
+    }
+  };
+
   render() {
     const exportModal = this.props.showExportModal ? (
       <ExportModal
@@ -58,7 +66,7 @@ class NavBar extends React.Component {
           <img className="icon" src="/static/icons/splish-liquidlogo.png" />
           <div className="controls">
             <IconButton
-              onClick={this.vectorClicked}
+              onClick={this.selectorClicked}
               stroke={globalStyles.accent}
               name="cursor"
               backgroundColor={globalStyles.secondary}

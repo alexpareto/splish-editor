@@ -4,6 +4,7 @@ import * as Actions from './actions';
 import * as d3 from 'd3';
 import getHistory from '../../lib/getHistory';
 import throttleQuality from '../../lib/throttleQuality';
+import isBounded from '../../lib/isBounded';
 
 const initialState = {
   history: {
@@ -291,6 +292,28 @@ export const movingStillReducer = (state = initialState, action) => {
         currentTool: 'selector',
       };
     case actionTypes.MAKE_SELECTION:
+      console.log('MAKING SELECTION WITH CORNERS: ', action.corners);
+
+      for (anchor of state.anchors) {
+        if (isBounded(action.corners, anchor)) {
+          anchor.component
+            .attr('stroke', globalStyles.action)
+            .attr('fill', globalStyles.action);
+        } else {
+          anchor.component
+            .attr('stroke', globalStyles.anchorColor)
+            .attr('fill', globalStyles.anchorColor);
+        }
+      }
+
+      for (vector of state.vectors) {
+        if (isBounded(action.corners, vector[1])) {
+          vector[1].path.attr('stroke', globalStyles.action);
+        } else {
+          vector[1].path.attr('stroke', globalStyles.vectorHeadColor);
+        }
+      }
+
       return {
         ...state,
         selection: null,

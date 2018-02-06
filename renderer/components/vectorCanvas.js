@@ -77,7 +77,7 @@ class VectorCanvas extends React.Component {
           if (!path) {
             path = this.state.svg.append('path');
             path
-              .attr('stroke', '#000')
+              .attr('stroke', globalStyles.vectorPathColor)
               .attr('stroke-width', 1)
               .attr('stroke-dasharray', '3, 5')
               .attr('stroke-linecap', 'round');
@@ -90,10 +90,11 @@ class VectorCanvas extends React.Component {
           if (!path) {
             path = this.state.svg.append('path');
             path
-              .attr('stroke', '#000')
+              .attr('stroke', globalStyles.selectorOutlineColor)
               .attr('stroke-width', 1)
               .attr('stroke-dasharray', '3, 5')
-              .attr('stroke-linecap', 'round');
+              .attr('stroke-linecap', 'round')
+              .attr('fill', 'none');
             this.setState({ path });
           }
           data[1] = { x: data[0].x, y: mouse[1] };
@@ -120,8 +121,8 @@ class VectorCanvas extends React.Component {
           ]);
           break;
         case 'selector':
-          this.path.remove();
-          let corners = [data[0], data[2]];
+          this.state.path.remove();
+          let corners = [this.state.data[0], this.state.data[2]];
           this.props.makeSelection(corners);
           break;
       }
@@ -171,10 +172,6 @@ class VectorCanvas extends React.Component {
               position: absolute;
               user-select: none;
               cursor: crosshair;
-            }
-            path {
-              stroke-width: 2;
-              stroke: #000;
             }
           `}
         </style>
