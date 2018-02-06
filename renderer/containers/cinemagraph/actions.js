@@ -13,6 +13,7 @@ export const actionTypes = {
   SELECT_CINEMAGRAPH_BRUSH_TOOL: 'SELECT_CINEMAGRAPH_BRUSH_TOOL',
   START_CINEMAGRAPH_PREVIEW: 'START_CINEMAGRAPH_PREVIEW',
   TOGGLE_CINEMAGRAPH_OVERLAY: 'TOGGLE_CINEMAGRAPH_OVERLAY',
+  RESET_CINEMAGRAPH_STATE: 'RESET_CINEMAGRAPH_STATE',
 };
 
 export const selectCinemagraphVideo = (
@@ -94,4 +95,8 @@ export const startCinemagraphPreview = callback => {
 
 export const toggleCinemagraphOverlay = () => {
   return { type: actionTypes.TOGGLE_CINEMAGRAPH_OVERLAY };
+};
+
+export const resetCinemagraphState = () => {
+  return { type: actionTypes.RESET_CINEMAGRAPH_STATE };
 };

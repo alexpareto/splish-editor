@@ -49,6 +49,7 @@ class Cinemagraph extends React.Component {
             toggleCinemagraphOverlay={this.props.toggleCinemagraphOverlay}
             showOverlay={this.props.cinemagraph.showOverlay}
             tool={this.props.cinemagraph.tool}
+            resetCinemagraphState={this.props.resetCinemagraphState}
           />
           <CinemagraphCanvas
             initializeCinemagraphCanvas={this.props.initializeCinemagraphCanvas}
@@ -101,6 +102,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.selectCinemagraphEraseTool()),
     toggleCinemagraphOverlay: () =>
       dispatch(Actions.toggleCinemagraphOverlay()),
+    resetCinemagraphState: () => dispatch(Actions.resetCinemagraphState()),
   };
 };
 

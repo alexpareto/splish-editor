@@ -284,6 +284,8 @@ export const movingStillReducer = (state = initialState, action) => {
         ...state,
         duration: action.duration,
       };
+    case actionTypes.RESET_MOVING_STILL_STATE:
+      return initialState;
     default:
       return state;
   }
