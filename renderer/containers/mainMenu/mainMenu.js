@@ -19,6 +19,8 @@ import * as MovingStillActions from '../movingStill/actions';
 import FileSelection from '../../components/fileSelection';
 import { getBoundingRect, setWindowSize } from '../../lib/windowSizeHelpers';
 import sizeOf from 'image-size';
+import electron from 'electron';
+import fs from 'fs';
 
 class MainMenu extends React.Component {
   constructor(props) {
@@ -55,18 +57,54 @@ class MainMenu extends React.Component {
 
       console.log('METADATA: ', metadata);
 
-      let naturalDimensions;
+      let naturalDimensions, duration;
       for (let i = 0; i < 4; i++) {
         naturalDimensions = {
           width: metadata.streams[i].coded_width,
           height: metadata.streams[i].coded_height,
         };
 
+        duration = metadata.streams[i].duration;
+
         if (naturalDimensions.width && naturalDimensions.height) {
           break;
         }
       }
 
+      const remote = electron.remote || false;
+
+      if (!remote) {
+        return;
+      }
+
+      const dir = remote.app.getPath('temp') + 'thumbnails/';
+
+      console.log('WRITING THUMBNAILS TO: ', dir);
+
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+
+      fs.readdir(dir, (err, files) => {
+        if (files) {
+          for (const file of files) {
+            fs.unlinkSync(dir + file);
+          }
+        }
+        let command = ffmpeg();
+
+        command
+          .input(videoPath)
+          .withInputFps(25)
+          .fps(3)
+          .output(dir + '%03d.jpg')
+          .on('end', () => {
+            console.log('WROTE IMAGES');
+          })
+          .run();
+      });
+
+      const numThumbNails = Math.floor(duration);
       const hPadding = 120;
       const vPadding = 180;
       const headerSize = 100; // height of toolbar at top
@@ -81,6 +119,7 @@ class MainMenu extends React.Component {
         videoPath,
         naturalDimensions,
         boundingRect,
+        numThumbNails,
       );
 
       Router.push('/cinemagraph');
