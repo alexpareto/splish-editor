@@ -31,7 +31,7 @@ class Login extends React.Component {
       email: '',
       password: '',
       passwordConfirm: '',
-      showLogin: true,
+      showLogin: false,
       hasError: false,
       errorMessage: '',
     };
@@ -92,6 +92,12 @@ class Login extends React.Component {
     this.props.signUpUser(this.state.email, this.state.password);
   };
 
+  _handleLoginKeyPress = e => {
+    if (e.key === 'Enter') {
+      this.onLoginButtonClick(e);
+    }
+  };
+
   renderLogin = () => {
     if (!this.state.showLogin) {
       return null;
@@ -114,6 +120,7 @@ class Login extends React.Component {
             placeholder="password"
             value={this.state.password}
             onChange={this.handleInputChange}
+            onKeyPress={this._handleLoginKeyPress}
           />
           <span className="confirm-button">
             <Button onClick={this.onLoginButtonClick}>login</Button>
@@ -141,6 +148,12 @@ class Login extends React.Component {
         `}</style>
       </div>
     );
+  };
+
+  _handleSignUpKeyPress = e => {
+    if (e.key === 'Enter') {
+      this.onSignUpButtonClick(e);
+    }
   };
 
   renderSignUp = () => {
@@ -175,6 +188,7 @@ class Login extends React.Component {
             placeholder="confirm password"
             value={this.state.passwordConfirm}
             onChange={this.handleInputChange}
+            onKeyPress={this._handleSignUpKeyPress}
           />
           <span className="confirm-button">
             <Button onClick={this.onSignUpButtonClick}>sign up</Button>
