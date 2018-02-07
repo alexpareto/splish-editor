@@ -382,7 +382,7 @@ class Preview {
       if (this.isCapturing) {
         window.requestAnimationFrame(this.renderAnimationFrame);
       } else {
-        const time = this.isSeeking ? 80 : 40;
+        const time = this.isSeeking ? 150 : 40;
         setTimeout(() => {
           this.renderAnimationFrame();
         }, time);

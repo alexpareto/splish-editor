@@ -84,7 +84,7 @@ class Trimmer extends React.Component {
     });
     this.props.startSeeking();
     event.preventDefault();
-    setTimeout(this.requestAnimationFrame, 80);
+    setTimeout(this.requestAnimationFrame, 150);
   };
 
   mouseDownRight = event => {
@@ -95,13 +95,13 @@ class Trimmer extends React.Component {
     });
     this.props.startSeeking();
     event.preventDefault();
-    setTimeout(this.requestAnimationFrame, 80);
+    setTimeout(this.requestAnimationFrame, 150);
   };
 
   requestAnimationFrame = () => {
     if (this.state.isSeeking) {
       this.video.currentTime = this.state.currentTime;
-      setTimeout(this.requestAnimationFrame, 80);
+      setTimeout(this.requestAnimationFrame, 150);
     }
   };
 
