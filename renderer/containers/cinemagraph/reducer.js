@@ -33,6 +33,8 @@ const initialState = {
   tool: 'eraser',
   thumbnailsLoaded: false,
   numThumbnails: 0,
+  videoStartTime: 0,
+  videoEndTime: 10,
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
@@ -153,12 +155,16 @@ export const cinemagraphReducer = (state = initialState, action) => {
         thumbnailsLoaded: true,
       };
     case actionTypes.CINEMAGRAPH_TRIM_FRONT:
+      state.preview.updateTrim(action.time, state.videoEndTime);
       return {
         ...state,
+        videoStartTime: action.time,
       };
     case actionTypes.CINEMAGRAPH_TRIM_BACK:
+      state.preview.updateTrim(state.videoStartTime, action.time);
       return {
         ...state,
+        videoEndTime: action.time,
       };
     case actionTypes.CINEMAGRAPH_SET_STILL_FRAME:
       return {

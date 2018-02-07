@@ -51,22 +51,22 @@ class Trimmer extends React.Component {
     this.video.addEventListener('loadedmetadata', () => {
       console.log('DURATION: ', this.video.duration);
       this.duration = this.video.duration;
+      this.resetTicker();
     });
 
     this.video.addEventListener('seeked', this.resetTicker);
-    this.video.addEventListener('play', this.resetTicker);
   }
 
   resetTicker = () => {
     if (!this.state.isSeeking) {
-      const timeToAnimate = this.duration - this.video.currentTime;
-      const width = this.win.getBounds().width - 2 * this.trimmerHPadding;
-      const currentPos = width * (this.video.currentTime / this.duration);
+      const timeToAnimate =
+        Math.min(this.duration, this.props.videoEndTime) -
+        this.video.currentTime;
 
       this.ticker.animate(
         [
-          { transform: `translate3d(${currentPos}px, 0px, 0px)` },
-          { transform: `translate3d(${width}px, 0px, 0px)` },
+          { transform: `translate3d(0px, 0px, 0px)` },
+          { transform: `translate3d(${this.trimmerWidth}px, 0px, 0px)` },
         ],
         {
           duration: timeToAnimate * 1000,
@@ -77,12 +77,12 @@ class Trimmer extends React.Component {
   };
 
   mouseDownLeft = event => {
-    this.setState({ isDownLeft: true });
+    this.setState({ isDownLeft: true, isSeeking: true });
     event.preventDefault();
   };
 
   mouseDownRight = event => {
-    this.setState({ isDownRight: true });
+    this.setState({ isDownRight: true, isSeeking: true });
     event.preventDefault();
   };
 
@@ -109,7 +109,6 @@ class Trimmer extends React.Component {
       this.trimmerRight.style.marginLeft = `${this.trimmerWidth - 2}px`;
     }
 
-    // this.setState({isSeeking: !this.state.isSeeking});
     event.preventDefault();
   };
 
@@ -118,6 +117,19 @@ class Trimmer extends React.Component {
   };
 
   mouseUpTrimmer = event => {
+    if (this.state.isDownLeft) {
+      const trimTime =
+        (this.trimmerMarginLeft + 5) / this.width * this.duration;
+      this.props.cinemagraphTrimFront(trimTime);
+      this.ticker.style.marginLeft = `${this.trimmerMarginLeft + 5}px`;
+    } else if (this.state.isDownRight) {
+      const trimTime =
+        (this.trimmerMarginLeft + 5 + this.trimmerWidth) /
+        this.width *
+        this.duration;
+      this.props.cinemagraphTrimBack(trimTime);
+    }
+
     this.setState({
       isSeeking: false,
       isDownRight: false,

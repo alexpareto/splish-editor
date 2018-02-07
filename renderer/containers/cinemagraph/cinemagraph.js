@@ -65,12 +65,17 @@ class Cinemagraph extends React.Component {
             startCinemagraphPreview={this.props.startCinemagraphPreview}
             preview={this.props.cinemagraph.preview}
             showOverlay={this.props.cinemagraph.showOverlay}
+            videoStartTime={this.props.cinemagraph.videoStartTime}
             tool={this.props.cinemagraph.tool}
           />
           <CinemagraphTrimmer
+            videoStartTime={this.props.cinemagraph.videoStartTime}
+            videoEndTime={this.props.cinemagraph.videoEndTime}
             thumbnailsLoaded={this.props.cinemagraph.thumbnailsLoaded}
             numThumbnails={this.props.cinemagraph.numThumbnails}
             videoDimensions={this.props.cinemagraph.previewDimensions}
+            cinemagraphTrimBack={this.props.cinemagraphTrimBack}
+            cinemagraphTrimFront={this.props.cinemagraphTrimFront}
           />
         </div>
       </Holder>
@@ -107,6 +112,8 @@ const mapDispatchToProps = dispatch => {
     toggleCinemagraphOverlay: () =>
       dispatch(Actions.toggleCinemagraphOverlay()),
     resetCinemagraphState: () => dispatch(Actions.resetCinemagraphState()),
+    cinemagraphTrimFront: time => dispatch(Actions.cinemagraphTrimFront(time)),
+    cinemagraphTrimBack: time => dispatch(Actions.cinemagraphTrimBack(time)),
   };
 };
 

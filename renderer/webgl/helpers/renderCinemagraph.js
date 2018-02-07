@@ -35,7 +35,10 @@ class Preview {
     this.ctx = this.canvas2d.getContext('2d');
 
     this.video = document.getElementById('cinemagraphVideo');
+    this.video.onended = this.restartVideo;
     this.duration = this.video.duration;
+    this.startTime = 0;
+    this.endTime = this.duration;
     this.videoWidth = previewDimensions.width;
     this.videoHeight = previewDimensions.height;
     this.vidTexture = this.gl.createTexture();
@@ -222,6 +225,19 @@ class Preview {
     }
   };
 
+  restartVideo = () => {
+    // console.log("RESTARTING VIDEO");
+    this.video.currentTime = this.startTime;
+    this.video.play();
+  };
+
+  updateTrim = (startTime, endTime) => {
+    console.log('UPDATING TRIM TO ', startTime, endTime);
+    this.endTime = endTime;
+    this.startTime = startTime;
+    this.duration = endTime - startTime;
+  };
+
   setMask = mask => {
     this.brushedImage.data.set(mask);
   };
@@ -325,6 +341,10 @@ class Preview {
         this.isCapturing = false;
         this.videoUploader.upload();
       }
+    }
+
+    if (this.video.currentTime >= this.endTime) {
+      this.restartVideo();
     }
 
     // preview at a lower framerate than 60fps
