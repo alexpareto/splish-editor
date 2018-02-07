@@ -19,6 +19,7 @@ import * as MovingStillActions from '../movingStill/actions';
 import FileSelection from '../../components/fileSelection';
 import { getBoundingRect, setWindowSize } from '../../lib/windowSizeHelpers';
 import sizeOf from 'image-size';
+import A from '../../components/a';
 
 class MainMenu extends React.Component {
   constructor(props) {
@@ -143,15 +144,6 @@ class MainMenu extends React.Component {
             </div>
           </Link>
           <FileSelection
-            type="video"
-            filesHandler={this.initializeAndOpenCinemagraph}
-          >
-            <div className="action-button">
-              <img className="icon" src="/static/icons/splish-solidlogo.png" />
-              <span>cinemagrapher</span>
-            </div>
-          </FileSelection>
-          <FileSelection
             type="img"
             filesHandler={this.initializeAndOpenMovingStill}
           >
@@ -160,9 +152,27 @@ class MainMenu extends React.Component {
               <span>animagrapher</span>
             </div>
           </FileSelection>
+          <FileSelection
+            type="video"
+            filesHandler={this.initializeAndOpenCinemagraph}
+          >
+            <div className="action-button">
+              <img className="icon" src="/static/icons/splish-solidlogo.png" />
+              <span>cinemagrapher</span>
+            </div>
+          </FileSelection>
+          <Link href="/tutorials" prefetch>
+            <div className="tutorials-link">
+              <A>getting started tutorials</A>
+            </div>
+          </Link>
         </div>
         <style jsx>
           {`
+            .tutorials-link {
+              height: 70px;
+            }
+
             .eye-logo {
               position: absolute;
               top: 5px;
