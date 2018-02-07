@@ -18,6 +18,7 @@ export const actionTypes = {
   CINEMAGRAPH_TRIM_FRONT: 'TRIM_FRONT',
   CINEMAGRAPH_TRIM_BACK: 'TRIM_BACK',
   CINEMAGRAPH_SET_STILL_FRAME: 'CINEMAGRAPH_SET_STILL_FRAME',
+  CINEMAGRAPH_START_SEEKING: 'CINEMAGRAPH_START_SEEKING',
 };
 
 export const selectCinemagraphVideo = (
@@ -120,5 +121,9 @@ export const cinemagraphTrimBack = time => {
 };
 
 export const cinemagraphSetStillFrame = time => {
-  return { type: actionTypes.CINEMAGRAPH, time };
+  return { type: actionTypes.CINEMAGRAPH_SET_STILL_FRAME, time };
+};
+
+export const cinemagraphStartSeeking = () => {
+  return { type: actionTypes.CINEMAGRAPH_START_SEEKING };
 };

@@ -35,6 +35,7 @@ const initialState = {
   numThumbnails: 0,
   videoStartTime: 0,
   videoEndTime: 10,
+  isSeeking: false,
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
@@ -155,20 +156,29 @@ export const cinemagraphReducer = (state = initialState, action) => {
         thumbnailsLoaded: true,
       };
     case actionTypes.CINEMAGRAPH_TRIM_FRONT:
+      state.preview.setSeeking(false);
       state.preview.updateTrim(action.time, state.videoEndTime);
       return {
         ...state,
         videoStartTime: action.time,
       };
     case actionTypes.CINEMAGRAPH_TRIM_BACK:
+      state.preview.setSeeking(false);
       state.preview.updateTrim(state.videoStartTime, action.time);
       return {
         ...state,
         videoEndTime: action.time,
+        isSeeking: false,
       };
     case actionTypes.CINEMAGRAPH_SET_STILL_FRAME:
       return {
         ...state,
+      };
+    case actionTypes.CINEMAGRAPH_START_SEEKING:
+      state.preview.setSeeking(true);
+      return {
+        ...state,
+        isSeeking: true,
       };
     default:
       return state;

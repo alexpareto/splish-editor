@@ -78,11 +78,13 @@ class Trimmer extends React.Component {
 
   mouseDownLeft = event => {
     this.setState({ isDownLeft: true, isSeeking: true });
+    this.props.startSeeking();
     event.preventDefault();
   };
 
   mouseDownRight = event => {
     this.setState({ isDownRight: true, isSeeking: true });
+    this.props.startSeeking();
     event.preventDefault();
   };
 
@@ -97,6 +99,8 @@ class Trimmer extends React.Component {
       this.trimmer.style.width = `${this.trimmerWidth}px`;
       this.trimmer.style.marginLeft = `${this.trimmerMarginLeft}px`;
       this.trimmerRight.style.marginLeft = `${this.trimmerWidth - 2}px`;
+      this.video.currentTime =
+        (this.trimmerMarginLeft + 5) / this.width * this.duration;
     } else if (this.state.isDownRight) {
       const windowWidth = this.win.getBounds().width;
       this.trimmerMarginRight = Math.max(
@@ -107,6 +111,10 @@ class Trimmer extends React.Component {
         this.width - this.trimmerMarginLeft - this.trimmerMarginRight - 5;
       this.trimmer.style.width = `${this.trimmerWidth}px`;
       this.trimmerRight.style.marginLeft = `${this.trimmerWidth - 2}px`;
+      this.video.currentTime =
+        (this.trimmerMarginLeft + 5 + this.trimmerWidth) /
+        this.width *
+        this.duration;
     }
 
     event.preventDefault();
