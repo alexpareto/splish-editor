@@ -10,8 +10,8 @@ class Trimmer extends React.Component {
       isSeeking: false,
       isDownLeft: false,
       isDownRight: false,
-      isDownSeek: false,
       isDownStill: false,
+      currentTime: 0,
     };
 
     this.wrapperHeight = 70;
@@ -77,15 +77,32 @@ class Trimmer extends React.Component {
   };
 
   mouseDownLeft = event => {
-    this.setState({ isDownLeft: true, isSeeking: true });
+    this.setState({
+      isDownLeft: true,
+      isSeeking: true,
+      currentTime: this.video.currentTime,
+    });
     this.props.startSeeking();
     event.preventDefault();
+    setTimeout(this.requestAnimationFrame, 80);
   };
 
   mouseDownRight = event => {
-    this.setState({ isDownRight: true, isSeeking: true });
+    this.setState({
+      isDownRight: true,
+      isSeeking: true,
+      currentTime: this.video.currentTime,
+    });
     this.props.startSeeking();
     event.preventDefault();
+    setTimeout(this.requestAnimationFrame, 80);
+  };
+
+  requestAnimationFrame = () => {
+    if (this.state.isSeeking) {
+      this.video.currentTime = this.state.currentTime;
+      setTimeout(this.requestAnimationFrame, 80);
+    }
   };
 
   mouseMoveTrimmer = event => {
@@ -99,8 +116,10 @@ class Trimmer extends React.Component {
       this.trimmer.style.width = `${this.trimmerWidth}px`;
       this.trimmer.style.marginLeft = `${this.trimmerMarginLeft}px`;
       this.trimmerRight.style.marginLeft = `${this.trimmerWidth - 2}px`;
-      this.video.currentTime =
-        (this.trimmerMarginLeft + 5) / this.width * this.duration;
+
+      this.setState({
+        currentTime: (this.trimmerMarginLeft + 5) / this.width * this.duration,
+      });
     } else if (this.state.isDownRight) {
       const windowWidth = this.win.getBounds().width;
       this.trimmerMarginRight = Math.max(
@@ -111,10 +130,13 @@ class Trimmer extends React.Component {
         this.width - this.trimmerMarginLeft - this.trimmerMarginRight - 5;
       this.trimmer.style.width = `${this.trimmerWidth}px`;
       this.trimmerRight.style.marginLeft = `${this.trimmerWidth - 2}px`;
-      this.video.currentTime =
-        (this.trimmerMarginLeft + 5 + this.trimmerWidth) /
-        this.width *
-        this.duration;
+
+      this.setState({
+        currentTime:
+          (this.trimmerMarginLeft + 5 + this.trimmerWidth) /
+          this.width *
+          this.duration,
+      });
     }
 
     event.preventDefault();
@@ -229,6 +251,7 @@ class Trimmer extends React.Component {
           	}
 
           	.ticker {
+          		display: ${this.state.isSeekign ? 'hidden' : 'block'};
           		width: 2px;
           		background-color: ${globalStyles.action};
           		height: ${this.trimmerHeight}px;

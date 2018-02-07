@@ -73,7 +73,7 @@ class Preview {
 
   capture = () => {
     this.captureProgress = 0;
-    this.video.currentTime = 0;
+    this.video.currentTime = this.startTime;
     this.capturer.start();
     this.isCapturing = true;
   };
@@ -251,7 +251,6 @@ class Preview {
   };
 
   updateTrim = (startTime, endTime) => {
-    console.log('UPDATING TRIM TO ', startTime, endTime);
     this.endTime = endTime;
     this.startTime = startTime;
     this.duration = endTime - startTime;
@@ -358,6 +357,14 @@ class Preview {
 
     if (this.isCapturing) {
       this.captureProgress++;
+      console.log(
+        'CAPTURING WITH PROGRESS ',
+        this.captureProgress,
+        ' OF ',
+        this.framerate,
+        '*',
+        this.duration,
+      );
       if (this.captureProgress > this.framerate * this.duration) {
         this.capturer.stop();
         this.isCapturing = false;
@@ -375,9 +382,10 @@ class Preview {
       if (this.isCapturing) {
         window.requestAnimationFrame(this.renderAnimationFrame);
       } else {
+        const time = this.isSeeking ? 80 : 40;
         setTimeout(() => {
           this.renderAnimationFrame();
-        }, 40);
+        }, time);
       }
     }
   };

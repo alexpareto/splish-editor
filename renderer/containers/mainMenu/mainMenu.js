@@ -121,6 +121,7 @@ class MainMenu extends React.Component {
         naturalDimensions,
         boundingRect,
         numThumbnails,
+        duration,
       );
 
       Router.push('/cinemagraph');
@@ -266,6 +267,7 @@ const mapDispatchToProps = dispatch => {
       naturalDimensions,
       boundingRect,
       numThumbnails,
+      duration,
     ) =>
       dispatch(
         CinemagraphActions.selectCinemagraphVideo(
@@ -273,6 +275,7 @@ const mapDispatchToProps = dispatch => {
           naturalDimensions,
           boundingRect,
           numThumbnails,
+          duration,
         ),
       ),
     selectMovingStillImage: (imgPath, naturalDimensions, boundingRect) =>

@@ -52,6 +52,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
         videoPath: action.videoPath,
         previewDimensions,
         numbThumbnails: action.numThumbnails,
+        videoEndTime: action.duration,
       };
     case actionTypes.START_CINEMAGRAPH_PREVIEW:
       preview = new Preview(
