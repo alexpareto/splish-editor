@@ -44,7 +44,7 @@ class ExportItem extends React.Component {
           <VisibilitySensor onChange={this.onVisibilityChange} />
           <video
             loop
-            height={this.props.height}
+            height="100%"
             ref={video => (this.video = video)}
             preload="none"
           >
@@ -59,7 +59,7 @@ class ExportItem extends React.Component {
               font-family: ${globalStyles.fontFamily};
               transition: all 0.2s ease;
               box-shadow: ${globalStyles.lighterBoxShadow};
-              height: 200px;
+              height: ${this.props.height};
               margin: 10px;
               position: relative;
             }
