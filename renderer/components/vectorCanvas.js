@@ -104,11 +104,12 @@ class VectorCanvas extends React.Component {
           path.attr('d', this.lineFunction(data));
           break;
       }
+      this.setState({ hasMoved: true });
     }
   };
 
   onMouseUp = mouse => {
-    if (this.props.isInitialized) {
+    if (this.props.isInitialized && this.state.hasMoved) {
       switch (this.props.currentTool) {
         case 'vector':
           this.props.addVector([
@@ -126,8 +127,8 @@ class VectorCanvas extends React.Component {
           this.props.makeSelection(corners);
           break;
       }
-      this.setState({ data: [], isDown: false, path: null });
     }
+    this.setState({ data: [], isDown: false, path: null, hasMoved: false });
   };
 
   render() {
