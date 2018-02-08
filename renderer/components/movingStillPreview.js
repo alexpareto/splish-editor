@@ -35,10 +35,8 @@ class MovingStillPreview extends React.Component {
               const file = new File([data], 'output.txt', {
                 type: 'video/mp4',
               });
-
-              this.props.uploadExportRequest(file);
+              this.props.movingStillExportComplete(file);
             });
-            this.props.movingStillExportComplete();
           },
         );
       }

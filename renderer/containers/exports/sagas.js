@@ -18,11 +18,14 @@ const postToAWS = (signedUrlData, file) => {
   return fetch(signedUrlData.url, options);
 };
 
-const verifyWithDb = signedUrl => {
+const verifyWithDb = (signedUrl, title, description, license) => {
   console.log(signedUrl);
   const getUrl = signedUrl.substring(0, signedUrl.indexOf('?'));
   let body = new FormData();
   body.append('get_url', getUrl);
+  body.append('title', title);
+  body.append('description', description);
+  body.append('license', license);
   return api.call('exports/new', 'POST', body);
 };
 
@@ -41,7 +44,13 @@ function* uploadExport(action) {
     }
 
     // now create an entry in the DB
-    const verifyWithDbRes = yield call(verifyWithDb, signedUrlData.url);
+    const verifyWithDbRes = yield call(
+      verifyWithDb,
+      signedUrlData.url,
+      action.title,
+      action.description,
+      action.license,
+    );
     if (!verifyWithDbRes.ok) {
       throw new Error(
         `${verifyWithDbRes.status}: ${verifyWithDbRes.statusText}`,

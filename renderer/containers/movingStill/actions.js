@@ -78,8 +78,8 @@ export const startExportingMovingStill = () => {
   return { type: actionTypes.START_EXPORTING_MOVING_STILL };
 };
 
-export const movingStillExportComplete = () => {
-  return { type: actionTypes.MOVING_STILL_EXPORT_COMPLETE };
+export const movingStillExportComplete = file => {
+  return { type: actionTypes.MOVING_STILL_EXPORT_COMPLETE, file };
 };
 
 export const movingStillShareComplete = () => {
@@ -105,7 +105,6 @@ export const removeAnchor = (isUndo, isRedo, anchor) => {
 export const removeVector = (isUndo, isRedo, vector) => {
   return { type: actionTypes.REMOVE_VECTOR, vector, isUndo, isRedo };
 };
-
 
 export const makeSelection = corners => {
   return { type: actionTypes.MAKE_SELECTION, corners };

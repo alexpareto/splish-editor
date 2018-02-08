@@ -38,7 +38,11 @@ class Cinemagraph extends React.Component {
             startExportingCinemagraph={this.props.startExportingCinemagraph}
             cinemagraphShareComplete={this.props.cinemagraphShareComplete}
             showExportModal={this.props.cinemagraph.showExportModal}
+            exportFile={this.props.cinemagraph.file}
             isRendering={this.props.cinemagraph.isRendering}
+            isUploading={this.props.isUploading}
+            lastUploadedExport={this.props.lastUploadedExport}
+            uploadExportRequest={this.props.uploadExportRequest}
             updateCinemagraphBrushBlur={this.props.updateCinemagraphBrushBlur}
             updateCinemagraphBrushSize={this.props.updateCinemagraphBrushSize}
             selectCinemagraphBrushTool={this.props.selectCinemagraphBrushTool}
@@ -58,7 +62,6 @@ class Cinemagraph extends React.Component {
             isRendering={this.props.cinemagraph.isRendering}
             previewDimensions={this.props.cinemagraph.previewDimensions}
             cinemagraphExportComplete={this.props.cinemagraphExportComplete}
-            uploadExportRequest={this.props.uploadExportRequest}
             brushSize={this.props.cinemagraph.brushSize}
             brushBlur={this.props.cinemagraph.brushBlur}
             addCinemagraphBrushStroke={this.props.addCinemagraphBrushStroke}
@@ -89,10 +92,12 @@ const mapDispatchToProps = dispatch => {
   return {
     startExportingCinemagraph: () =>
       dispatch(Actions.startExportingCinemagraph()),
-    uploadExportRequest: file =>
-      dispatch(ExportActions.uploadExportRequest(file)),
-    cinemagraphExportComplete: () =>
-      dispatch(Actions.cinemagraphExportComplete()),
+    uploadExportRequest: (file, title, description, license) =>
+      dispatch(
+        ExportActions.uploadExportRequest(file, title, description, license),
+      ),
+    cinemagraphExportComplete: file =>
+      dispatch(Actions.cinemagraphExportComplete(file)),
     cinemagraphShareComplete: () =>
       dispatch(Actions.cinemagraphShareComplete()),
     updateCinemagraphBrushBlur: brushBlur =>
@@ -125,6 +130,8 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => ({
   cinemagraph: state.cinemagraph,
   exports: state.exports.exports,
+  isUploading: state.exports.uploadRequestSent,
+  lastUploadedExport: state.exports.lastUploadedExport,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cinemagraph);

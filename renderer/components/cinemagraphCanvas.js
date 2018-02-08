@@ -46,10 +46,8 @@ class CinemagraphPreview extends React.Component {
           const file = new File([data], 'output.mp4', {
             type: 'video/mp4',
           });
-
-          this.props.uploadExportRequest(file);
+          this.props.cinemagraphExportComplete(file);
         });
-        this.props.cinemagraphExportComplete();
       });
       this.setState({ hasLoaded: true });
     }
