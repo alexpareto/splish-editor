@@ -62,7 +62,13 @@ class Trimmer extends React.Component {
         Math.min(this.duration, this.props.videoEndTime) -
         this.video.currentTime;
 
-      this.ticker.animate(
+      console.log('TICKER', this.ticker);
+
+      if (this.animation) {
+        this.animation.cancel();
+      }
+
+      this.animation = this.ticker.animate(
         [
           { transform: `translate3d(0px, 0px, 0px)` },
           { transform: `translate3d(${this.trimmerWidth}px, 0px, 0px)` },

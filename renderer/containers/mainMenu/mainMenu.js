@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 import Router from 'next/router';
+import Head from 'next/head';
+import { Tooltip } from 'react-tippy';
 
 import checkLoggedIn from '../../lib/checkLoggedIn.js';
 import redirect from '../../lib/redirect.js';
@@ -180,33 +182,61 @@ class MainMenu extends React.Component {
     }
     return (
       <Holder>
+        <Head>
+          <link rel="stylesheet" type="text/css" href="/static/css/tippy.css" />
+        </Head>
+
         <div className="eye-logo">
           <EyeLogo height={30} withText={true} />
         </div>
         <div className="button-holder">
-          <Link href="/profile" prefetch>
-            <div className="action-button">
-              <img className="icon" src="/static/icons/splish-proficon.png" />
-              <span>profile</span>
-            </div>
-          </Link>
+          <Tooltip
+            title="see your projects and setup your account"
+            theme="light"
+            position="right"
+          >
+            <Link href="/profile" prefetch>
+              <div className="action-button">
+                <img className="icon" src="/static/icons/splish-proficon.png" />
+                <span>profile</span>
+              </div>
+            </Link>
+          </Tooltip>
           <FileSelection
             type="img"
             filesHandler={this.initializeAndOpenMovingStill}
           >
-            <div className="action-button">
-              <img className="icon" src="/static/icons/splish-liquidlogo.png" />
-              <span>animagrapher</span>
-            </div>
+            <Tooltip
+              title="use vectors to add motion to a photo"
+              theme="light"
+              position="right"
+            >
+              <div className="action-button">
+                <img
+                  className="icon"
+                  src="/static/icons/splish-liquidlogo.png"
+                />
+                <span>animagrapher</span>
+              </div>
+            </Tooltip>
           </FileSelection>
           <FileSelection
             type="video"
             filesHandler={this.initializeAndOpenCinemagraph}
           >
-            <div className="action-button">
-              <img className="icon" src="/static/icons/splish-solidlogo.png" />
-              <span>cinemagrapher</span>
-            </div>
+            <Tooltip
+              title="freeze areas of a video"
+              theme="light"
+              position="right"
+            >
+              <div className="action-button">
+                <img
+                  className="icon"
+                  src="/static/icons/splish-solidlogo.png"
+                />
+                <span>cinemagrapher</span>
+              </div>
+            </Tooltip>
           </FileSelection>
           <Link href="/tutorials" prefetch>
             <div className="tutorials-link">
@@ -232,7 +262,7 @@ class MainMenu extends React.Component {
             }
 
             .button-holder {
-              width: 30%;
+              width: 40%;
               display: inline-flex;
               box-sizing: border-box;
               flex-direction: column;

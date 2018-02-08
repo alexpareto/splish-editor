@@ -32,6 +32,35 @@ class NavBar extends React.Component {
     }
   };
 
+  showCinemagraphLengthDialog = () => {
+    // first show confirm quit
+    const remote = electron.remote || false;
+
+    if (!remote) {
+      return null;
+    }
+    const { dialog } = remote;
+
+    if (dialog) {
+      const dialogOpts = {
+        type: 'info',
+        buttons: ['Okay'],
+        message: 'Video Too Long!',
+        detail: `Splish only supports exports that are less than six seconds. Please trim your cinemagraph to under six seconds!`,
+      };
+
+      dialog.showMessageBox(dialogOpts);
+    }
+  };
+
+  exportCinemagraph = () => {
+    if (this.props.duration > 7) {
+      this.showCinemagraphLengthDialog();
+    } else {
+      this.props.startExportingCinemagraph();
+    }
+  };
+
   showQuitDialog = () => {
     // first show confirm quit
     const remote = electron.remote || false;
@@ -93,7 +122,7 @@ class NavBar extends React.Component {
                 stroke={globalStyles.accent}
                 name="share"
                 backgroundColor={globalStyles.secondary}
-                onClick={this.props.startExportingCinemagraph}
+                onClick={this.exportCinemagraph}
               />
             </Tooltip>
           </div>
@@ -167,6 +196,7 @@ class NavBar extends React.Component {
               />
               <span className="level-label">{this.state.brushBlur}0%</span>
             </div>
+            <div> Length: {this.props.duration.toFixed(1)}s </div>
           </div>
           <div>
             <div className="eye-back" onClick={this.showQuitDialog}>
