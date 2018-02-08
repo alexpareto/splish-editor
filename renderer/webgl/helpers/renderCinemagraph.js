@@ -388,14 +388,6 @@ class Preview {
 
     if (this.isCapturing) {
       this.captureProgress++;
-      console.log(
-        'CAPTURING WITH PROGRESS ',
-        this.captureProgress,
-        ' OF ',
-        this.framerate,
-        '*',
-        this.duration,
-      );
       if (this.captureProgress > this.framerate * this.duration) {
         this.capturer.stop();
         this.isCapturing = false;
