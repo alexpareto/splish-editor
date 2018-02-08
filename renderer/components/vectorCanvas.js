@@ -22,6 +22,7 @@ class VectorCanvas extends React.Component {
     const md = this.onMouseDown;
     const mm = this.onMouseMove;
     const mu = this.onMouseUp;
+    const mc = this.onClick;
 
     svg
       .on('mousedown', function() {
@@ -35,6 +36,10 @@ class VectorCanvas extends React.Component {
       .on('mouseup', function() {
         const m3 = d3.mouse(this);
         mu(m3);
+      })
+      .on('click', function() {
+        const m4 = d3.mouse(this);
+        mc(m4);
       });
 
     this.setState({ svg });
@@ -63,6 +68,16 @@ class VectorCanvas extends React.Component {
         case 'selector':
           data = [{ x: mouse[0], y: mouse[1] }, {}, {}, {}, {}];
           this.setState({ data, isDown: true });
+          break;
+      }
+    }
+  };
+
+  onClick = mouse => {
+    if (this.props.isInitialized) {
+      switch (this.props.currentTool) {
+        case 'selector':
+          this.props.makeSelection(null);
           break;
       }
     }
