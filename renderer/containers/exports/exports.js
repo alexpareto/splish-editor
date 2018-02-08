@@ -18,16 +18,17 @@ class Exports extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      height: '200px',
+    };
   }
 
   async componentDidMount() {
-    const data = await checkLoggedIn();
-    if (!data) {
-      Router.push('/login');
-    }
     this.props.getExports();
 
+    this.setState({
+      height: window.innerHeight / 3 + 'px',
+    });
     //this.getExportInterval = setInterval(this.props.getExports, 3000);
   }
 
@@ -49,7 +50,7 @@ class Exports extends React.Component {
               key={exportObject.id}
               videoUrl={exportObject.video_url}
               shareLink={'https://splish.io/e/' + exportObject.public_id}
-              height="200px"
+              height={this.state.height}
             />
           );
         })}
