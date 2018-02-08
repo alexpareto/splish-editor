@@ -81,6 +81,7 @@ class NavBar extends React.Component {
         isRendering={this.props.isRendering}
         isUploading={this.props.isUploading}
         exportFile={this.props.exportFile}
+        videoDimensions={this.props.videoDimensions}
         lastUploadedExport={this.props.lastUploadedExport}
         uploadExportRequest={this.props.uploadExportRequest}
         exports={this.props.exports}

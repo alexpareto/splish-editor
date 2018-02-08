@@ -45,6 +45,7 @@ class MovingStill extends React.Component {
             startExportingMovingStill={this.props.startExportingMovingStill}
             showExportModal={this.props.movingStill.showExportModal}
             movingStillShareComplete={this.props.movingStillShareComplete}
+            videoDimensions={this.props.movingStill.previewDimensions}
             isRendering={this.props.movingStill.isRendering}
             isUploading={this.props.isUploading}
             lastUploadedExport={this.props.lastUploadedExport}

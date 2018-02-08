@@ -8,20 +8,43 @@ export default (outputPath, videoDimensions, callback) => {
     return;
   }
 
-  this.dir = remote.app.getPath('temp');
+  const pixels = videoDimensions.width * videoDimensions.height;
+  let size = 1;
+  let waterMarkWidth = 100;
+  let waterMarkHeight = 26;
+
+  const mark1 = 50000;
+  const mark2 = 1500000;
+
+  if (pixels > mark2) {
+    size = 3;
+    waterMarkWidth = 250;
+    waterMarkHeight = 66;
+  } else if (pixels > mark2) {
+    size = 2;
+    waterMarkWidth = 150;
+    waterMarkHeight = 39;
+  }
+
+  const dir = remote.app.getPath('temp') + 'frames/';
 
   const ffmpeg = getFfmpeg();
   let command = ffmpeg();
+  console.log('WATERMARK WIDTH ', waterMarkWidth);
 
   command
-    .input(this.dir + 'output.mp4')
-    .input('./renderer/static/icons/watermark-1.png')
+    .input(dir + 'output.mp4')
+    .input(`./renderer/static/icons/watermark-${size}.png`)
     .inputFPS(25)
     .fps(25)
-    .complexFilter('overlay=10:10')
+    .complexFilter(
+      `overlay=${videoDimensions.width -
+        (waterMarkWidth + 10)}:${videoDimensions.height -
+        (waterMarkHeight + 10)}`,
+    )
     .output(outputPath)
     .on('end', () => {
-      console.log('UPLOADING');
+      callback();
     })
     .run();
 };

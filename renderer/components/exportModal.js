@@ -5,6 +5,9 @@ import Loading from './loading';
 import Button from './button';
 import Input from './input';
 import TextArea from './textarea';
+import FileSaver from './fileSaver';
+import exportWithWaterMark from '../lib/exportWithWaterMark';
+import electron from 'electron';
 
 class ExportModal extends React.Component {
   constructor(props) {
@@ -41,6 +44,34 @@ class ExportModal extends React.Component {
       );
     }
   }
+
+  showExportSuccessDialog = () => {
+    // first show confirm quit
+    const remote = electron.remote || false;
+
+    if (!remote) {
+      return null;
+    }
+    const { dialog } = remote;
+
+    if (dialog) {
+      const dialogOpts = {
+        type: 'info',
+        buttons: ['okay'],
+        message: 'Your splish was successfully exported with a watermark!',
+      };
+
+      dialog.showMessageBox(dialogOpts);
+    }
+  };
+
+  export = path => {
+    exportWithWaterMark(
+      path,
+      this.props.videoDimensions,
+      this.showExportSuccessDialog,
+    );
+  };
 
   handleInputChange = event => {
     const target = event.target;
@@ -219,7 +250,13 @@ class ExportModal extends React.Component {
       <div>
         <span>All rendered! Share your splish with this link:</span>
         <span style={{ userSelect: 'auto' }}> {shareLink} </span>
-        <Button onClick={this.props.onComplete}>done</Button>
+        <span> or </span>
+        <FileSaver fileHandler={this.export}>
+          <Button>download with watermark</Button>
+        </FileSaver>
+        <div className="closeButton">
+          <Button onClick={this.props.onComplete}>close</Button>
+        </div>
         <style jsx>{`
           div {
             display: flex;
@@ -230,6 +267,10 @@ class ExportModal extends React.Component {
 
           span {
             margin: 5px 0;
+          }
+
+          .closeButton {
+            margin-top: 10px;
           }
         `}</style>
       </div>
