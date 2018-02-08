@@ -20,7 +20,10 @@ const postToAWS = (signedUrlData, file) => {
 
 const verifyWithDb = (signedUrl, title, description, license) => {
   console.log(signedUrl);
-  const getUrl = signedUrl.substring(0, signedUrl.indexOf('?'));
+  const getUrl = signedUrl
+    .substring(0, signedUrl.indexOf('?'))
+    .replace('splish-exports.s3.amazonaws.com', 'cdn.splish.io');
+
   let body = new FormData();
   body.append('get_url', getUrl);
   body.append('title', title);
