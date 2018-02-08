@@ -39,27 +39,6 @@ class MainMenu extends React.Component {
     }
   }
 
-  showCinemagraphLengthDialog = () => {
-    // first show confirm quit
-    const remote = electron.remote || false;
-
-    if (!remote) {
-      return null;
-    }
-    const { dialog } = remote;
-
-    if (dialog) {
-      const dialogOpts = {
-        type: 'info',
-        buttons: ['Okay'],
-        message: 'Video Too Long!',
-        detail: `Splish only supports cinemagraphs that are less than six seconds. Please trim your video or try starting with one that is a little shorter!`,
-      };
-
-      dialog.showMessageBox(dialogOpts);
-    }
-  };
-
   // get all the dimensions
   initializeAndOpenCinemagraph = files => {
     // hit endpoint to track start project
@@ -91,11 +70,6 @@ class MainMenu extends React.Component {
         if (naturalDimensions.width && naturalDimensions.height) {
           break;
         }
-      }
-
-      if (duration > 6) {
-        this.showCinemagraphLengthDialog();
-        return;
       }
 
       const remote = electron.remote || false;

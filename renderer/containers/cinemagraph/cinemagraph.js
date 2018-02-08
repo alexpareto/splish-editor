@@ -34,6 +34,7 @@ class Cinemagraph extends React.Component {
           tabIndex="0"
         >
           <NavBar
+            duration={this.props.cinemagraph.duration}
             selectCinemagraphVideo={this.props.selectCinemagraphVideo}
             startExportingCinemagraph={this.props.startExportingCinemagraph}
             cinemagraphShareComplete={this.props.cinemagraphShareComplete}

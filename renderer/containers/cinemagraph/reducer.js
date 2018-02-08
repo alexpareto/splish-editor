@@ -36,6 +36,7 @@ const initialState = {
   videoStartTime: 0,
   videoEndTime: 10,
   isSeeking: false,
+  duration: 0,
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
@@ -54,6 +55,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
         previewDimensions,
         numbThumbnails: action.numThumbnails,
         videoEndTime: action.duration,
+        duration: action.duration,
       };
     case actionTypes.START_CINEMAGRAPH_PREVIEW:
       preview = new Preview(
@@ -162,6 +164,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
       state.preview.updateTrim(action.time, state.videoEndTime);
       return {
         ...state,
+        duration: state.videoEndTime - action.time,
         videoStartTime: action.time,
       };
     case actionTypes.CINEMAGRAPH_TRIM_BACK:
@@ -169,6 +172,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
       state.preview.updateTrim(state.videoStartTime, action.time);
       return {
         ...state,
+        duration: action.time - state.videoStartTime,
         videoEndTime: action.time,
         isSeeking: false,
       };
