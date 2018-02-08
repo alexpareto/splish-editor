@@ -1,5 +1,7 @@
 import getFfmpeg from './getFfmpeg';
 import electron from 'electron';
+import path from 'path';
+import isDev from 'electron-is-dev';
 
 export default (outputPath, videoDimensions, callback) => {
   const remote = electron.remote || false;
@@ -7,6 +9,8 @@ export default (outputPath, videoDimensions, callback) => {
   if (!remote) {
     return;
   }
+
+  let win = remote.getCurrentWindow();
 
   const pixels = videoDimensions.width * videoDimensions.height;
   let size = 1;
@@ -30,11 +34,12 @@ export default (outputPath, videoDimensions, callback) => {
 
   const ffmpeg = getFfmpeg();
   let command = ffmpeg();
-  console.log('WATERMARK WIDTH ', waterMarkWidth);
 
   command
     .input(dir + 'output.mp4')
-    .input(`./renderer/static/icons/watermark-${size}.png`)
+    .input(
+      `https://s3-us-west-2.amazonaws.com/splish-assets/icons/watermark-${size}.png`,
+    )
     .inputFPS(25)
     .fps(25)
     .complexFilter(
