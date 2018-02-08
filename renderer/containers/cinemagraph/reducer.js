@@ -27,6 +27,7 @@ const initialState = {
     width: 0,
     height: 0,
   },
+  file: null,
   showOverlay: false,
   showExportModal: false,
   isRendering: false,
@@ -125,6 +126,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
     case actionTypes.CINEMAGRAPH_EXPORT_COMPLETE:
       return {
         ...state,
+        file: action.file,
         isRendering: false,
       };
     case actionTypes.CINEMAGRAPH_SHARE_COMPLETE:

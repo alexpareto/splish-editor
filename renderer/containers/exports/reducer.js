@@ -6,6 +6,7 @@ const initialState = {
   getRequestSent: false,
   getRequestError: false,
   exports: [],
+  lastUploadedExport: {},
 };
 
 export const exportReducer = (state = initialState, action) => {
@@ -16,6 +17,7 @@ export const exportReducer = (state = initialState, action) => {
         ...state,
         uploadRequestSent: true,
         uploadHasError: false,
+        lastUploadedExport: {},
       };
     case actionTypes.UPLOAD_EXPORT_FAILURE:
       return {
@@ -28,6 +30,7 @@ export const exportReducer = (state = initialState, action) => {
         ...state,
         uploadRequestSent: false,
         uploadHasError: false,
+        lastUploadedExport: action.data,
       };
     /* sign up */
     case actionTypes.GET_EXPORTS_REQUEST:

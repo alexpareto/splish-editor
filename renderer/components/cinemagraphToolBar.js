@@ -64,6 +64,10 @@ class NavBar extends React.Component {
     const exportModal = this.props.showExportModal ? (
       <ExportModal
         isRendering={this.props.isRendering}
+        exportFile={this.props.exportFile}
+        isUploading={this.props.isUploading}
+        lastUploadedExport={this.props.lastUploadedExport}
+        uploadExportRequest={this.props.uploadExportRequest}
         exports={this.props.exports}
         onComplete={this.props.cinemagraphShareComplete}
       />
