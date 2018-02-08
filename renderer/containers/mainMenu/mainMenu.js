@@ -19,7 +19,10 @@ import * as MovingStillActions from '../movingStill/actions';
 import FileSelection from '../../components/fileSelection';
 import { getBoundingRect, setWindowSize } from '../../lib/windowSizeHelpers';
 import sizeOf from 'image-size';
+import electron from 'electron';
+import fs from 'fs';
 import A from '../../components/a';
+
 
 class MainMenu extends React.Component {
   constructor(props) {
@@ -56,32 +59,71 @@ class MainMenu extends React.Component {
 
       console.log('METADATA: ', metadata);
 
-      let naturalDimensions;
+      let naturalDimensions, duration;
       for (let i = 0; i < 4; i++) {
         naturalDimensions = {
           width: metadata.streams[i].coded_width,
           height: metadata.streams[i].coded_height,
         };
 
+        duration = metadata.streams[i].duration;
+
         if (naturalDimensions.width && naturalDimensions.height) {
           break;
         }
       }
 
+      const remote = electron.remote || false;
+
+      if (!remote) {
+        return;
+      }
+
+      const dir = remote.app.getPath('temp') + 'thumbnails/';
+
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+
+      fs.readdir(dir, (err, files) => {
+        if (files) {
+          for (const file of files) {
+            fs.unlinkSync(dir + file);
+          }
+        }
+        let command = ffmpeg();
+
+        // load 3 thumbnails per second of video
+        command
+          .input(videoPath)
+          .withInputFps(25)
+          .fps(3)
+          .output(dir + '%02d.jpg')
+          .on('end', () => {
+            this.props.loadThumbnails();
+          })
+          .run();
+      });
+
+      const numThumbnails = Math.floor(duration) * 3;
       const hPadding = 120;
-      const vPadding = 180;
+      const vPadding = 220;
       const headerSize = 100; // height of toolbar at top
+      const footerSize = 60;
       const boundingRect = getBoundingRect(
         naturalDimensions,
         hPadding,
         vPadding,
         headerSize,
+        footerSize,
       );
 
       this.props.selectCinemagraphVideo(
         videoPath,
         naturalDimensions,
         boundingRect,
+        numThumbnails,
+        duration,
       );
 
       Router.push('/cinemagraph');
@@ -108,11 +150,13 @@ class MainMenu extends React.Component {
       const hPadding = 120;
       const vPadding = 180;
       const headerSize = 100; // height of toolbar at top
+      const footerSize = 0;
       const boundingRect = getBoundingRect(
         naturalDimensions,
         hPadding,
         vPadding,
         headerSize,
+        footerSize,
       );
 
       this.props.selectMovingStillImage(
@@ -229,12 +273,20 @@ const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => {
   return {
     logout: () => dispatch(logoutUser()),
-    selectCinemagraphVideo: (videoPath, naturalDimensions, boundingRect) =>
+    selectCinemagraphVideo: (
+      videoPath,
+      naturalDimensions,
+      boundingRect,
+      numThumbnails,
+      duration,
+    ) =>
       dispatch(
         CinemagraphActions.selectCinemagraphVideo(
           videoPath,
           naturalDimensions,
           boundingRect,
+          numThumbnails,
+          duration,
         ),
       ),
     selectMovingStillImage: (imgPath, naturalDimensions, boundingRect) =>
@@ -245,6 +297,7 @@ const mapDispatchToProps = dispatch => {
           boundingRect,
         ),
       ),
+    loadThumbnails: () => dispatch(CinemagraphActions.loadThumbnails()),
   };
 };
 

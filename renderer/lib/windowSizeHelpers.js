@@ -7,6 +7,7 @@ export const getBoundingRect = (
   hPadding,
   vPadding,
   headerSize,
+  footerSize,
 ) => {
   const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
 
@@ -36,7 +37,7 @@ export const getBoundingRect = (
 
   return {
     x: hPadding / 2,
-    y: (vPadding - headerSize) / 2 + headerSize,
+    y: (vPadding - (headerSize + footerSize)) / 2 + headerSize,
     width: boundingWidth,
     height: boundingHeight,
   };

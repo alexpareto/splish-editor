@@ -76,7 +76,7 @@ class CinemagraphPreview extends React.Component {
           width={this.props.boundingRect.width}
           autoPlay={true}
           onPlay={this.startPreview}
-          loop
+          // loop
           // need to include both cuz handled
           // differently on client and server
           muted={true}
@@ -111,7 +111,7 @@ class CinemagraphPreview extends React.Component {
         <style jsx>{`
           .overlay {
             z-index: 0;
-            background-color: #ffffff;
+            background-color: ${globalStyles.background};
             width: 100%;
             height: 100vh;
             position: absolute;

@@ -31,6 +31,11 @@ const initialState = {
   showExportModal: false,
   isRendering: false,
   tool: 'eraser',
+  thumbnailsLoaded: false,
+  numThumbnails: 0,
+  videoStartTime: 0,
+  videoEndTime: 10,
+  isSeeking: false,
 };
 
 export const cinemagraphReducer = (state = initialState, action) => {
@@ -41,11 +46,14 @@ export const cinemagraphReducer = (state = initialState, action) => {
       state = initialState;
 
       const previewDimensions = throttleQuality(action.naturalDimensions, '2K');
+      console.log('THE ORIGINAL DURATION IS: ', action.duration);
       return {
         ...state,
         boundingRect: action.boundingRect,
         videoPath: action.videoPath,
         previewDimensions,
+        numbThumbnails: action.numThumbnails,
+        videoEndTime: action.duration,
       };
     case actionTypes.START_CINEMAGRAPH_PREVIEW:
       preview = new Preview(
@@ -144,6 +152,45 @@ export const cinemagraphReducer = (state = initialState, action) => {
     case actionTypes.RESET_CINEMAGRAPH_STATE:
       state.preview.stop();
       return initialState;
+    case actionTypes.LOAD_THUMBNAILS:
+      return {
+        ...state,
+        thumbnailsLoaded: true,
+      };
+    case actionTypes.CINEMAGRAPH_TRIM_FRONT:
+      state.preview.setSeeking(false);
+      state.preview.updateTrim(action.time, state.videoEndTime);
+      return {
+        ...state,
+        videoStartTime: action.time,
+      };
+    case actionTypes.CINEMAGRAPH_TRIM_BACK:
+      state.preview.setSeeking(false);
+      state.preview.updateTrim(state.videoStartTime, action.time);
+      return {
+        ...state,
+        videoEndTime: action.time,
+        isSeeking: false,
+      };
+    case actionTypes.CINEMAGRAPH_SET_STILL_FRAME:
+      state.preview.setStillFrame();
+
+      // todo is implement undo/redo for this
+      history = {
+        redoStack: [],
+        undoStack: [],
+      };
+
+      return {
+        ...state,
+        history,
+      };
+    case actionTypes.CINEMAGRAPH_START_SEEKING:
+      state.preview.setSeeking(true);
+      return {
+        ...state,
+        isSeeking: true,
+      };
     default:
       return state;
   }

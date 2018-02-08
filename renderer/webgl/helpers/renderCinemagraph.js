@@ -35,13 +35,20 @@ class Preview {
     this.ctx = this.canvas2d.getContext('2d');
 
     this.video = document.getElementById('cinemagraphVideo');
+    this.video.onended = this.restartVideo;
     this.duration = this.video.duration;
+    this.startTime = 0;
+    this.endTime = this.duration;
     this.videoWidth = previewDimensions.width;
     this.videoHeight = previewDimensions.height;
     this.vidTexture = this.gl.createTexture();
     this.imgTexture = this.gl.createTexture();
     this.originalImage = [];
     this.brushedImage = [];
+    this.everyOther = true;
+
+    this.isSeeking = false;
+    this.isChoosingStill = false;
 
     // video capturing
     let CCapture;
@@ -66,7 +73,7 @@ class Preview {
 
   capture = () => {
     this.captureProgress = 0;
-    this.video.currentTime = 0;
+    this.video.currentTime = this.startTime;
     this.capturer.start();
     this.isCapturing = true;
   };
@@ -123,10 +130,16 @@ class Preview {
         'show_overlay',
       );
 
+      this.pictureprogram.is_seeking = gl.getUniformLocation(
+        this.pictureprogram,
+        'is_seeking',
+      );
+
       // Set the texture to use.
       gl.uniform1i(this.pictureprogram.u_image0, 0);
       gl.uniform1i(this.pictureprogram.u_image1, 1);
       gl.uniform1i(this.pictureprogram.show_overlay, 2);
+      gl.uniform1i(this.pictureprogram.is_seeking, 3);
     } catch (e) {
       console.log('ERROR MAKING SHADERS: ', e);
       return;
@@ -163,6 +176,42 @@ class Preview {
 
   setShowOverlay = newOverlay => {
     this.showOverlay = newOverlay;
+  };
+
+  setSeeking = isSeeking => {
+    this.isSeeking = isSeeking;
+    if (isSeeking) {
+      this.video.pause();
+    } else {
+      this.video.play();
+    }
+  };
+
+  setStillFrame = () => {
+    this.ctx.drawImage(this.video, 0, 0, this.videoWidth, this.videoHeight);
+
+    this.originalImage = this.ctx.getImageData(
+      0,
+      0,
+      this.videoWidth,
+      this.videoHeight,
+    );
+
+    let tempData = new Uint8ClampedArray(this.brushedImage.data);
+
+    this.brushedImage = this.ctx.getImageData(
+      0,
+      0,
+      this.videoWidth,
+      this.videoHeight,
+    );
+    const l = this.brushedImage.data.length / 4;
+
+    for (let i = 0; i < l; i++) {
+      this.brushedImage.data[i * 4 + 3] = tempData[i * 4 + 3];
+    }
+
+    this.setSeeking(false);
   };
 
   update = (newPoint, brushSize, brushBlur, brushTool) => {
@@ -222,6 +271,21 @@ class Preview {
     }
   };
 
+  restartVideo = () => {
+    if (!this.isSeeking) {
+      this.video.currentTime = this.startTime;
+      this.video.play();
+    }
+  };
+
+  updateTrim = (startTime, endTime) => {
+    console.log('UPDATING TRIM TO ', startTime, endTime);
+    this.endTime = endTime;
+    this.startTime = startTime;
+    this.duration = endTime - startTime;
+    this.video.currentTime = this.startTime;
+  };
+
   setMask = mask => {
     this.brushedImage.data.set(mask);
   };
@@ -249,8 +313,6 @@ class Preview {
 
     // for now just take a snapshot of the first frame played
     // as the still image
-    // TODO: seek to a specified still image in the video and
-    // set that!
     if (!this.hasRendered) {
       this.ctx.drawImage(this.video, 0, 0, this.videoWidth, this.videoHeight);
 
@@ -300,6 +362,11 @@ class Preview {
       this.showOverlay,
     );
 
+    gl.uniform1i(
+      gl.getUniformLocation(this.pictureprogram, 'is_seeking'),
+      this.isSeeking,
+    );
+
     gl.drawArrays(gl.TRIANGLES, 0, resolution * resolution * 2 * 3);
   };
 
@@ -310,6 +377,7 @@ class Preview {
 
   stop = () => {
     this.isPlaying = false;
+    console.log('PAUSING HERE');
     this.video.pause();
   };
 
@@ -320,11 +388,23 @@ class Preview {
 
     if (this.isCapturing) {
       this.captureProgress++;
+      console.log(
+        'CAPTURING WITH PROGRESS ',
+        this.captureProgress,
+        ' OF ',
+        this.framerate,
+        '*',
+        this.duration,
+      );
       if (this.captureProgress > this.framerate * this.duration) {
         this.capturer.stop();
         this.isCapturing = false;
         this.videoUploader.upload();
       }
+    }
+
+    if (this.video.currentTime >= this.endTime) {
+      this.restartVideo();
     }
 
     // preview at a lower framerate than 60fps
@@ -333,9 +413,10 @@ class Preview {
       if (this.isCapturing) {
         window.requestAnimationFrame(this.renderAnimationFrame);
       } else {
+        const time = this.isSeeking ? 60 : 40;
         setTimeout(() => {
           this.renderAnimationFrame();
-        }, 40);
+        }, time);
       }
     }
   };
