@@ -1,7 +1,5 @@
 import getFfmpeg from './getFfmpeg';
 import electron from 'electron';
-import path from 'path';
-import isDev from 'electron-is-dev';
 
 export default (outputPath, videoDimensions, callback) => {
   const remote = electron.remote || false;
@@ -9,8 +7,6 @@ export default (outputPath, videoDimensions, callback) => {
   if (!remote) {
     return;
   }
-
-  let win = remote.getCurrentWindow();
 
   const pixels = videoDimensions.width * videoDimensions.height;
   let size = 1;
