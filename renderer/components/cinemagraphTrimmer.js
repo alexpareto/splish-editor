@@ -48,7 +48,6 @@ class Trimmer extends React.Component {
     this.trimmerRight = document.getElementById('cinemagraphTrimmerRight');
 
     this.video.addEventListener('loadedmetadata', () => {
-      console.log('DURATION: ', this.video.duration);
       this.duration = this.video.duration;
       this.resetTicker();
     });
@@ -61,8 +60,6 @@ class Trimmer extends React.Component {
       const timeToAnimate =
         Math.min(this.duration, this.props.videoEndTime) -
         this.video.currentTime;
-
-      console.log('TICKER', this.ticker);
 
       if (this.animation) {
         this.animation.cancel();

@@ -6989,6 +6989,6 @@ yauzl@2.4.1:
   dependencies:
     fd-slicer "~1.0.1"
 
-zcapture.js@^0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/zcapture.js/-/zcapture.js-0.0.9.tgz#cd8c735e125d711b082c94de82138ede6a1b9e2b"
+zcapture.js@^0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/zcapture.js/-/zcapture.js-0.0.16.tgz#e98ade5515b995b00f93475602c783d228cfd168"
