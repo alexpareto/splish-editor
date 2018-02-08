@@ -294,9 +294,16 @@ class Preview {
 
     this.capturer.capture(this.canvas);
 
+    let duration = this.duration;
+
+    if (this.duration < 3) {
+      const mult = Math.ceil(3.0 / this.duration);
+      duration *= mult;
+    }
+
     if (this.isCapturing) {
       this.captureProgress++;
-      if (this.captureProgress > framerate * this.duration) {
+      if (this.captureProgress > framerate * duration) {
         this.isCapturing = false;
         this.capturer.stop();
         this.videoUploader.upload();
