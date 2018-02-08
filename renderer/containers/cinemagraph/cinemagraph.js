@@ -77,6 +77,7 @@ class Cinemagraph extends React.Component {
             cinemagraphTrimBack={this.props.cinemagraphTrimBack}
             cinemagraphTrimFront={this.props.cinemagraphTrimFront}
             startSeeking={this.props.cinemagraphStartSeeking}
+            cinemagraphSetStillFrame={this.props.cinemagraphSetStillFrame}
           />
         </div>
       </Holder>
@@ -116,6 +117,8 @@ const mapDispatchToProps = dispatch => {
     cinemagraphTrimFront: time => dispatch(Actions.cinemagraphTrimFront(time)),
     cinemagraphTrimBack: time => dispatch(Actions.cinemagraphTrimBack(time)),
     cinemagraphStartSeeking: () => dispatch(Actions.cinemagraphStartSeeking()),
+    cinemagraphSetStillFrame: time =>
+      dispatch(Actions.cinemagraphSetStillFrame(time)),
   };
 };
 

@@ -173,8 +173,17 @@ export const cinemagraphReducer = (state = initialState, action) => {
         isSeeking: false,
       };
     case actionTypes.CINEMAGRAPH_SET_STILL_FRAME:
+      state.preview.setStillFrame();
+
+      // todo is implement undo/redo for this
+      history = {
+        redoStack: [],
+        undoStack: [],
+      };
+
       return {
         ...state,
+        history,
       };
     case actionTypes.CINEMAGRAPH_START_SEEKING:
       state.preview.setSeeking(true);

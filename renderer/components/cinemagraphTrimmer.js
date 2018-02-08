@@ -143,7 +143,14 @@ class Trimmer extends React.Component {
     event.preventDefault();
   };
 
-  dragStillEnd = event => {};
+  dragStillEnd = event => {
+    this.requestAnimationFrame();
+    this.setState({ isSeeking: false });
+    setTimeout(() => {
+      this.props.cinemagraphSetStillFrame(this.currentTime);
+      this.ticker.style.display = 'block';
+    }, 50);
+  };
 
   requestAnimationFrame = () => {
     if (this.state.isSeeking) {

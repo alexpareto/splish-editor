@@ -187,6 +187,33 @@ class Preview {
     }
   };
 
+  setStillFrame = () => {
+    this.ctx.drawImage(this.video, 0, 0, this.videoWidth, this.videoHeight);
+
+    this.originalImage = this.ctx.getImageData(
+      0,
+      0,
+      this.videoWidth,
+      this.videoHeight,
+    );
+
+    let tempData = new Uint8ClampedArray(this.brushedImage.data);
+
+    this.brushedImage = this.ctx.getImageData(
+      0,
+      0,
+      this.videoWidth,
+      this.videoHeight,
+    );
+    const l = this.brushedImage.data.length / 4;
+
+    for (let i = 0; i < l; i++) {
+      this.brushedImage.data[i * 4 + 3] = tempData[i * 4 + 3];
+    }
+
+    this.setSeeking(false);
+  };
+
   update = (newPoint, brushSize, brushBlur, brushTool) => {
     const normalizedPoint = this.normalizedPoint(
       newPoint[0],
