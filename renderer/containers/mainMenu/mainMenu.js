@@ -190,18 +190,18 @@ class MainMenu extends React.Component {
           <EyeLogo height={30} withText={true} />
         </div>
         <div className="button-holder">
-          <Link href="/profile" prefetch>
-            <Tooltip
-              title="see your projects and setup your account"
-              theme="light"
-              position="right"
-            >
+          <Tooltip
+            title="see your projects and setup your account"
+            theme="light"
+            position="right"
+          >
+            <Link href="/profile" prefetch>
               <div className="action-button">
                 <img className="icon" src="/static/icons/splish-proficon.png" />
                 <span>profile</span>
               </div>
-            </Tooltip>
-          </Link>
+            </Link>
+          </Tooltip>
           <FileSelection
             type="img"
             filesHandler={this.initializeAndOpenMovingStill}
