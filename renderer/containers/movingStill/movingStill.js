@@ -46,6 +46,10 @@ class MovingStill extends React.Component {
             showExportModal={this.props.movingStill.showExportModal}
             movingStillShareComplete={this.props.movingStillShareComplete}
             isRendering={this.props.movingStill.isRendering}
+            isUploading={this.props.isUploading}
+            lastUploadedExport={this.props.lastUploadedExport}
+            exportFile={this.props.movingStill.file}
+            uploadExportRequest={this.props.uploadExportRequest}
             updateMovingStillDuration={this.props.updateMovingStillDuration}
             selectSelectionTool={this.props.selectSelectionTool}
             exports={this.props.exports}
@@ -65,7 +69,6 @@ class MovingStill extends React.Component {
             boundingRect={this.props.movingStill.boundingRect}
             isRendering={this.props.movingStill.isRendering}
             movingStillExportComplete={this.props.movingStillExportComplete}
-            uploadExportRequest={this.props.uploadExportRequest}
             duration={this.props.movingStill.duration}
           />
           <VectorCanvas
@@ -101,10 +104,12 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.updateAnimationParams(params)),
     startExportingMovingStill: () =>
       dispatch(Actions.startExportingMovingStill()),
-    movingStillExportComplete: () =>
-      dispatch(Actions.movingStillExportComplete()),
-    uploadExportRequest: file =>
-      dispatch(ExportActions.uploadExportRequest(file)),
+    movingStillExportComplete: file =>
+      dispatch(Actions.movingStillExportComplete(file)),
+    uploadExportRequest: (file, title, description, license) =>
+      dispatch(
+        ExportActions.uploadExportRequest(file, title, description, license),
+      ),
     movingStillShareComplete: () =>
       dispatch(Actions.movingStillShareComplete()),
     updateMovingStillDuration: duration =>
@@ -124,6 +129,8 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => ({
   movingStill: state.movingStill,
   exports: state.exports.exports,
+  isUploading: state.exports.uploadRequestSent,
+  lastUploadedExport: state.exports.lastUploadedExport,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovingStill);

@@ -7,8 +7,14 @@ export const actionTypes = {
   GET_EXPORTS_SUCCESS: 'GET_EXPORTS_SUCCESS',
 };
 
-export const uploadExportRequest = file => {
-  return { type: actionTypes.UPLOAD_EXPORT_REQUEST, file };
+export const uploadExportRequest = (file, title, description, license) => {
+  return {
+    type: actionTypes.UPLOAD_EXPORT_REQUEST,
+    file,
+    title,
+    description,
+    license,
+  };
 };
 
 export const uploadExportFailure = errorMessage => {

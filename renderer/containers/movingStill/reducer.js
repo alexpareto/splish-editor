@@ -42,6 +42,7 @@ const initialState = {
   isRendering: false,
   shareLink: '',
   duration: 3.0,
+  file: null,
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -207,6 +208,7 @@ export const movingStillReducer = (state = initialState, action) => {
     case actionTypes.MOVING_STILL_EXPORT_COMPLETE:
       return {
         ...state,
+        file: action.file,
         isRendering: false,
       };
     case actionTypes.MOVING_STILL_SHARE_COMPLETE:
@@ -264,6 +266,10 @@ export const movingStillReducer = (state = initialState, action) => {
         selection = action.selection;
       } else {
         selection = state.selection;
+      }
+
+      if (!selection.vectors && !selection.anchors) {
+        return state;
       }
 
       for (vector of selection.vectors) {

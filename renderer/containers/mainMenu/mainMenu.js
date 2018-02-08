@@ -23,7 +23,6 @@ import electron from 'electron';
 import fs from 'fs';
 import A from '../../components/a';
 
-
 class MainMenu extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +42,9 @@ class MainMenu extends React.Component {
   // get all the dimensions
   initializeAndOpenCinemagraph = files => {
     // hit endpoint to track start project
-    api.call('exports/start', 'POST').then(res => {
+    let body = new FormData();
+    body.append('project_type', 'CG');
+    api.call('exports/start', 'POST', body).then(res => {
       if (res.ok) {
         console.log('all good fam');
       }
@@ -134,7 +135,9 @@ class MainMenu extends React.Component {
 
   initializeAndOpenMovingStill = files => {
     // hit endpoint to track start project
-    api.call('exports/start', 'POST').then(res => {
+    let body = new FormData();
+    body.append('project_type', 'MS');
+    api.call('exports/start', 'POST', body).then(res => {
       if (res.ok) {
         console.log('all good fam');
       }

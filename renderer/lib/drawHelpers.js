@@ -2,6 +2,10 @@ import * as d3 from 'd3';
 import * as globalStyles from '../globalStyles';
 
 export const isBounded = (corners, point) => {
+  if (!corners || !point) {
+    return false;
+  }
+
   const lowerX = corners[0].x < corners[1].x ? corners[0].x : corners[1].x;
   const upperX = corners[0].x >= corners[1].x ? corners[0].x : corners[1].x;
   const lowerY = corners[0].y < corners[1].y ? corners[0].y : corners[1].y;

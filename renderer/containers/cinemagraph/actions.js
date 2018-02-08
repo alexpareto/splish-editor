@@ -62,8 +62,8 @@ export const startExportingCinemagraph = () => {
   return { type: actionTypes.START_EXPORTING_CINEMAGRAPH };
 };
 
-export const cinemagraphExportComplete = () => {
-  return { type: actionTypes.CINEMAGRAPH_EXPORT_COMPLETE };
+export const cinemagraphExportComplete = file => {
+  return { type: actionTypes.CINEMAGRAPH_EXPORT_COMPLETE, file };
 };
 
 export const cinemagraphShareComplete = () => {
