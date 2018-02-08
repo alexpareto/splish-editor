@@ -245,15 +245,18 @@ class Preview {
   };
 
   restartVideo = () => {
-    // console.log("RESTARTING VIDEO");
-    this.video.currentTime = this.startTime;
-    this.video.play();
+    if (!this.isSeeking) {
+      this.video.currentTime = this.startTime;
+      this.video.play();
+    }
   };
 
   updateTrim = (startTime, endTime) => {
+    console.log('UPDATING TRIM TO ', startTime, endTime);
     this.endTime = endTime;
     this.startTime = startTime;
     this.duration = endTime - startTime;
+    this.video.currentTime = this.startTime;
   };
 
   setMask = mask => {
@@ -347,6 +350,7 @@ class Preview {
 
   stop = () => {
     this.isPlaying = false;
+    console.log('PAUSING HERE');
     this.video.pause();
   };
 
@@ -382,7 +386,7 @@ class Preview {
       if (this.isCapturing) {
         window.requestAnimationFrame(this.renderAnimationFrame);
       } else {
-        const time = this.isSeeking ? 150 : 40;
+        const time = this.isSeeking ? 60 : 40;
         setTimeout(() => {
           this.renderAnimationFrame();
         }, time);

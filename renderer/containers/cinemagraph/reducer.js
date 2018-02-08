@@ -46,6 +46,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
       state = initialState;
 
       const previewDimensions = throttleQuality(action.naturalDimensions, '2K');
+      console.log('THE ORIGINAL DURATION IS: ', action.duration);
       return {
         ...state,
         boundingRect: action.boundingRect,

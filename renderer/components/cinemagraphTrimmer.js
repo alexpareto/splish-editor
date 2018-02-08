@@ -1,6 +1,7 @@
 import React from 'react';
 import * as globalStyles from '../globalStyles';
 import electron from 'electron';
+import Draggable from 'react-draggable';
 
 class Trimmer extends React.Component {
   constructor(props) {
@@ -8,11 +9,9 @@ class Trimmer extends React.Component {
 
     this.state = {
       isSeeking: false,
-      isDownLeft: false,
-      isDownRight: false,
-      isDownStill: false,
-      currentTime: 0,
     };
+
+    this.currentTime;
 
     this.wrapperHeight = 70;
     this.trimmerHeight = 40;
@@ -76,97 +75,82 @@ class Trimmer extends React.Component {
     }
   };
 
-  mouseDownLeft = event => {
+  dragStart = event => {
     this.setState({
-      isDownLeft: true,
       isSeeking: true,
-      currentTime: this.video.currentTime,
     });
+    this.currentTime = this.video.currentTime;
     this.props.startSeeking();
     event.preventDefault();
-    setTimeout(this.requestAnimationFrame, 150);
+    setTimeout(this.requestAnimationFrame, 40);
+    this.ticker.style.display = 'none';
   };
 
-  mouseDownRight = event => {
-    this.setState({
-      isDownRight: true,
-      isSeeking: true,
-      currentTime: this.video.currentTime,
-    });
-    this.props.startSeeking();
+  trimmerDragLeft = event => {
+    this.trimmerMarginLeft = Math.max(-5, event.clientX - this.trimmerHPadding);
+    this.trimmerWidth =
+      this.width - this.trimmerMarginLeft - this.trimmerMarginRight - 5;
+    this.trimmer.style.width = `${this.trimmerWidth}px`;
+    this.trimmer.style.marginLeft = `${this.trimmerMarginLeft}px`;
+    this.trimmerRight.style.marginLeft = `${this.trimmerWidth - 2}px`;
+
+    this.currentTime =
+      (this.trimmerMarginLeft + 5) / this.width * this.duration;
     event.preventDefault();
-    setTimeout(this.requestAnimationFrame, 150);
   };
+
+  trimmerDragRight = event => {
+    const windowWidth = this.win.getBounds().width;
+    this.trimmerMarginRight = Math.max(
+      0,
+      windowWidth - event.clientX - this.trimmerHPadding,
+    );
+    this.trimmerWidth =
+      this.width - this.trimmerMarginLeft - this.trimmerMarginRight - 5;
+    this.trimmer.style.width = `${this.trimmerWidth}px`;
+    this.trimmerRight.style.marginLeft = `${this.trimmerWidth - 2}px`;
+
+    this.currentTime =
+      (this.trimmerMarginLeft + 5 + this.trimmerWidth) /
+      this.width *
+      this.duration;
+    event.preventDefault();
+  };
+
+  trimmerEndLeft = event => {
+    const trimTime = (this.trimmerMarginLeft + 5) / this.width * this.duration;
+    this.props.cinemagraphTrimFront(trimTime);
+    this.ticker.style.marginLeft = `${this.trimmerMarginLeft + 5}px`;
+    this.setState({ isSeeking: false });
+    event.preventDefault();
+    this.ticker.style.display = 'block';
+  };
+
+  trimmerEndRight = event => {
+    const trimTime =
+      (this.trimmerMarginLeft + 5 + this.trimmerWidth) /
+      this.width *
+      this.duration;
+    this.props.cinemagraphTrimBack(trimTime);
+    this.setState({ isSeeking: false });
+    event.preventDefault();
+    this.ticker.style.display = 'block';
+  };
+
+  dragStillMove = event => {
+    const marginLeft = Math.max(0, event.clientX - this.trimmerHPadding);
+    this.currentTime = marginLeft / this.width * this.duration;
+    event.preventDefault();
+  };
+
+  dragStillEnd = event => {};
 
   requestAnimationFrame = () => {
     if (this.state.isSeeking) {
-      this.video.currentTime = this.state.currentTime;
+      // don't allow the video to end
+      this.video.currentTime = this.currentTime;
       setTimeout(this.requestAnimationFrame, 150);
     }
-  };
-
-  mouseMoveTrimmer = event => {
-    if (this.state.isDownLeft) {
-      this.trimmerMarginLeft = Math.max(
-        -5,
-        event.clientX - this.trimmerHPadding,
-      );
-      this.trimmerWidth =
-        this.width - this.trimmerMarginLeft - this.trimmerMarginRight - 5;
-      this.trimmer.style.width = `${this.trimmerWidth}px`;
-      this.trimmer.style.marginLeft = `${this.trimmerMarginLeft}px`;
-      this.trimmerRight.style.marginLeft = `${this.trimmerWidth - 2}px`;
-
-      this.setState({
-        currentTime: (this.trimmerMarginLeft + 5) / this.width * this.duration,
-      });
-    } else if (this.state.isDownRight) {
-      const windowWidth = this.win.getBounds().width;
-      this.trimmerMarginRight = Math.max(
-        0,
-        windowWidth - event.clientX - this.trimmerHPadding,
-      );
-      this.trimmerWidth =
-        this.width - this.trimmerMarginLeft - this.trimmerMarginRight - 5;
-      this.trimmer.style.width = `${this.trimmerWidth}px`;
-      this.trimmerRight.style.marginLeft = `${this.trimmerWidth - 2}px`;
-
-      this.setState({
-        currentTime:
-          (this.trimmerMarginLeft + 5 + this.trimmerWidth) /
-          this.width *
-          this.duration,
-      });
-    }
-
-    event.preventDefault();
-  };
-
-  mouseDownTrimmer = event => {
-    event.preventDefault();
-  };
-
-  mouseUpTrimmer = event => {
-    if (this.state.isDownLeft) {
-      const trimTime =
-        (this.trimmerMarginLeft + 5) / this.width * this.duration;
-      this.props.cinemagraphTrimFront(trimTime);
-      this.ticker.style.marginLeft = `${this.trimmerMarginLeft + 5}px`;
-    } else if (this.state.isDownRight) {
-      const trimTime =
-        (this.trimmerMarginLeft + 5 + this.trimmerWidth) /
-        this.width *
-        this.duration;
-      this.props.cinemagraphTrimBack(trimTime);
-    }
-
-    this.setState({
-      isSeeking: false,
-      isDownRight: false,
-      isDownLeft: false,
-      isDownStill: false,
-    });
-    event.preventDefault();
   };
 
   render() {
@@ -188,19 +172,37 @@ class Trimmer extends React.Component {
     }
 
     return (
-      <div
-        className="trimContainer"
-        onMouseDown={this.mouseDownTrimmer}
-        onMouseMove={this.mouseMoveTrimmer}
-        onMouseUp={this.mouseUpTrimmer}
-      >
+      <div className="trimContainer">
+        <div className="stillWrapper">
+          <Draggable
+            bounds="parent"
+            axis="x"
+            onStart={this.dragStart}
+            onDrag={this.dragStillMove}
+            onStop={this.dragStillEnd}
+          >
+            <div className="stillChooser" />
+          </Draggable>
+        </div>
         <div className="trimmer" id="cinemagraphTrimmer">
-          <div className="trimmerLeft" onMouseDown={this.mouseDownLeft} />
-          <div
-            className="trimmerRight"
-            id="cinemagraphTrimmerRight"
-            onMouseDown={this.mouseDownRight}
-          />
+          <Draggable
+            bounds="parent"
+            axis="x"
+            onStart={this.dragStart}
+            onDrag={this.trimmerDragLeft}
+            onStop={this.trimmerEndLeft}
+          >
+            <div className="trimmerLeft" />
+          </Draggable>
+          <Draggable
+            bounds="parent"
+            axis="x"
+            onStart={this.dragStart}
+            onDrag={this.trimmerDragRight}
+            onStop={this.trimmerEndRight}
+          >
+            <div className="trimmerRight" id="cinemagraphTrimmerRight" />
+          </Draggable>
         </div>
         <div className="thumbnails">
           <div className="ticker" id="cinemagraphTicker" />
@@ -222,20 +224,32 @@ class Trimmer extends React.Component {
           {`
 
           	.trimmerLeft {
-          		margin-left: -7px;
-          		position: absolute;
           		cursor: col-resize;
+          		margin-left: -11px;
+          		position: absolute;
           		height: ${this.trimmerHeight}px;
-          		width: 9px;
+          		width: 13px;
           		z-index: 5;
           	}
 
+          	.stillChooser {
+          		width: 0px;
+          		height: 0px;
+          		border-left: 8px solid transparent;
+  						border-right: 8px solid transparent;
+  						border-top: 10px solid ${globalStyles.action};
+  						border-radius: 3px;
+          		position: absolute;
+          		border-radius: 2px;
+          		z-index: 6;
+          	}
+
           	.trimmerRight {
-          		margin-left: ${this.trimmerWidth - 2}px;
           		cursor: col-resize;
+          		margin-left: ${this.trimmerWidth - 6}px;
           		position: absolute;
           		height: ${this.trimmerHeight}px;
-          		width: 9px;
+          		width: 13px;
           		z-index: 5;
           	}
 
@@ -250,8 +264,14 @@ class Trimmer extends React.Component {
           		z-index: 3;
           	}
 
+          	.stillWrapper {
+          		width: ${this.width}px;
+          		height: ${this.trimmerHeight}px;
+          		margin-top: ${this.trimmerVPadding - 10}px;
+          		position: absolute;
+          	}
+
           	.ticker {
-          		display: ${this.state.isSeekign ? 'hidden' : 'block'};
           		width: 2px;
           		background-color: ${globalStyles.action};
           		height: ${this.trimmerHeight}px;
