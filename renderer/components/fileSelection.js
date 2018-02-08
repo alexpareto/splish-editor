@@ -15,7 +15,7 @@ class FileSelection extends React.Component {
         files = remote.dialog.showOpenDialog({
           title: 'Choose a video!',
           filters: [
-            { name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'mov'] },
+            { name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'mov', 'm4v'] },
           ],
           defaultPath: '~/',
           buttonLabel: 'Choose',

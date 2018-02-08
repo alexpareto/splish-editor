@@ -51,6 +51,7 @@ class MovingStill extends React.Component {
             exports={this.props.exports}
             duration={this.props.movingStill.duration}
             resetMovingStillState={this.props.resetMovingStillState}
+            currentTool={this.props.movingStill.currentTool}
           />
           <MovingStillPreview
             display={showPreview}

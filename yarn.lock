@@ -5145,6 +5145,10 @@ pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
 
+popper.js@^1.11.1:
+  version "1.12.9"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.9.tgz#0dfbc2dff96c451bb332edcfcfaaf566d331d5b3"
+
 prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
@@ -5447,6 +5451,12 @@ react-redux@^5.0.6:
     lodash-es "^4.2.0"
     loose-envify "^1.1.0"
     prop-types "^15.5.10"
+
+react-tippy@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-tippy/-/react-tippy-1.2.2.tgz#061467d34d29e7a5a9421822d125c451d6bb5153"
+  dependencies:
+    popper.js "^1.11.1"
 
 react-visibility-sensor@^3.11.0:
   version "3.11.0"

@@ -9,6 +9,7 @@ import Slider from 'rc-slider';
 import Link from 'next/link';
 import Head from 'next/head';
 import Router from 'next/router';
+import { Tooltip } from 'react-tippy';
 
 import EyeLogo from './eyelogo';
 
@@ -76,36 +77,57 @@ class NavBar extends React.Component {
             type="text/css"
             href="/static/css/rcSlider.css"
           />
+          <link rel="stylesheet" type="text/css" href="/static/css/tippy.css" />
         </Head>
         {exportModal}
         <div className="flex">
           <img className="icon" src="/static/icons/splish-solidlogo.png" />
           <div className="share-button">
-            <IconButton
-              stroke={globalStyles.accent}
-              name="share"
-              backgroundColor={globalStyles.secondary}
-              onClick={this.props.startExportingCinemagraph}
-            />
+            <Tooltip title="export your cinemagraph to share" theme="light">
+              <IconButton
+                stroke={globalStyles.accent}
+                name="share"
+                backgroundColor={globalStyles.secondary}
+                onClick={this.props.startExportingCinemagraph}
+              />
+            </Tooltip>
           </div>
           <div className="sliders">
             <div className="tool-button">
-              <IconButton
-                stroke={globalStyles.accent}
-                name={
-                  this.props.tool == 'eraser' ? 'plusCircle' : 'minusCircle'
+              <Tooltip
+                title={
+                  this.props.tool == 'eraser'
+                    ? 'turn off eraser'
+                    : 'turn on eraser'
                 }
-                backgroundColor={globalStyles.secondary}
-                onClick={this.toggleTool}
-              />
+                theme="light"
+              >
+                <IconButton
+                  stroke={globalStyles.accent}
+                  name={
+                    this.props.tool == 'eraser' ? 'plusCircle' : 'minusCircle'
+                  }
+                  backgroundColor={globalStyles.secondary}
+                  onClick={this.toggleTool}
+                />
+              </Tooltip>
             </div>
             <div className="tool-button">
-              <IconButton
-                stroke={globalStyles.accent}
-                name={this.props.showOverlay ? 'x' : 'droplet'}
-                backgroundColor={globalStyles.secondary}
-                onClick={this.props.toggleCinemagraphOverlay}
-              />
+              <Tooltip
+                title={
+                  this.props.showOverlay
+                    ? 'turn off overlay'
+                    : 'turn on overlay'
+                }
+                theme="light"
+              >
+                <IconButton
+                  stroke={globalStyles.accent}
+                  name={this.props.showOverlay ? 'x' : 'droplet'}
+                  backgroundColor={globalStyles.secondary}
+                  onClick={this.props.toggleCinemagraphOverlay}
+                />
+              </Tooltip>
             </div>
             <div className="slider">
               <span className="slider-label">size</span>

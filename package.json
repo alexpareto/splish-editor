@@ -62,6 +62,7 @@
     "react-draggable": "^3.0.5",
     "react-ga": "^2.4.1",
     "react-redux": "^5.0.6",
+    "react-tippy": "^1.2.2",
     "react-visibility-sensor": "^3.11.0",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",

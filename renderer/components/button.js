@@ -1,15 +1,19 @@
 import * as globalStyles from '../globalStyles';
 
 export default props => {
+  let { isActive, ...otherProps } = props;
+
   return (
-    <button {...props}>
+    <button {...otherProps}>
       {props.children}
       <style jsx>{`
         button {
           height: ${props.height ? props.height : 30}px;
           background: ${globalStyles.backgroundAccent};
           color: ${globalStyles.textColor};
-          border-style: none;
+          border-style: ${isActive ? 'solid' : 'none'};
+          border-color: ${globalStyles.textColor};
+          border-width: 1px;
           box-sizing: border-box;
           padding: 7px;
           display: flex;
@@ -20,7 +24,6 @@ export default props => {
           font-family: ${globalStyles.fontFamily};
           transition: all 0.2s ease;
           border-radius: 1px;
-          transition: all 250ms;
           box-shadow: ${globalStyles.lighterBoxShadow};
         }
 

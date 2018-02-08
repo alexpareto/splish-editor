@@ -9,6 +9,7 @@ import ExportModal from './exportModal';
 import Slider from 'rc-slider';
 import Head from 'next/head';
 import Router from 'next/router';
+import { Tooltip } from 'react-tippy';
 
 const electron = require('electron');
 
@@ -91,41 +92,68 @@ class NavBar extends React.Component {
             type="text/css"
             href="/static/css/rcSlider.css"
           />
+          <link rel="stylesheet" type="text/css" href="/static/css/tippy.css" />
         </Head>
         <div className="flex">
           {exportModal}
           <img className="icon" src="/static/icons/splish-liquidlogo.png" />
           <div className="controls">
-            <IconButton
-              onClick={this.selectorClicked}
-              stroke={globalStyles.accent}
-              name="cursor"
-              backgroundColor={globalStyles.secondary}
-            />
-            <IconButton
-              onClick={this.vectorClicked}
-              stroke={globalStyles.accent}
-              name="arrowDownLeft"
-              backgroundColor={globalStyles.secondary}
-            />
-            <IconButton
-              onClick={this.anchorClicked}
-              stroke={globalStyles.accent}
-              name="anchor"
-              backgroundColor={globalStyles.secondary}
-            />
-            <PreviewToggle
-              viewMode={this.props.viewMode}
-              startPreview={this.props.startMovingStillPreviewMode}
-              startEdit={this.props.startMovingStillEditMode}
-            />
-            <div className="share-button">
+            <Tooltip
+              title="select vectors and anchors to make edits"
+              theme="light"
+            >
               <IconButton
-                onClick={this.props.startExportingMovingStill}
+                onClick={this.selectorClicked}
                 stroke={globalStyles.accent}
-                name="share"
+                name="cursor"
                 backgroundColor={globalStyles.secondary}
+                isActive={this.props.currentTool == 'selector'}
               />
+            </Tooltip>
+            <Tooltip title="create vectors to animate image" theme="light">
+              <IconButton
+                onClick={this.vectorClicked}
+                stroke={globalStyles.accent}
+                name="arrowDownLeft"
+                backgroundColor={globalStyles.secondary}
+                isActive={this.props.currentTool == 'vector'}
+              />
+            </Tooltip>
+            <Tooltip
+              title="add anchor points to keep parts still"
+              theme="light"
+            >
+              <IconButton
+                onClick={this.anchorClicked}
+                stroke={globalStyles.accent}
+                name="anchor"
+                backgroundColor={globalStyles.secondary}
+                isActive={this.props.currentTool == 'anchor'}
+              />
+            </Tooltip>
+            <Tooltip
+              title={
+                this.props.viewMode === 'edit'
+                  ? 'start preview'
+                  : 'back to edit mode'
+              }
+              theme="light"
+            >
+              <PreviewToggle
+                viewMode={this.props.viewMode}
+                startPreview={this.props.startMovingStillPreviewMode}
+                startEdit={this.props.startMovingStillEditMode}
+              />
+            </Tooltip>
+            <div className="share-button">
+              <Tooltip title="export your animagraph to share" theme="light">
+                <IconButton
+                  onClick={this.props.startExportingMovingStill}
+                  stroke={globalStyles.accent}
+                  name="share"
+                  backgroundColor={globalStyles.secondary}
+                />
+              </Tooltip>
             </div>
             <div className="slider">
               <span className="slider-label">seconds</span>
