@@ -46,6 +46,7 @@ class Preview {
     this.originalImage = [];
     this.brushedImage = [];
     this.everyOther = true;
+    this.recentlyUpdated = 0;
 
     this.isSeeking = false;
     this.isChoosingStill = false;
@@ -269,6 +270,7 @@ class Preview {
         }
       }
     }
+    this.recentlyUpdated = 5;
   };
 
   restartVideo = () => {
@@ -330,8 +332,12 @@ class Preview {
       );
 
       this.hasRendered = true;
-    } else {
+    } else if (this.recentlyUpdated > 0) {
+      // only write data if it was recently updated
+      // "recent" is within 5 animation frames
+      // this had surprising perf gains
       this.ctx.putImageData(this.brushedImage, 0, 0);
+      this.recentlyUpdated--;
     }
 
     gl.activeTexture(gl.TEXTURE1);
