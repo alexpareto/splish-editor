@@ -77,7 +77,6 @@ class Cinemagraph extends React.Component {
             videoStartTime={this.props.cinemagraph.videoStartTime}
             videoEndTime={this.props.cinemagraph.videoEndTime}
             thumbnailsLoaded={this.props.cinemagraph.thumbnailsLoaded}
-            numThumbnails={this.props.cinemagraph.numThumbnails}
             videoDimensions={this.props.cinemagraph.previewDimensions}
             cinemagraphTrimBack={this.props.cinemagraphTrimBack}
             cinemagraphTrimFront={this.props.cinemagraphTrimFront}

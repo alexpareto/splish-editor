@@ -25,7 +25,6 @@ export const selectCinemagraphVideo = (
   videoPath,
   naturalDimensions,
   boundingRect,
-  numThumbnails,
   duration,
 ) => {
   return {
@@ -33,7 +32,6 @@ export const selectCinemagraphVideo = (
     videoPath,
     naturalDimensions,
     boundingRect,
-    numThumbnails,
     duration,
   };
 };

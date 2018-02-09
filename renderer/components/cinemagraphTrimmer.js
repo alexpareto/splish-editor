@@ -168,7 +168,7 @@ class Trimmer extends React.Component {
       this.props.videoDimensions.width / this.props.videoDimensions.height;
     const thumbnailWidth = aspectRatio * this.trimmerHeight;
     const numImages = Math.ceil(this.width / thumbnailWidth);
-    const everyImage = this.props.numThumbnails / numImages;
+    const everyImage = 15 / numImages;
 
     let thumbnailImages = [];
 
@@ -176,7 +176,9 @@ class Trimmer extends React.Component {
       for (let i = 1; i <= numImages; i++) {
         const thumbnail = Math.max(Math.floor(everyImage * i), 1);
         const leadingZero = thumbnail / 10 < 1 ? '0' : '';
-        const thumbnailName = `${this.dir}${leadingZero}${thumbnail}.jpg`;
+        const thumbnailName = `${
+          this.dir
+        }${leadingZero}${thumbnail}.jpg?${new Date().getTime()}`;
         thumbnailImages.push(thumbnailName);
       }
     }
