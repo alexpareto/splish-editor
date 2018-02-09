@@ -179,6 +179,8 @@ class Preview {
     this.init();
   };
 
+  cleanup = () => {};
+
   boundedPoint = (x, y) => {
     if (x < -1) x = -1;
     if (y < -1) y = -1;

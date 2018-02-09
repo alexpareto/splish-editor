@@ -12,35 +12,43 @@ class MovingStillPreview extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.display || this.props.isRendering) {
-      if (this.state.hasLoaded) {
-        this.preview.update(
-          this.props.anchors,
-          this.props.vectors,
-          this.props.duration,
-        );
-      } else {
-        this.preview = new Preview(
-          this.props.imgSrc,
-          this.props.anchors,
-          this.props.vectors,
-          this.props.boundingRect,
-          this.props.animationParams,
-          this.props.duration,
-          // callback for when the video completes capture
-          // Read file and send it to s3, also notify redux
-          // to stop capturing the video b/c export is done
-          filePath => {
-            fs.readFile(filePath, (err, data) => {
-              const file = new File([data], 'output.txt', {
-                type: 'video/mp4',
-              });
-              this.props.movingStillExportComplete(file);
-            });
-          },
-        );
-      }
+    if (this.preview) {
+      this.preview.stop();
     }
+
+    setTimeout(() => {
+      if (this.props.display || this.props.isRendering) {
+        if (this.state.hasLoaded) {
+          this.preview.update(
+            this.props.anchors,
+            this.props.vectors,
+            this.props.duration,
+          );
+        } else {
+          console.log('creating a new preview');
+          this.preview = new Preview(
+            this.props.imgSrc,
+            this.props.anchors,
+            this.props.vectors,
+            this.props.boundingRect,
+            this.props.animationParams,
+            this.props.duration,
+            // callback for when the video completes capture
+            // Read file and send it to s3, also notify redux
+            // to stop capturing the video b/c export is done
+            filePath => {
+              fs.readFile(filePath, (err, data) => {
+                const file = new File([data], 'output.txt', {
+                  type: 'video/mp4',
+                });
+                this.props.movingStillExportComplete(file);
+              });
+            },
+          );
+          this.setState({ hasLoaded: true });
+        }
+      }
+    }, 40);
 
     // give time for image upload to GPU
     if (this.props.isRendering) {
@@ -48,10 +56,6 @@ class MovingStillPreview extends React.Component {
         this.preview.capture();
       }, 300);
       return;
-    }
-
-    if (!this.props.display && this.preview) {
-      this.preview.stop();
     }
   }
 
