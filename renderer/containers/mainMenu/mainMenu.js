@@ -60,8 +60,6 @@ class MainMenu extends React.Component {
         console.error(err);
       }
 
-      console.log('METADATA: ', metadata);
-
       let naturalDimensions, duration;
       for (let i = 0; i < 4; i++) {
         naturalDimensions = {
@@ -96,11 +94,13 @@ class MainMenu extends React.Component {
         }
         let command = ffmpeg();
 
+        const framerate = 15 / duration;
+
         // load 3 thumbnails per second of video
         command
           .input(videoPath)
           .withInputFps(25)
-          .fps(3)
+          .fps(framerate)
           .output(dir + '%02d.jpg')
           .on('end', () => {
             this.props.loadThumbnails();
@@ -108,7 +108,6 @@ class MainMenu extends React.Component {
           .run();
       });
 
-      const numThumbnails = Math.floor(duration) * 3;
       const hPadding = 120;
       const vPadding = 220;
       const headerSize = 100; // height of toolbar at top
@@ -125,7 +124,6 @@ class MainMenu extends React.Component {
         videoPath,
         naturalDimensions,
         boundingRect,
-        numThumbnails,
         duration,
       );
 
@@ -310,7 +308,6 @@ const mapDispatchToProps = dispatch => {
       videoPath,
       naturalDimensions,
       boundingRect,
-      numThumbnails,
       duration,
     ) =>
       dispatch(
@@ -318,7 +315,6 @@ const mapDispatchToProps = dispatch => {
           videoPath,
           naturalDimensions,
           boundingRect,
-          numThumbnails,
           duration,
         ),
       ),

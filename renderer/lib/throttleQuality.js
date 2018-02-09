@@ -9,6 +9,9 @@ export default (naturalDimensions, quality) => {
     case '2K':
       MAX_PIXELS = 1920 * 1080;
       break;
+    case 'HD':
+      MAX_PIXELS = 1280 * 720;
+      break;
     default:
       MAX_PIXELS = 1920 * 1080;
   }

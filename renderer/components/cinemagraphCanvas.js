@@ -72,6 +72,7 @@ class CinemagraphPreview extends React.Component {
           id="cinemagraphVideo"
           src={this.props.videoSrc}
           width={this.props.boundingRect.width}
+          height={this.props.boundingRect.height}
           autoPlay={true}
           onPlay={this.startPreview}
           // loop
