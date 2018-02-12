@@ -17,6 +17,7 @@ class ExportModal extends React.Component {
       exportCount: 0,
       title: '',
       description: '',
+      private: false,
       hasUploaded: false,
     };
   }
@@ -25,7 +26,7 @@ class ExportModal extends React.Component {
     // if done rendering and filling out title/description start upload
     if (
       !nextProps.isRendering &&
-      this.state.exportStage == 2 &&
+      this.state.exportStage == 3 &&
       !this.state.hasUploaded &&
       !this.props.isUploading
     ) {
@@ -155,6 +156,57 @@ class ExportModal extends React.Component {
             <Button
               onClick={() => {
                 this.setState({ exportStage: 2 });
+              }}
+            >
+              continue
+            </Button>
+          </span>
+          <style jsx>{`
+            div {
+              position: relative;
+              height: 100%;
+              width: 100%;
+              text-align: center;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            }
+
+            span {
+              display: inline-block;
+              margin: 30px;
+            }
+          `}</style>
+        </div>
+      );
+    } else if (this.state.exportStage == 2) {
+      return (
+        <div>
+          <span className="render-text">
+            Would you like your Splish to be public or private?
+          </span>
+          <div className="options">
+            Public - get a link to share with friends and participate in the
+            community
+            <input
+              onChange={() => this.setState({ private: false })}
+              type="radio"
+              checked={!this.state.private}
+              className="radio"
+            />
+            Private - only you can see this splish in your personal profile
+            <input
+              onChange={() => this.setState({ private: true })}
+              type="radio"
+              checked={this.state.private}
+              className="radio"
+            />
+          </div>
+          <span>
+            <Button
+              onClick={() => {
+                this.setState({ exportStage: 3 });
                 // if already done rendering then start upload now
                 if (!this.props.isRendering) {
                   this.setState(
@@ -186,6 +238,10 @@ class ExportModal extends React.Component {
               flex-direction: column;
               align-items: center;
               justify-content: center;
+            }
+
+            .radio {
+              padding: 20px;
             }
 
             span {
