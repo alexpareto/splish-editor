@@ -162,7 +162,7 @@ class ExportModal extends React.Component {
               className="privacy-option"
             >
               {this.state.privacy_level == 'PU' ? <CheckCircle /> : <Circle />}
-              public
+              <label>public</label>
             </div>
           </Tooltip>
           <Tooltip
@@ -175,7 +175,7 @@ class ExportModal extends React.Component {
               className="privacy-option"
             >
               {this.state.privacy_level == 'UL' ? <CheckCircle /> : <Circle />}
-              unlisted
+              <label>unlisted</label>
             </div>
           </Tooltip>
           <Tooltip
@@ -188,10 +188,10 @@ class ExportModal extends React.Component {
               className="privacy-option"
             >
               {this.state.privacy_level == 'PR' ? <CheckCircle /> : <Circle />}
-              private
+              <label>private</label>
             </div>
           </Tooltip>
-          <span>
+          <span className="contine-button">
             <Button
               onClick={() => {
                 this.setState({ exportStage: 3 });
@@ -231,18 +231,17 @@ class ExportModal extends React.Component {
             }
 
             .privacy-option {
-              width: 200px;
+              width: 100px;
               display: flex;
               align-items: center;
-              justify-content: space-between;
               padding: 5px;
             }
 
-            .radio {
-              padding: 20px;
+            label {
+              padding-left: 7px;
             }
 
-            span {
+            .contine-button {
               display: inline-block;
               margin: 30px;
             }
