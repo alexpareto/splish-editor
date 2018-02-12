@@ -22,7 +22,6 @@ class VectorCanvas extends React.Component {
     const md = this.onMouseDown;
     const mm = this.onMouseMove;
     const mu = this.onMouseUp;
-    const mc = this.onClick;
 
     svg
       .on('mousedown', function() {
@@ -36,10 +35,6 @@ class VectorCanvas extends React.Component {
       .on('mouseup', function() {
         const m3 = d3.mouse(this);
         mu(m3);
-      })
-      .on('click', function() {
-        const m4 = d3.mouse(this);
-        mc(m4);
       });
 
     this.setState({ svg });
@@ -68,16 +63,6 @@ class VectorCanvas extends React.Component {
         case 'selector':
           data = [{ x: mouse[0], y: mouse[1] }, {}, {}, {}, {}];
           this.setState({ data, isDown: true });
-          break;
-      }
-    }
-  };
-
-  onClick = mouse => {
-    if (this.props.isInitialized) {
-      switch (this.props.currentTool) {
-        case 'selector':
-          this.props.makeSelection(null);
           break;
       }
     }
@@ -124,25 +109,36 @@ class VectorCanvas extends React.Component {
   };
 
   onMouseUp = mouse => {
-    if (this.props.isInitialized && this.state.hasMoved) {
-      switch (this.props.currentTool) {
-        case 'vector':
-          this.props.addVector([
-            {
-              x: this.state.data[0].x,
-              y: this.state.data[0].y,
-              path: this.state.path,
-            },
-            { x: mouse[0], y: mouse[1] },
-          ]);
-          break;
-        case 'selector':
-          this.state.path.remove();
-          let corners = [this.state.data[0], this.state.data[2]];
-          this.props.makeSelection(corners);
-          break;
+    if (this.props.isInitialized) {
+      if (this.state.hasMoved) {
+        // on drag end stuff goes in here
+        switch (this.props.currentTool) {
+          case 'vector':
+            this.props.addVector([
+              {
+                x: this.state.data[0].x,
+                y: this.state.data[0].y,
+                path: this.state.path,
+              },
+              { x: mouse[0], y: mouse[1] },
+            ]);
+            break;
+          case 'selector':
+            this.state.path.remove();
+            let corners = [this.state.data[0], this.state.data[2]];
+            this.props.makeSelection(corners);
+            break;
+        }
+      } else {
+        // on click stuff goes here
+        switch (this.props.currentTool) {
+          case 'selector':
+            this.props.makeSelection(null);
+            break;
+        }
       }
     }
+
     this.setState({ data: [], isDown: false, path: null, hasMoved: false });
   };
 

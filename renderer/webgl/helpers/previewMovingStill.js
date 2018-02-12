@@ -175,7 +175,10 @@ class Preview {
   update = (anchors, vectors, duration) => {
     this.anchors = anchors;
     this.vectors = vectors;
+    this.numVectors = vectors.length + 1;
+    this.numAnchors = anchors.length + 1;
     this.duration = duration;
+    this.gl.deleteProgram(this.pictureprogram);
     this.init();
   };
 
