@@ -9,15 +9,18 @@ import FileSaver from './fileSaver';
 import exportWithWaterMark from '../lib/exportWithWaterMark';
 import electron from 'electron';
 
+import { Tooltip } from 'react-tippy';
+import { Circle, CheckCircle } from 'react-feather';
+
 class ExportModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      exportStage: 0,
+      exportStage: 1,
       exportCount: 0,
       title: '',
       description: '',
-      private: false,
+      privacy_level: 'PU',
       hasUploaded: false,
     };
   }
@@ -40,6 +43,7 @@ class ExportModal extends React.Component {
             this.state.title,
             this.state.description,
             '',
+            this.state.privacy_level,
           );
         },
       );
@@ -100,53 +104,15 @@ class ExportModal extends React.Component {
   };
 
   renderMain = () => {
-    if (this.state.exportStage == 0) {
+    if (this.state.exportStage == 1) {
       return (
         <div>
           <span className="render-text">
-            Awesome. What would you like to call your splish?
-          </span>
-          <Input
-            name="title"
-            placeholder="title"
-            value={this.state.title}
-            onChange={this.handleInputChange}
-            onKeyDown={this.onTitleKeyDown}
-            maxLength="255"
-          />
-          <span>
-            <Button onClick={() => this.setState({ exportStage: 1 })}>
-              continue
-            </Button>
-          </span>
-          <style jsx>{`
-            div {
-              position: relative;
-              height: 100%;
-              width: 100%;
-              text-align: center;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-            }
-
-            span {
-              display: inline-block;
-              margin: 30px;
-            }
-          `}</style>
-        </div>
-      );
-    } else if (this.state.exportStage == 1) {
-      return (
-        <div>
-          <span className="render-text">
-            Great name! How about a description?
+            What do you want to caption your Splish?
           </span>
           <TextArea
             name="description"
-            placeholder="description"
+            placeholder="caption"
             value={this.state.description}
             onChange={this.handleInputChange}
             onKeyDown={this.onTextAreaKeyDown}
@@ -182,27 +148,49 @@ class ExportModal extends React.Component {
       );
     } else if (this.state.exportStage == 2) {
       return (
-        <div>
+        <div className="holder">
           <span className="render-text">
-            Would you like your Splish to be public or private?
+            Would you like to share your Splish?
           </span>
-          <div className="options">
-            Public - get a link to share with friends and participate in the
-            community
-            <input
-              onChange={() => this.setState({ private: false })}
-              type="radio"
-              checked={!this.state.private}
-              className="radio"
-            />
-            Private - only you can see this splish in your personal profile
-            <input
-              onChange={() => this.setState({ private: true })}
-              type="radio"
-              checked={this.state.private}
-              className="radio"
-            />
-          </div>
+          <Tooltip
+            title="post to the community, get featured on discover, and have this splish appear on your public profile"
+            theme="light"
+            position="right"
+          >
+            <div
+              onClick={() => this.setState({ privacy_level: 'PU' })}
+              className="privacy-option"
+            >
+              {this.state.privacy_level == 'PU' ? <CheckCircle /> : <Circle />}
+              Public
+            </div>
+          </Tooltip>
+          <Tooltip
+            title="only people with the link can see"
+            theme="light"
+            position="right"
+          >
+            <div
+              onClick={() => this.setState({ privacy_level: 'UL' })}
+              className="privacy-option"
+            >
+              {this.state.privacy_level == 'UL' ? <CheckCircle /> : <Circle />}
+              Unlisted
+            </div>
+          </Tooltip>
+          <Tooltip
+            title="only you can see this splish in your personal profile"
+            theme="light"
+            position="right"
+          >
+            <div
+              onClick={() => this.setState({ privacy_level: 'PR' })}
+              className="privacy-option"
+            >
+              {this.state.privacy_level == 'PR' ? <CheckCircle /> : <Circle />}
+              Private
+            </div>
+          </Tooltip>
           <span>
             <Button
               onClick={() => {
@@ -219,6 +207,7 @@ class ExportModal extends React.Component {
                         this.state.title,
                         this.state.description,
                         '',
+                        this.state.privacy_level,
                       );
                     },
                   );
@@ -229,7 +218,7 @@ class ExportModal extends React.Component {
             </Button>
           </span>
           <style jsx>{`
-            div {
+            .holder {
               position: relative;
               height: 100%;
               width: 100%;
@@ -238,6 +227,15 @@ class ExportModal extends React.Component {
               flex-direction: column;
               align-items: center;
               justify-content: center;
+              padding: 20px;
+            }
+
+            .privacy-option {
+              width: 200px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 5px;
             }
 
             .radio {
@@ -302,27 +300,41 @@ class ExportModal extends React.Component {
       ? `https://splish.io/e/${this.props.lastUploadedExport.public_id}`
       : null;
 
+    const shareText =
+      this.state.privacy_level == 'PR' ? (
+        <span>
+          All rendered! See your private splish in your profile or export below.
+        </span>
+      ) : (
+        <React.Fragment>
+          <span>All rendered! Share your splish with this link:</span>
+          <span style={{ userSelect: 'auto' }}> {shareLink} </span>
+          <span> or </span>
+        </React.Fragment>
+      );
     return (
-      <div>
-        <span>All rendered! Share your splish with this link:</span>
-        <span style={{ userSelect: 'auto' }}> {shareLink} </span>
-        <span> or </span>
-        <FileSaver fileHandler={this.export}>
-          <Button>download with watermark</Button>
-        </FileSaver>
+      <div className="holder">
+        {shareText}
+        <div className="download-button">
+          <FileSaver fileHandler={this.export}>
+            <Button>download with watermark</Button>
+          </FileSaver>
+        </div>
         <div className="closeButton">
           <Button onClick={this.props.onComplete}>close</Button>
         </div>
         <style jsx>{`
-          div {
+          .holder {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            padding: 5px;
+            text-align: center;
           }
 
-          span {
-            margin: 5px 0;
+          .download-button {
+            margin-top: 10px;
           }
 
           .closeButton {
@@ -340,7 +352,7 @@ class ExportModal extends React.Component {
         <style jsx>{`
           .dialog {
             width: 400px;
-            height: 200px;
+            height: 300px;
             background-color: ${globalStyles.background};
             box-shadow: ${globalStyles.heavierBoxShadow};
             display: flex;
@@ -357,7 +369,7 @@ class ExportModal extends React.Component {
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 300000;
+            z-index: 100;
           }
         `}</style>
       </div>

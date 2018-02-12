@@ -93,9 +93,15 @@ const mapDispatchToProps = dispatch => {
   return {
     startExportingCinemagraph: () =>
       dispatch(Actions.startExportingCinemagraph()),
-    uploadExportRequest: (file, title, description, license) =>
+    uploadExportRequest: (file, title, description, license, privacy_level) =>
       dispatch(
-        ExportActions.uploadExportRequest(file, title, description, license),
+        ExportActions.uploadExportRequest(
+          file,
+          title,
+          description,
+          license,
+          privacy_level,
+        ),
       ),
     cinemagraphExportComplete: file =>
       dispatch(Actions.cinemagraphExportComplete(file)),
