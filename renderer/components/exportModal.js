@@ -108,7 +108,7 @@ class ExportModal extends React.Component {
       return (
         <div>
           <span className="render-text">
-            What do you want to caption your Splish?
+            What do you want to caption your splish?
           </span>
           <TextArea
             name="description"
@@ -150,7 +150,7 @@ class ExportModal extends React.Component {
       return (
         <div className="holder">
           <span className="render-text">
-            Would you like to share your Splish?
+            Would you like to share your splish?
           </span>
           <Tooltip
             title="post to the community, get featured on discover, and have this splish appear on your public profile"
@@ -162,7 +162,7 @@ class ExportModal extends React.Component {
               className="privacy-option"
             >
               {this.state.privacy_level == 'PU' ? <CheckCircle /> : <Circle />}
-              Public
+              public
             </div>
           </Tooltip>
           <Tooltip
@@ -175,7 +175,7 @@ class ExportModal extends React.Component {
               className="privacy-option"
             >
               {this.state.privacy_level == 'UL' ? <CheckCircle /> : <Circle />}
-              Unlisted
+              unlisted
             </div>
           </Tooltip>
           <Tooltip
@@ -188,7 +188,7 @@ class ExportModal extends React.Component {
               className="privacy-option"
             >
               {this.state.privacy_level == 'PR' ? <CheckCircle /> : <Circle />}
-              Private
+              private
             </div>
           </Tooltip>
           <span>
