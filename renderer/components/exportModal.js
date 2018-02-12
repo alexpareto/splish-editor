@@ -163,7 +163,9 @@ class ExportModal extends React.Component {
                     },
                     () => {
                       this.props.uploadExportRequest(
-                        this.props.exportFile,
+                        this.props.videoFile,
+                        this.props.previewFile,
+                        this.props.videoDimensions,
                         this.state.title,
                         this.state.description,
                         '',

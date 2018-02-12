@@ -10,16 +10,17 @@ const signedUrlCall = () => {
   return api.call('exports/gen', 'GET');
 };
 
-const postToAWS = (signedUrlData, file) => {
+const postToAWS = (signedUrl, file) => {
+  console.log('THE FILE IS: ', file);
+
   const options = {
     method: 'PUT',
     body: file,
   };
-  return fetch(signedUrlData.url, options);
+  return fetch(signedUrl, options);
 };
 
 const verifyWithDb = (signedUrl, title, description, license) => {
-  console.log(signedUrl);
   const getUrl = signedUrl
     .substring(0, signedUrl.indexOf('?'))
     .replace('splish-exports.s3.amazonaws.com', 'cdn.splish.io');
@@ -35,15 +36,27 @@ const verifyWithDb = (signedUrl, title, description, license) => {
 function* uploadExport(action) {
   try {
     // first get signed url
+    console.log('STARTING UPLOAD EXPORT');
     const signedUrlRes = yield call(signedUrlCall);
     const signedUrlData = yield signedUrlRes.json();
     if (signedUrlData.error) {
       throw new Error(signedUrlData.error);
     }
-    // now use the signed url to post to AWS
-    const awsRes = yield call(postToAWS, signedUrlData, action.file);
+
+    // now use the signed urls to post to AWS
+    const awsRes = yield call(postToAWS, signedUrlData.url, action.videoFile);
+    const awsRes2 = yield call(
+      postToAWS,
+      signedUrlData.poster_image_url,
+      action.previewFile,
+    );
+
     if (!awsRes.ok) {
       throw new Error(`${awsRes.status}: ${awsRes.statusText}`);
+    }
+
+    if (!awsRes2.ok) {
+      throw new Error(`${awsRes2.status}: ${awsRes2.statusText}`);
     }
 
     // now create an entry in the DB
