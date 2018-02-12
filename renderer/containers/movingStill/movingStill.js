@@ -107,9 +107,15 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.startExportingMovingStill()),
     movingStillExportComplete: file =>
       dispatch(Actions.movingStillExportComplete(file)),
-    uploadExportRequest: (file, title, description, license) =>
+    uploadExportRequest: (file, title, description, license, privacy_level) =>
       dispatch(
-        ExportActions.uploadExportRequest(file, title, description, license),
+        ExportActions.uploadExportRequest(
+          file,
+          title,
+          description,
+          license,
+          privacy_level,
+        ),
       ),
     movingStillShareComplete: () =>
       dispatch(Actions.movingStillShareComplete()),

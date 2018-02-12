@@ -18,7 +18,13 @@ const postToAWS = (signedUrlData, file) => {
   return fetch(signedUrlData.url, options);
 };
 
-const verifyWithDb = (signedUrl, title, description, license) => {
+const verifyWithDb = (
+  signedUrl,
+  title,
+  description,
+  license,
+  privacy_level,
+) => {
   console.log(signedUrl);
   const getUrl = signedUrl
     .substring(0, signedUrl.indexOf('?'))
@@ -29,6 +35,8 @@ const verifyWithDb = (signedUrl, title, description, license) => {
   body.append('title', title);
   body.append('description', description);
   body.append('license', license);
+  body.append('privacy_level', privacy_level);
+
   return api.call('exports/new', 'POST', body);
 };
 
@@ -53,6 +61,7 @@ function* uploadExport(action) {
       action.title,
       action.description,
       action.license,
+      action.privacy_level,
     );
     if (!verifyWithDbRes.ok) {
       throw new Error(
