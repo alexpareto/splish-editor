@@ -4,6 +4,7 @@ import Preview from '../../webgl/helpers/renderCinemagraph';
 import getHistory from '../../lib/getHistory';
 import throttleQuality from '../../lib/throttleQuality';
 import * as Actions from './actions';
+import fs from 'fs';
 
 const initialState = {
   history: {
@@ -27,7 +28,8 @@ const initialState = {
     width: 0,
     height: 0,
   },
-  file: null,
+  videoFile: null,
+  previewFile: null,
   showOverlay: false,
   showExportModal: false,
   isRendering: false,
@@ -126,7 +128,7 @@ export const cinemagraphReducer = (state = initialState, action) => {
     case actionTypes.CINEMAGRAPH_EXPORT_COMPLETE:
       return {
         ...state,
-        file: action.file,
+        videoFile: action.file,
         isRendering: false,
       };
     case actionTypes.CINEMAGRAPH_SHARE_COMPLETE:
@@ -155,9 +157,14 @@ export const cinemagraphReducer = (state = initialState, action) => {
       state.preview.stop();
       return initialState;
     case actionTypes.LOAD_THUMBNAILS:
+      const data = fs.readFileSync(action.firstImage);
+      const previewFile = new File([data], 'preview.jpg', {
+        type: 'image/jpeg',
+      });
       return {
         ...state,
         thumbnailsLoaded: true,
+        previewFile,
       };
     case actionTypes.CINEMAGRAPH_TRIM_FRONT:
       state.preview.setSeeking(false);

@@ -38,7 +38,7 @@ class MovingStillPreview extends React.Component {
             // to stop capturing the video b/c export is done
             filePath => {
               fs.readFile(filePath, (err, data) => {
-                const file = new File([data], 'output.txt', {
+                const file = new File([data], 'output.mp4', {
                   type: 'video/mp4',
                 });
                 this.props.movingStillExportComplete(file);
