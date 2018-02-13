@@ -1,10 +1,13 @@
 import { actionTypes } from './actions';
+import { dispatch } from 'react-redux';
 import * as globalStyles from '../../globalStyles';
 import * as Actions from './actions';
 import * as d3 from 'd3';
 import getHistory from '../../lib/getHistory';
 import throttleQuality from '../../lib/throttleQuality';
 import * as DrawHelpers from '../../lib/drawHelpers';
+import Preview from '../../webgl/helpers/previewMovingStill';
+import fs from 'fs';
 
 const initialState = {
   history: {
@@ -43,6 +46,7 @@ const initialState = {
   shareLink: '',
   duration: 3.0,
   file: null,
+  preview: null,
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -54,7 +58,8 @@ export const movingStillReducer = (state = initialState, action) => {
     anchor,
     vectors,
     vector,
-    selection;
+    selection,
+    preview;
   switch (action.type) {
     case actionTypes.SELECT_MOVING_STILL_IMAGE:
       //reset state
@@ -62,6 +67,7 @@ export const movingStillReducer = (state = initialState, action) => {
 
       // throttle preview to 2k to prevent crashes
       const previewDimensions = throttleQuality(action.naturalDimensions, '2K');
+
       return {
         ...state,
         imgPath: action.imgPath,
@@ -70,11 +76,32 @@ export const movingStillReducer = (state = initialState, action) => {
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       let vectorCanvas = d3.select('#movingStillSVG');
+
+      preview = new Preview(
+        state.imgPath,
+        state.anchors,
+        state.vectors,
+        state.boundingRect,
+        state.animationParams,
+        state.duration,
+        // callback for when the video completes capture
+        // Read file and send it to s3, also notify redux
+        // to stop capturing the video b/c export is done
+        filePath => {
+          fs.readFile(filePath, (err, data) => {
+            const file = new File([data], 'output.txt', {
+              type: 'video/mp4',
+            });
+            dispatch(Actions.movingStillExportComplete(file));
+          });
+        },
+      );
+
       return {
         ...state,
-        isInitialized: true,
-        currentTool: action.tool,
+        currentTool: 'vector',
         vectorCanvas,
+        preview,
       };
     case actionTypes.SELECT_VECTOR_TOOL:
       DrawHelpers.clearSelection(state.anchors, state.vectors);
@@ -99,13 +126,13 @@ export const movingStillReducer = (state = initialState, action) => {
         currentTool: 'anchor',
       };
     case actionTypes.START_MOVING_STILL_PREVIEW_MODE:
-      let boundingRect = state.vectorCanvas.node().getBoundingClientRect();
+      state.preview.update(state.anchors, state.vectors, state.duration);
       return {
         ...state,
         viewMode: 'preview',
-        boundingRect,
       };
     case actionTypes.START_MOVING_STILL_EDIT_MODE:
+      state.preview.stop();
       return {
         ...state,
         viewMode: 'edit',
@@ -199,6 +226,7 @@ export const movingStillReducer = (state = initialState, action) => {
         animationParams,
       };
     case actionTypes.START_EXPORTING_MOVING_STILL:
+      state.preview.capture();
       return {
         ...state,
         isRendering: true,
@@ -217,6 +245,9 @@ export const movingStillReducer = (state = initialState, action) => {
         showExportModal: false,
       };
     case actionTypes.UPDATE_MOVING_STILL_DURATION:
+      if (state.viewMode == 'preview') {
+        state.preview.update(state.anchors, state.vectors, action.duration);
+      }
       return {
         ...state,
         duration: action.duration,

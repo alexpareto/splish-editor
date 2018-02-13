@@ -62,8 +62,6 @@ class Preview {
       quality: 99,
       handleData: this.videoUploader.addFrame,
     });
-
-    this.init();
   }
 
   capture = () => {

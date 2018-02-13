@@ -23,30 +23,6 @@ class NavBar extends React.Component {
     };
   }
 
-  anchorClicked = () => {
-    if (this.props.isInitialized) {
-      this.props.selectAnchorTool();
-    } else {
-      this.props.initializeMovingStillCanvas('anchor');
-    }
-  };
-
-  vectorClicked = () => {
-    if (this.props.isInitialized) {
-      this.props.selectVectorTool();
-    } else {
-      this.props.initializeMovingStillCanvas('vector');
-    }
-  };
-
-  selectorClicked = () => {
-    if (this.props.isInitialized) {
-      this.props.selectSelectionTool();
-    } else {
-      this.props.initializeMovingStillCanvas('selector');
-    }
-  };
-
   showQuitDialog = () => {
     // first show confirm quit
     const remote = electron.remote || false;
@@ -108,7 +84,7 @@ class NavBar extends React.Component {
               theme="light"
             >
               <IconButton
-                onClick={this.selectorClicked}
+                onClick={this.props.selectSelectionTool}
                 stroke={globalStyles.accent}
                 name="cursor"
                 backgroundColor={globalStyles.secondary}
@@ -117,7 +93,7 @@ class NavBar extends React.Component {
             </Tooltip>
             <Tooltip title="create vectors to animate image" theme="light">
               <IconButton
-                onClick={this.vectorClicked}
+                onClick={this.props.selectVectorTool}
                 stroke={globalStyles.accent}
                 name="arrowDownLeft"
                 backgroundColor={globalStyles.secondary}
@@ -129,7 +105,7 @@ class NavBar extends React.Component {
               theme="light"
             >
               <IconButton
-                onClick={this.anchorClicked}
+                onClick={this.props.selectAnchorTool}
                 stroke={globalStyles.accent}
                 name="anchor"
                 backgroundColor={globalStyles.secondary}

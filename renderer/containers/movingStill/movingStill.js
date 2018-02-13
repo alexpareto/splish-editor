@@ -36,7 +36,6 @@ class MovingStill extends React.Component {
         >
           <ToolBar
             viewMode={this.props.movingStill.viewMode}
-            initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
             selectAnchorTool={this.props.selectAnchorTool}
             selectVectorTool={this.props.selectVectorTool}
             isInitialized={this.props.movingStill.isInitialized}
@@ -61,6 +60,7 @@ class MovingStill extends React.Component {
           <MovingStillPreview
             display={showPreview}
             isRendering={this.props.movingStill.isRendering}
+            initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
             imgSrc={this.props.movingStill.imgPath}
             anchors={this.props.movingStill.anchors}
             vectors={this.props.movingStill.vectors}
@@ -76,7 +76,6 @@ class MovingStill extends React.Component {
             display={!showPreview}
             currentTool={this.props.movingStill.currentTool}
             imgSrc={this.props.movingStill.imgPath}
-            isInitialized={this.props.movingStill.isInitialized}
             boundingRect={this.props.movingStill.boundingRect}
             addVector={this.props.addVector}
             addAnchor={this.props.addAnchor}
@@ -90,8 +89,8 @@ class MovingStill extends React.Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    initializeMovingStillCanvas: tool =>
-      dispatch(Actions.initializeMovingStillCanvas(tool)),
+    initializeMovingStillCanvas: () =>
+      dispatch(Actions.initializeMovingStillCanvas()),
     startMovingStillPreviewMode: () =>
       dispatch(Actions.startMovingStillPreviewMode()),
     startMovingStillEditMode: () =>

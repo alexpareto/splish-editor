@@ -50,26 +50,24 @@ class VectorCanvas extends React.Component {
     });
 
   onMouseDown = mouse => {
-    if (this.props.isInitialized) {
-      let data;
-      switch (this.props.currentTool) {
-        case 'vector':
-          data = [{ x: mouse[0], y: mouse[1] }, {}];
-          this.setState({ data, isDown: true });
-          break;
-        case 'anchor':
-          this.props.addAnchor({ x: mouse[0], y: mouse[1] });
-          break;
-        case 'selector':
-          data = [{ x: mouse[0], y: mouse[1] }, {}, {}, {}, {}];
-          this.setState({ data, isDown: true });
-          break;
-      }
+    let data;
+    switch (this.props.currentTool) {
+      case 'vector':
+        data = [{ x: mouse[0], y: mouse[1] }, {}];
+        this.setState({ data, isDown: true });
+        break;
+      case 'anchor':
+        this.props.addAnchor({ x: mouse[0], y: mouse[1] });
+        break;
+      case 'selector':
+        data = [{ x: mouse[0], y: mouse[1] }, {}, {}, {}, {}];
+        this.setState({ data, isDown: true });
+        break;
     }
   };
 
   onMouseMove = mouse => {
-    if (this.state.isDown && this.props.isInitialized) {
+    if (this.state.isDown) {
       let path = this.state.path;
       let data = this.state.data;
       switch (this.props.currentTool) {
@@ -109,33 +107,31 @@ class VectorCanvas extends React.Component {
   };
 
   onMouseUp = mouse => {
-    if (this.props.isInitialized) {
-      if (this.state.hasMoved) {
-        // on drag end stuff goes in here
-        switch (this.props.currentTool) {
-          case 'vector':
-            this.props.addVector([
-              {
-                x: this.state.data[0].x,
-                y: this.state.data[0].y,
-                path: this.state.path,
-              },
-              { x: mouse[0], y: mouse[1] },
-            ]);
-            break;
-          case 'selector':
-            this.state.path.remove();
-            let corners = [this.state.data[0], this.state.data[2]];
-            this.props.makeSelection(corners);
-            break;
-        }
-      } else {
-        // on click stuff goes here
-        switch (this.props.currentTool) {
-          case 'selector':
-            this.props.makeSelection(null);
-            break;
-        }
+    if (this.state.hasMoved) {
+      // on drag end stuff goes in here
+      switch (this.props.currentTool) {
+        case 'vector':
+          this.props.addVector([
+            {
+              x: this.state.data[0].x,
+              y: this.state.data[0].y,
+              path: this.state.path,
+            },
+            { x: mouse[0], y: mouse[1] },
+          ]);
+          break;
+        case 'selector':
+          this.state.path.remove();
+          let corners = [this.state.data[0], this.state.data[2]];
+          this.props.makeSelection(corners);
+          break;
+      }
+    } else {
+      // on click stuff goes here
+      switch (this.props.currentTool) {
+        case 'selector':
+          this.props.makeSelection(null);
+          break;
       }
     }
 
@@ -156,19 +152,6 @@ class VectorCanvas extends React.Component {
             left: 0,
             right: 0,
           }}
-        />
-        <img
-          id="movingStillImage"
-          style={{
-            width: `${this.props.boundingRect.width}px`,
-            height: `${this.props.boundingRect.height}px`,
-            margin: 'auto',
-            top: `${this.props.boundingRect.y}px`,
-            left: 0,
-            right: 0,
-            position: 'absolute',
-          }}
-          src={this.props.imgSrc}
         />
         <style jsx>
           {`
