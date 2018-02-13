@@ -11,8 +11,6 @@ const signedUrlCall = () => {
 };
 
 const postToAWS = (signedUrl, file) => {
-  console.log('THE FILE IS: ', file);
-
   const options = {
     method: 'PUT',
     body: file,
@@ -20,13 +18,27 @@ const postToAWS = (signedUrl, file) => {
   return fetch(signedUrl, options);
 };
 
-const verifyWithDb = (signedUrl, title, description, license) => {
-  const getUrl = signedUrl
-    .substring(0, signedUrl.indexOf('?'))
+const verifyWithDb = (
+  videoUrl,
+  imageUrl,
+  dimensions,
+  title,
+  description,
+  license,
+) => {
+  const getUrl = videoUrl
+    .substring(0, videoUrl.indexOf('?'))
+    .replace('splish-exports.s3.amazonaws.com', 'cdn.splish.io');
+
+  const posterImageUrl = imageUrl
+    .substring(0, imageUrl.indexOf('?'))
     .replace('splish-exports.s3.amazonaws.com', 'cdn.splish.io');
 
   let body = new FormData();
   body.append('get_url', getUrl);
+  body.append('poster_image_url', posterImageUrl);
+  body.append('width', dimensions.width);
+  body.append('height', dimensions.height);
   body.append('title', title);
   body.append('description', description);
   body.append('license', license);
@@ -36,7 +48,6 @@ const verifyWithDb = (signedUrl, title, description, license) => {
 function* uploadExport(action) {
   try {
     // first get signed url
-    console.log('STARTING UPLOAD EXPORT');
     const signedUrlRes = yield call(signedUrlCall);
     const signedUrlData = yield signedUrlRes.json();
     if (signedUrlData.error) {
@@ -63,6 +74,8 @@ function* uploadExport(action) {
     const verifyWithDbRes = yield call(
       verifyWithDb,
       signedUrlData.url,
+      signedUrlData.poster_image_url,
+      action.dimensions,
       action.title,
       action.description,
       action.license,
