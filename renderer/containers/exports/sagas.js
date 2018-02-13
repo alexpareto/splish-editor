@@ -25,6 +25,7 @@ const verifyWithDb = (
   title,
   description,
   license,
+  privacy_level
 ) => {
   const getUrl = videoUrl
     .substring(0, videoUrl.indexOf('?'))
@@ -42,6 +43,8 @@ const verifyWithDb = (
   body.append('title', title);
   body.append('description', description);
   body.append('license', license);
+  body.append('privacy_level', privacy_level);
+
   return api.call('exports/new', 'POST', body);
 };
 
@@ -79,6 +82,7 @@ function* uploadExport(action) {
       action.title,
       action.description,
       action.license,
+      action.privacy_level,
     );
     if (!verifyWithDbRes.ok) {
       throw new Error(

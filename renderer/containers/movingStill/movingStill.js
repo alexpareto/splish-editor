@@ -115,6 +115,7 @@ const mapDispatchToProps = dispatch => {
       title,
       description,
       license,
+      privacy_level,
     ) =>
       dispatch(
         ExportActions.uploadExportRequest(
@@ -124,6 +125,7 @@ const mapDispatchToProps = dispatch => {
           title,
           description,
           license,
+          privacy_level,
         ),
       ),
     movingStillShareComplete: () =>

@@ -14,6 +14,7 @@ export const uploadExportRequest = (
   title,
   description,
   license,
+  privacy_level,
 ) => {
   return {
     type: actionTypes.UPLOAD_EXPORT_REQUEST,
@@ -23,6 +24,7 @@ export const uploadExportRequest = (
     title,
     description,
     license,
+    privacy_level,
   };
 };
 

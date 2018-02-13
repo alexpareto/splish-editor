@@ -203,7 +203,7 @@ class NavBar extends React.Component {
             .share-button {
               position: absolute;
               top: 110px;
-              z-index: 1;
+              z-index: 15;
               right: 10px;
             }
 
