@@ -20,7 +20,6 @@ import * as CinemagraphActions from '../cinemagraph/actions';
 import * as MovingStillActions from '../movingStill/actions';
 import FileSelection from '../../components/fileSelection';
 import { getBoundingRect, setWindowSize } from '../../lib/windowSizeHelpers';
-import sizeOf from 'image-size';
 import electron from 'electron';
 import fs from 'fs';
 import A from '../../components/a';
@@ -144,11 +143,27 @@ class MainMenu extends React.Component {
     });
 
     const imgPath = 'file://' + files[0];
-    sizeOf(files[0], (err, dimensions) => {
-      const naturalDimensions = {
-        width: dimensions.width,
-        height: dimensions.height,
-      };
+
+    const ffmpeg = getFfmpeg();
+    var ExifImage = require('exif').ExifImage;
+
+    new ExifImage({ image: imgPath.split('file://')[1] }, (error, exifData) => {
+      console.log('ERROR: ', error);
+      console.log('exifData: ', exifData);
+    });
+
+    ffmpeg.ffprobe(imgPath, (err, metadata) => {
+      let naturalDimensions;
+      for (let i = 0; i < 4; i++) {
+        naturalDimensions = {
+          width: metadata.streams[i].coded_width,
+          height: metadata.streams[i].coded_height,
+        };
+
+        if (naturalDimensions.width && naturalDimensions.height) {
+          break;
+        }
+      }
 
       const hPadding = 120;
       const vPadding = 180;
