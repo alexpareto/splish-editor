@@ -93,7 +93,8 @@ class NavBar extends React.Component {
     const exportModal = this.props.showExportModal ? (
       <ExportModal
         isRendering={this.props.isRendering}
-        exportFile={this.props.exportFile}
+        videoFile={this.props.videoFile}
+        previewFile={this.props.previewFile}
         videoDimensions={this.props.videoDimensions}
         isUploading={this.props.isUploading}
         lastUploadedExport={this.props.lastUploadedExport}

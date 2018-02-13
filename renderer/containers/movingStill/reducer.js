@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 import getHistory from '../../lib/getHistory';
 import throttleQuality from '../../lib/throttleQuality';
 import * as DrawHelpers from '../../lib/drawHelpers';
+import fs from 'fs';
 
 const initialState = {
   history: {
@@ -42,7 +43,8 @@ const initialState = {
   isRendering: false,
   shareLink: '',
   duration: 3.0,
-  file: null,
+  videoFile: null,
+  previewFile: null,
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -62,11 +64,17 @@ export const movingStillReducer = (state = initialState, action) => {
 
       // throttle preview to 2k to prevent crashes
       const previewDimensions = throttleQuality(action.naturalDimensions, '2K');
+      const data = fs.readFileSync(action.imgPath.split('file://')[1]);
+      const previewFile = new File([data], 'preview.jpg', {
+        type: 'image/jpeg',
+      });
+
       return {
         ...state,
         imgPath: action.imgPath,
         boundingRect: action.boundingRect,
         previewDimensions,
+        previewFile,
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       let vectorCanvas = d3.select('#movingStillSVG');
@@ -208,7 +216,7 @@ export const movingStillReducer = (state = initialState, action) => {
     case actionTypes.MOVING_STILL_EXPORT_COMPLETE:
       return {
         ...state,
-        file: action.file,
+        videoFile: action.file,
         isRendering: false,
       };
     case actionTypes.MOVING_STILL_SHARE_COMPLETE:

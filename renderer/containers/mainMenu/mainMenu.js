@@ -103,7 +103,7 @@ class MainMenu extends React.Component {
           .fps(framerate)
           .output(dir + '%02d.jpg')
           .on('end', () => {
-            this.props.loadThumbnails();
+            this.props.loadThumbnails(dir + '01.jpg');
           })
           .run();
       });
@@ -326,7 +326,8 @@ const mapDispatchToProps = dispatch => {
           boundingRect,
         ),
       ),
-    loadThumbnails: () => dispatch(CinemagraphActions.loadThumbnails()),
+    loadThumbnails: firstImage =>
+      dispatch(CinemagraphActions.loadThumbnails(firstImage)),
   };
 };
 

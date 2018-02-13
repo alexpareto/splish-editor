@@ -7,8 +7,7 @@ import * as globalStyles from '../globalStyles';
 class FileSaver extends React.Component {
   chooseFileDialog = () => {
     const path = remote.dialog.showSaveDialog({
-      title: 'Choose a video!',
-      filters: [{ name: 'Movies', extensions: ['mp4'] }],
+      filters: [{ name: 'Movies', extensions: this.props.extensions }],
       buttonLabel: 'Save',
       properties: ['openFile'],
     });

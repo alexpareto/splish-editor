@@ -203,7 +203,9 @@ class ExportModal extends React.Component {
                     },
                     () => {
                       this.props.uploadExportRequest(
-                        this.props.exportFile,
+                        this.props.videoFile,
+                        this.props.previewFile,
+                        this.props.videoDimensions,
                         this.state.title,
                         this.state.description,
                         '',
@@ -315,8 +317,14 @@ class ExportModal extends React.Component {
       <div className="holder">
         {shareText}
         <div className="download-button">
-          <FileSaver fileHandler={this.export}>
-            <Button>download with watermark</Button>
+          <FileSaver fileHandler={this.export} extensions={['mp4']}>
+            <Button>export video with watermark</Button>
+          </FileSaver>
+        </div>
+        <span> or </span>
+        <div className="download-button">
+          <FileSaver fileHandler={this.export} extensions={['gif']}>
+            <Button>export gif with watermark</Button>
           </FileSaver>
         </div>
         <div className="closeButton">

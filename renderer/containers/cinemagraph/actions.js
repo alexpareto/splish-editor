@@ -108,8 +108,8 @@ export const resetCinemagraphState = () => {
   return { type: actionTypes.RESET_CINEMAGRAPH_STATE };
 };
 
-export const loadThumbnails = () => {
-  return { type: actionTypes.LOAD_THUMBNAILS };
+export const loadThumbnails = firstImage => {
+  return { type: actionTypes.LOAD_THUMBNAILS, firstImage };
 };
 
 export const cinemagraphTrimFront = time => {

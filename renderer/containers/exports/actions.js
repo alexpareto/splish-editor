@@ -8,7 +8,9 @@ export const actionTypes = {
 };
 
 export const uploadExportRequest = (
-  file,
+  videoFile,
+  previewFile,
+  dimensions,
   title,
   description,
   license,
@@ -16,7 +18,9 @@ export const uploadExportRequest = (
 ) => {
   return {
     type: actionTypes.UPLOAD_EXPORT_REQUEST,
-    file,
+    videoFile,
+    previewFile,
+    dimensions,
     title,
     description,
     license,
