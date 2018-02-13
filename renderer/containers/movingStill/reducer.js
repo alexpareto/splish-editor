@@ -35,7 +35,7 @@ const initialState = {
     width: 0,
   },
   animationParams: {
-    dragDistance: 3.0,
+    dragDistance: 4.0,
     anchorImpact: 2.5,
     impactDivisor: 4.0,
   },
