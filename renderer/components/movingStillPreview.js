@@ -3,7 +3,7 @@ import * as globalStyles from '../globalStyles';
 import fs from 'fs';
 
 class MovingStillPreview extends React.Component {
-  initializeMovingStillCanvas = () => {
+  componentDidMount() {
     this.props.initializeMovingStillCanvas(
       // callback for when the video completes capture
       // Read file and send it to s3, also notify redux
@@ -17,24 +17,11 @@ class MovingStillPreview extends React.Component {
         });
       },
     );
-  };
+  }
 
   render() {
     return (
       <div>
-        <img
-          onLoad={this.initializeMovingStillCanvas}
-          style={{
-            width: `${this.props.boundingRect.width}px`,
-            height: `${this.props.boundingRect.height}px`,
-            margin: 'auto',
-            top: `${this.props.boundingRect.y}px`,
-            left: 0,
-            right: 0,
-            position: 'absolute',
-          }}
-          src={this.props.imgSrc}
-        />
         <canvas
           style={{
             width: `${this.props.boundingRect.width}px`,
@@ -44,6 +31,7 @@ class MovingStillPreview extends React.Component {
             left: 0,
             right: 0,
             position: 'absolute',
+            zIndex: '1',
           }}
           width={this.props.previewDimensions.width}
           height={this.props.previewDimensions.height}
@@ -58,6 +46,7 @@ class MovingStillPreview extends React.Component {
             left: 0,
             right: 0,
             position: 'absolute',
+            zIndex: '0',
           }}
           id="2dcanvas"
           width={this.props.previewDimensions.width}

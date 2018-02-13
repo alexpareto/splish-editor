@@ -46,6 +46,7 @@ const initialState = {
   duration: 3.0,
   file: null,
   preview: null,
+  orientation: 1,
 };
 
 export const movingStillReducer = (state = initialState, action) => {
@@ -71,6 +72,7 @@ export const movingStillReducer = (state = initialState, action) => {
         ...state,
         imgPath: action.imgPath,
         boundingRect: action.boundingRect,
+        orientation: action.orientation,
         previewDimensions,
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
@@ -84,6 +86,7 @@ export const movingStillReducer = (state = initialState, action) => {
         state.animationParams,
         state.duration,
         action.callback,
+        state.orientation,
       );
 
       return {
@@ -218,8 +221,8 @@ export const movingStillReducer = (state = initialState, action) => {
       };
     case actionTypes.START_EXPORTING_MOVING_STILL:
       state.preview.stop();
-      state.preview.update(state.anchors, state.vectors, state.duration);
       setTimeout(() => {
+        state.preview.update(state.anchors, state.vectors, state.duration);
         state.preview.capture();
       }, 200);
       return {

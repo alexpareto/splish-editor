@@ -10,6 +10,7 @@ import redirect from '../../lib/redirect.js';
 import * as globalStyles from '../../globalStyles';
 import getFfmpeg from '../../lib/getFfmpeg';
 import * as api from '../../lib/api';
+import getOrientedDimensions from '../../lib/getOrientedDimensions';
 
 import Logo from '../../components/logo.js';
 import Button from '../../components/button.js';
@@ -148,44 +149,55 @@ class MainMenu extends React.Component {
     var ExifImage = require('exif').ExifImage;
 
     new ExifImage({ image: imgPath.split('file://')[1] }, (error, exifData) => {
-      console.log('ERROR: ', error);
-      console.log('exifData: ', exifData);
-    });
+      let orientation;
 
-    ffmpeg.ffprobe(imgPath, (err, metadata) => {
-      let naturalDimensions;
-      for (let i = 0; i < 4; i++) {
-        naturalDimensions = {
-          width: metadata.streams[i].coded_width,
-          height: metadata.streams[i].coded_height,
-        };
-
-        if (naturalDimensions.width && naturalDimensions.height) {
-          break;
-        }
+      if (error) {
+        orientation = 1;
+      } else {
+        orientation = exifData.image.Orientation;
       }
 
-      const hPadding = 120;
-      const vPadding = 180;
-      const headerSize = 100; // height of toolbar at top
-      const footerSize = 0;
-      const boundingRect = getBoundingRect(
-        naturalDimensions,
-        hPadding,
-        vPadding,
-        headerSize,
-        footerSize,
-      );
+      ffmpeg.ffprobe(imgPath, (err, metadata) => {
+        let naturalDimensions;
+        for (let i = 0; i < 4; i++) {
+          naturalDimensions = {
+            width: metadata.streams[i].coded_width,
+            height: metadata.streams[i].coded_height,
+          };
 
-      this.props.selectMovingStillImage(
-        imgPath,
-        naturalDimensions,
-        boundingRect,
-      );
+          if (naturalDimensions.width && naturalDimensions.height) {
+            break;
+          }
+        }
 
-      Router.push('/movingStill');
+        naturalDimensions = getOrientedDimensions(
+          orientation,
+          naturalDimensions,
+        );
 
-      setWindowSize(boundingRect, hPadding, vPadding);
+        const hPadding = 120;
+        const vPadding = 180;
+        const headerSize = 100; // height of toolbar at top
+        const footerSize = 0;
+        const boundingRect = getBoundingRect(
+          naturalDimensions,
+          hPadding,
+          vPadding,
+          headerSize,
+          footerSize,
+        );
+
+        this.props.selectMovingStillImage(
+          imgPath,
+          naturalDimensions,
+          boundingRect,
+          orientation,
+        );
+
+        Router.push('/movingStill');
+
+        setWindowSize(boundingRect, hPadding, vPadding);
+      });
     });
   };
 
@@ -333,12 +345,18 @@ const mapDispatchToProps = dispatch => {
           duration,
         ),
       ),
-    selectMovingStillImage: (imgPath, naturalDimensions, boundingRect) =>
+    selectMovingStillImage: (
+      imgPath,
+      naturalDimensions,
+      boundingRect,
+      orientation,
+    ) =>
       dispatch(
         MovingStillActions.selectMovingStillImage(
           imgPath,
           naturalDimensions,
           boundingRect,
+          orientation,
         ),
       ),
     loadThumbnails: () => dispatch(CinemagraphActions.loadThumbnails()),
