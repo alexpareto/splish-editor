@@ -11,7 +11,7 @@ export default (outputPath, videoDimensions, callback) => {
   const pixels = videoDimensions.width * videoDimensions.height;
   let size = 1;
   let waterMarkWidth = 100;
-  let waterMarkHeight = 26;
+  let waterMarkHeight = 30;
 
   const mark1 = 50000;
   const mark2 = 1500000;
@@ -19,11 +19,11 @@ export default (outputPath, videoDimensions, callback) => {
   if (pixels > mark2) {
     size = 3;
     waterMarkWidth = 250;
-    waterMarkHeight = 66;
+    waterMarkHeight = 75;
   } else if (pixels > mark2) {
     size = 2;
     waterMarkWidth = 150;
-    waterMarkHeight = 39;
+    waterMarkHeight = 45;
   }
 
   const dir = remote.app.getPath('temp') + 'frames/';
