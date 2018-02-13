@@ -280,6 +280,8 @@ class Preview {
 
   stop = () => {
     this.isPlaying = false;
+    this.tween = 0.0;
+    this.render();
   };
 
   renderAnimationFrame = time => {

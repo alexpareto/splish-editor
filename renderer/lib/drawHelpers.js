@@ -37,7 +37,6 @@ export const drawVectorPath = (vectorCanvas, vector) => {
 };
 
 export const drawVectorHead = (vectorCanvas, vector) => {
-  console.log('VECTOR: ', vector);
   //draw arrow head
   let path = vectorCanvas.append('path');
   let dx = vector[1].x - vector[0].x;
@@ -91,7 +90,6 @@ export const removeVector = (vectorList, vector) => {
   }
 
   vectorList.splice(removeIndex, 1);
-  console.log('ATTEMPTING TO REMOVE VECTOR: ', vector);
   vector[0].path.remove();
   vector[1].path.remove();
 

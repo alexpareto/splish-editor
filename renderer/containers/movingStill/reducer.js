@@ -1,5 +1,5 @@
 import { actionTypes } from './actions';
-import { dispatch } from 'react-redux';
+import { dispatch } from 'redux';
 import * as globalStyles from '../../globalStyles';
 import * as Actions from './actions';
 import * as d3 from 'd3';
@@ -7,7 +7,6 @@ import getHistory from '../../lib/getHistory';
 import throttleQuality from '../../lib/throttleQuality';
 import * as DrawHelpers from '../../lib/drawHelpers';
 import Preview from '../../webgl/helpers/previewMovingStill';
-import fs from 'fs';
 
 const initialState = {
   history: {
@@ -84,17 +83,7 @@ export const movingStillReducer = (state = initialState, action) => {
         state.boundingRect,
         state.animationParams,
         state.duration,
-        // callback for when the video completes capture
-        // Read file and send it to s3, also notify redux
-        // to stop capturing the video b/c export is done
-        filePath => {
-          fs.readFile(filePath, (err, data) => {
-            const file = new File([data], 'output.txt', {
-              type: 'video/mp4',
-            });
-            dispatch(Actions.movingStillExportComplete(file));
-          });
-        },
+        action.callback,
       );
 
       return {
@@ -126,7 +115,9 @@ export const movingStillReducer = (state = initialState, action) => {
         currentTool: 'anchor',
       };
     case actionTypes.START_MOVING_STILL_PREVIEW_MODE:
-      state.preview.update(state.anchors, state.vectors, state.duration);
+      setTimeout(() => {
+        state.preview.update(state.anchors, state.vectors, state.duration);
+      }, 50);
       return {
         ...state,
         viewMode: 'preview',
@@ -226,7 +217,11 @@ export const movingStillReducer = (state = initialState, action) => {
         animationParams,
       };
     case actionTypes.START_EXPORTING_MOVING_STILL:
-      state.preview.capture();
+      state.preview.stop();
+      state.preview.update(state.anchors, state.vectors, state.duration);
+      setTimeout(() => {
+        state.preview.capture();
+      }, 200);
       return {
         ...state,
         isRendering: true,
@@ -246,7 +241,9 @@ export const movingStillReducer = (state = initialState, action) => {
       };
     case actionTypes.UPDATE_MOVING_STILL_DURATION:
       if (state.viewMode == 'preview') {
-        state.preview.update(state.anchors, state.vectors, action.duration);
+        setTimeout(() => {
+          state.preview.update(state.anchors, state.vectors, action.duration);
+        }, 40);
       }
       return {
         ...state,

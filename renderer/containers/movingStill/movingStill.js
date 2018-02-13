@@ -19,7 +19,7 @@ class MovingStill extends React.Component {
     );
   }
   render() {
-    const showPreview = this.props.movingStill.viewMode == 'preview';
+    const showVectors = this.props.movingStill.viewMode == 'edit';
 
     return (
       <Holder>
@@ -58,7 +58,6 @@ class MovingStill extends React.Component {
             currentTool={this.props.movingStill.currentTool}
           />
           <MovingStillPreview
-            display={showPreview}
             isRendering={this.props.movingStill.isRendering}
             initializeMovingStillCanvas={this.props.initializeMovingStillCanvas}
             imgSrc={this.props.movingStill.imgPath}
@@ -73,7 +72,7 @@ class MovingStill extends React.Component {
             duration={this.props.movingStill.duration}
           />
           <VectorCanvas
-            display={!showPreview}
+            display={showVectors}
             currentTool={this.props.movingStill.currentTool}
             imgSrc={this.props.movingStill.imgPath}
             boundingRect={this.props.movingStill.boundingRect}
@@ -89,8 +88,8 @@ class MovingStill extends React.Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    initializeMovingStillCanvas: () =>
-      dispatch(Actions.initializeMovingStillCanvas()),
+    initializeMovingStillCanvas: callback =>
+      dispatch(Actions.initializeMovingStillCanvas(callback)),
     startMovingStillPreviewMode: () =>
       dispatch(Actions.startMovingStillPreviewMode()),
     startMovingStillEditMode: () =>

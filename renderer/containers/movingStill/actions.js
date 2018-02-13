@@ -25,8 +25,8 @@ export const actionTypes = {
 };
 
 // ACTIONS
-export const initializeMovingStillCanvas = () => {
-  return { type: actionTypes.INITIALIZE_MOVING_STILL_CANVAS };
+export const initializeMovingStillCanvas = callback => {
+  return { type: actionTypes.INITIALIZE_MOVING_STILL_CANVAS, callback };
 };
 
 export const selectMovingStillImage = (

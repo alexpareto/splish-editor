@@ -3,25 +3,27 @@ import * as globalStyles from '../globalStyles';
 import fs from 'fs';
 
 class MovingStillPreview extends React.Component {
-  componentDidUpdate() {
-    // give time for image upload to GPU
-    // if (this.props.isRendering) {
-    //   setTimeout(() => {
-    //     this.preview.capture();
-    //   }, 300);
-    //   return;
-    // }
-  }
-
   initializeMovingStillCanvas = () => {
-    this.props.initializeMovingStillCanvas();
+    this.props.initializeMovingStillCanvas(
+      // callback for when the video completes capture
+      // Read file and send it to s3, also notify redux
+      // to stop capturing the video b/c export is done
+      filePath => {
+        fs.readFile(filePath, (err, data) => {
+          const file = new File([data], 'output.txt', {
+            type: 'video/mp4',
+          });
+          this.props.movingStillExportComplete(file);
+        });
+      },
+    );
   };
 
   render() {
     return (
       <div>
         <img
-          onLoad={this.initializeCanvas}
+          onLoad={this.initializeMovingStillCanvas}
           style={{
             width: `${this.props.boundingRect.width}px`,
             height: `${this.props.boundingRect.height}px`,
