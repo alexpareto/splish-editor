@@ -9,9 +9,7 @@ export default () => {
   }
 
   const ffmpegPath = remote.getGlobal('ffmpegpath');
-  const ffprobePath = remote.getGlobal('ffprobepath');
 
   ffmpeg.setFfmpegPath(ffmpegPath);
-  ffmpeg.setFfprobePath(ffprobePath);
   return ffmpeg;
 };

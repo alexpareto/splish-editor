@@ -5,6 +5,7 @@ import getShader from './getShader';
 import loadProgram from './loadProgram';
 import createImageGrid from './createImageGrid';
 import VideoUploader from '../../lib/videoUploader';
+import getOrientedCanvas from '../../lib/getOrientedCanvas';
 
 class Preview {
   constructor(
@@ -15,6 +16,7 @@ class Preview {
     animationParams,
     duration,
     exportCallback,
+    orientation,
   ) {
     this.imagePath = imagePath;
     this.anchors = anchors;
@@ -23,6 +25,7 @@ class Preview {
     this.animationParams = animationParams;
     this.duration = duration;
     this.exportCallback = exportCallback;
+    this.orientation = orientation;
 
     this.gl;
     this.texCoordLocation; // Location of the texture for the picture fragment shader.
@@ -63,7 +66,7 @@ class Preview {
       handleData: this.videoUploader.addFrame,
     });
 
-    this.init();
+    this.setImage(this.imagePath);
   }
 
   capture = () => {
@@ -166,10 +169,7 @@ class Preview {
 
     this.vectors = normalizedVectors;
     this.anchors = normalizedAnchors;
-
-    this.setImage(this.imagePath, () => {
-      this.start();
-    });
+    this.start();
   };
 
   update = (anchors, vectors, duration) => {
@@ -282,6 +282,8 @@ class Preview {
 
   stop = () => {
     this.isPlaying = false;
+    this.tween = 0.0;
+    this.render();
   };
 
   renderAnimationFrame = time => {
@@ -325,7 +327,7 @@ class Preview {
     return this.boundedPoint(x, y);
   };
 
-  setImage = (imagePath, callback) => {
+  setImage = imagePath => {
     imagePath = imagePath.split('file://')[1];
 
     var bitmap = fs.readFileSync(imagePath);
@@ -337,7 +339,6 @@ class Preview {
 
     image.onload = () => {
       this.loadImage(image);
-      callback();
     };
 
     image.src = base64str;
@@ -357,8 +358,11 @@ class Preview {
 
     ctx.clearRect(0, 0, canvWidth, canvHeight);
 
+    ctx = getOrientedCanvas(ctx, canvas, this.orientation);
+
     // Put the image on the canvas, scaled using xx & yy.
     ctx.drawImage(image, 0, 0, image.width, image.height, x, y, xx, yy);
+
     var gl = this.gl;
 
     // Create a texture object that will contain the image.
@@ -378,7 +382,6 @@ class Preview {
 
     //    Note: a canvas is used here but can be replaced by an image object.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
-    ctx.clearRect(0, 0, canvWidth, canvHeight);
   };
 }
 

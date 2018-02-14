@@ -25,20 +25,22 @@ export const actionTypes = {
 };
 
 // ACTIONS
-export const initializeMovingStillCanvas = tool => {
-  return { type: actionTypes.INITIALIZE_MOVING_STILL_CANVAS, tool };
+export const initializeMovingStillCanvas = callback => {
+  return { type: actionTypes.INITIALIZE_MOVING_STILL_CANVAS, callback };
 };
 
 export const selectMovingStillImage = (
   imgPath,
   naturalDimensions,
   boundingRect,
+  orientation,
 ) => {
   return {
     type: actionTypes.SELECT_MOVING_STILL_IMAGE,
     imgPath,
     naturalDimensions,
     boundingRect,
+    orientation,
   };
 };
 

@@ -1,11 +1,14 @@
 import { actionTypes } from './actions';
+import { dispatch } from 'redux';
 import * as globalStyles from '../../globalStyles';
 import * as Actions from './actions';
 import * as d3 from 'd3';
 import getHistory from '../../lib/getHistory';
 import throttleQuality from '../../lib/throttleQuality';
 import * as DrawHelpers from '../../lib/drawHelpers';
+import Preview from '../../webgl/helpers/previewMovingStill';
 import fs from 'fs';
+import electron from 'electron';
 
 const initialState = {
   history: {
@@ -43,6 +46,8 @@ const initialState = {
   isRendering: false,
   shareLink: '',
   duration: 3.0,
+  preview: null,
+  orientation: 1,
   videoFile: null,
   previewFile: null,
 };
@@ -56,7 +61,8 @@ export const movingStillReducer = (state = initialState, action) => {
     anchor,
     vectors,
     vector,
-    selection;
+    selection,
+    preview;
   switch (action.type) {
     case actionTypes.SELECT_MOVING_STILL_IMAGE:
       //reset state
@@ -64,25 +70,33 @@ export const movingStillReducer = (state = initialState, action) => {
 
       // throttle preview to 2k to prevent crashes
       const previewDimensions = throttleQuality(action.naturalDimensions, '2K');
-      const data = fs.readFileSync(action.imgPath.split('file://')[1]);
-      const previewFile = new File([data], 'preview.jpg', {
-        type: 'image/jpeg',
-      });
 
       return {
         ...state,
         imgPath: action.imgPath,
         boundingRect: action.boundingRect,
+        orientation: action.orientation,
         previewDimensions,
-        previewFile,
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       let vectorCanvas = d3.select('#movingStillSVG');
+
+      preview = new Preview(
+        state.imgPath,
+        state.anchors,
+        state.vectors,
+        state.boundingRect,
+        state.animationParams,
+        state.duration,
+        action.callback,
+        state.orientation,
+      );
+
       return {
         ...state,
-        isInitialized: true,
-        currentTool: action.tool,
+        currentTool: 'vector',
         vectorCanvas,
+        preview,
       };
     case actionTypes.SELECT_VECTOR_TOOL:
       DrawHelpers.clearSelection(state.anchors, state.vectors);
@@ -107,13 +121,15 @@ export const movingStillReducer = (state = initialState, action) => {
         currentTool: 'anchor',
       };
     case actionTypes.START_MOVING_STILL_PREVIEW_MODE:
-      let boundingRect = state.vectorCanvas.node().getBoundingClientRect();
+      setTimeout(() => {
+        state.preview.update(state.anchors, state.vectors, state.duration);
+      }, 50);
       return {
         ...state,
         viewMode: 'preview',
-        boundingRect,
       };
     case actionTypes.START_MOVING_STILL_EDIT_MODE:
+      state.preview.stop();
       return {
         ...state,
         viewMode: 'edit',
@@ -207,6 +223,11 @@ export const movingStillReducer = (state = initialState, action) => {
         animationParams,
       };
     case actionTypes.START_EXPORTING_MOVING_STILL:
+      state.preview.stop();
+      setTimeout(() => {
+        state.preview.update(state.anchors, state.vectors, state.duration);
+        state.preview.capture();
+      }, 200);
       return {
         ...state,
         isRendering: true,
@@ -214,10 +235,24 @@ export const movingStillReducer = (state = initialState, action) => {
         showExportModal: true,
       };
     case actionTypes.MOVING_STILL_EXPORT_COMPLETE:
+      const remote = electron.remote || false;
+      let previewFile;
+
+      if (remote) {
+        const dir = remote.app.getPath('temp') + 'frames/';
+        const data = fs.readFileSync(dir + '000.jpg');
+        previewFile = new File([data], 'preview.jpg', {
+          type: 'image/jpeg',
+        });
+      }
+
+      state.preview.stop();
+
       return {
         ...state,
         videoFile: action.file,
         isRendering: false,
+        previewFile,
       };
     case actionTypes.MOVING_STILL_SHARE_COMPLETE:
       return {
@@ -225,6 +260,11 @@ export const movingStillReducer = (state = initialState, action) => {
         showExportModal: false,
       };
     case actionTypes.UPDATE_MOVING_STILL_DURATION:
+      if (state.viewMode == 'preview') {
+        setTimeout(() => {
+          state.preview.update(state.anchors, state.vectors, action.duration);
+        }, 40);
+      }
       return {
         ...state,
         duration: action.duration,

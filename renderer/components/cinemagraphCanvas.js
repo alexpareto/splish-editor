@@ -105,6 +105,17 @@ class CinemagraphPreview extends React.Component {
           }}
           width={this.props.previewDimensions.width}
           height={this.props.previewDimensions.height}
+          id="2dcinemagraphvid"
+        />
+        <canvas
+          style={{
+            width: `${this.props.boundingRect.width}px`,
+            height: `${this.props.boundingRect.height}px`,
+            zIndex: -1,
+            position: 'absolute',
+          }}
+          width={this.props.previewDimensions.width}
+          height={this.props.previewDimensions.height}
           id="2dcinemagraph"
         />
         <style jsx>{`
