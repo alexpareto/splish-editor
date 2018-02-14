@@ -163,7 +163,7 @@ class VectorCanvas extends React.Component {
             .d3SVG {
               width: ${this.props.boundingRect.width}px;
               height: ${this.props.boundingRect.height}px;
-              z-index: 30000;
+              z-index: 10;
               position: absolute;
               user-select: none;
               cursor: crosshair;

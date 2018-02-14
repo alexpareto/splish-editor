@@ -7,13 +7,24 @@ export const actionTypes = {
   GET_EXPORTS_SUCCESS: 'GET_EXPORTS_SUCCESS',
 };
 
-export const uploadExportRequest = (file, title, description, license) => {
+export const uploadExportRequest = (
+  videoFile,
+  previewFile,
+  dimensions,
+  title,
+  description,
+  license,
+  privacy_level,
+) => {
   return {
     type: actionTypes.UPLOAD_EXPORT_REQUEST,
-    file,
+    videoFile,
+    previewFile,
+    dimensions,
     title,
     description,
     license,
+    privacy_level,
   };
 };
 

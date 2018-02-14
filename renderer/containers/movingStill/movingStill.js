@@ -48,7 +48,8 @@ class MovingStill extends React.Component {
             isRendering={this.props.movingStill.isRendering}
             isUploading={this.props.isUploading}
             lastUploadedExport={this.props.lastUploadedExport}
-            exportFile={this.props.movingStill.file}
+            videoFile={this.props.movingStill.videoFile}
+            previewFile={this.props.movingStill.previewFile}
             uploadExportRequest={this.props.uploadExportRequest}
             updateMovingStillDuration={this.props.updateMovingStillDuration}
             selectSelectionTool={this.props.selectSelectionTool}
@@ -105,9 +106,25 @@ const mapDispatchToProps = dispatch => {
       dispatch(Actions.startExportingMovingStill()),
     movingStillExportComplete: file =>
       dispatch(Actions.movingStillExportComplete(file)),
-    uploadExportRequest: (file, title, description, license) =>
+    uploadExportRequest: (
+      videoFile,
+      previewFile,
+      dimensions,
+      title,
+      description,
+      license,
+      privacy_level,
+    ) =>
       dispatch(
-        ExportActions.uploadExportRequest(file, title, description, license),
+        ExportActions.uploadExportRequest(
+          videoFile,
+          previewFile,
+          dimensions,
+          title,
+          description,
+          license,
+          privacy_level,
+        ),
       ),
     movingStillShareComplete: () =>
       dispatch(Actions.movingStillShareComplete()),

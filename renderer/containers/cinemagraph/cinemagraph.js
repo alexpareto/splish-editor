@@ -39,7 +39,8 @@ class Cinemagraph extends React.Component {
             startExportingCinemagraph={this.props.startExportingCinemagraph}
             cinemagraphShareComplete={this.props.cinemagraphShareComplete}
             showExportModal={this.props.cinemagraph.showExportModal}
-            exportFile={this.props.cinemagraph.file}
+            videoFile={this.props.cinemagraph.videoFile}
+            previewFile={this.props.cinemagraph.previewFile}
             isRendering={this.props.cinemagraph.isRendering}
             isUploading={this.props.isUploading}
             lastUploadedExport={this.props.lastUploadedExport}
@@ -93,9 +94,15 @@ const mapDispatchToProps = dispatch => {
   return {
     startExportingCinemagraph: () =>
       dispatch(Actions.startExportingCinemagraph()),
-    uploadExportRequest: (file, title, description, license) =>
+    uploadExportRequest: (file, title, description, license, privacy_level) =>
       dispatch(
-        ExportActions.uploadExportRequest(file, title, description, license),
+        ExportActions.uploadExportRequest(
+          file,
+          title,
+          description,
+          license,
+          privacy_level,
+        ),
       ),
     cinemagraphExportComplete: file =>
       dispatch(Actions.cinemagraphExportComplete(file)),

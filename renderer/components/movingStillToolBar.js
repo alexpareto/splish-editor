@@ -56,7 +56,8 @@ class NavBar extends React.Component {
       <ExportModal
         isRendering={this.props.isRendering}
         isUploading={this.props.isUploading}
-        exportFile={this.props.exportFile}
+        videoFile={this.props.videoFile}
+        previewFile={this.props.previewFile}
         videoDimensions={this.props.videoDimensions}
         lastUploadedExport={this.props.lastUploadedExport}
         uploadExportRequest={this.props.uploadExportRequest}
@@ -178,7 +179,7 @@ class NavBar extends React.Component {
             .share-button {
               position: absolute;
               top: 110px;
-              z-index: 1;
+              z-index: 15;
               right: 10px;
             }
 

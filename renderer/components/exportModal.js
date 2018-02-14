@@ -9,14 +9,18 @@ import FileSaver from './fileSaver';
 import exportWithWaterMark from '../lib/exportWithWaterMark';
 import electron from 'electron';
 
+import { Tooltip } from 'react-tippy';
+import { Circle, CheckCircle } from 'react-feather';
+
 class ExportModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      exportStage: 0,
+      exportStage: 1,
       exportCount: 0,
       title: '',
       description: '',
+      privacy_level: 'PU',
       hasUploaded: false,
     };
   }
@@ -25,7 +29,7 @@ class ExportModal extends React.Component {
     // if done rendering and filling out title/description start upload
     if (
       !nextProps.isRendering &&
-      this.state.exportStage == 2 &&
+      this.state.exportStage == 3 &&
       !this.state.hasUploaded &&
       !this.props.isUploading
     ) {
@@ -39,6 +43,7 @@ class ExportModal extends React.Component {
             this.state.title,
             this.state.description,
             '',
+            this.state.privacy_level,
           );
         },
       );
@@ -99,22 +104,26 @@ class ExportModal extends React.Component {
   };
 
   renderMain = () => {
-    if (this.state.exportStage == 0) {
+    if (this.state.exportStage == 1) {
       return (
         <div>
           <span className="render-text">
-            Awesome. What would you like to call your splish?
+            What do you want to caption your splish?
           </span>
-          <Input
-            name="title"
-            placeholder="title"
-            value={this.state.title}
+          <TextArea
+            name="description"
+            placeholder="caption"
+            value={this.state.description}
             onChange={this.handleInputChange}
-            onKeyDown={this.onTitleKeyDown}
-            maxLength="255"
+            onKeyDown={this.onTextAreaKeyDown}
+            maxLength="500"
           />
           <span>
-            <Button onClick={() => this.setState({ exportStage: 1 })}>
+            <Button
+              onClick={() => {
+                this.setState({ exportStage: 2 });
+              }}
+            >
               continue
             </Button>
           </span>
@@ -137,24 +146,55 @@ class ExportModal extends React.Component {
           `}</style>
         </div>
       );
-    } else if (this.state.exportStage == 1) {
+    } else if (this.state.exportStage == 2) {
       return (
-        <div>
+        <div className="holder">
           <span className="render-text">
-            Great name! How about a description?
+            Would you like to share your splish?
           </span>
-          <TextArea
-            name="description"
-            placeholder="description"
-            value={this.state.description}
-            onChange={this.handleInputChange}
-            onKeyDown={this.onTextAreaKeyDown}
-            maxLength="500"
-          />
-          <span>
+          <Tooltip
+            title="post to the community, get featured on discover, and have this splish appear on your public profile"
+            theme="light"
+            position="right"
+          >
+            <div
+              onClick={() => this.setState({ privacy_level: 'PU' })}
+              className="privacy-option"
+            >
+              {this.state.privacy_level == 'PU' ? <CheckCircle /> : <Circle />}
+              <label>public</label>
+            </div>
+          </Tooltip>
+          <Tooltip
+            title="only people with the link can see"
+            theme="light"
+            position="right"
+          >
+            <div
+              onClick={() => this.setState({ privacy_level: 'UL' })}
+              className="privacy-option"
+            >
+              {this.state.privacy_level == 'UL' ? <CheckCircle /> : <Circle />}
+              <label>unlisted</label>
+            </div>
+          </Tooltip>
+          <Tooltip
+            title="only you can see this splish in your personal profile"
+            theme="light"
+            position="right"
+          >
+            <div
+              onClick={() => this.setState({ privacy_level: 'PR' })}
+              className="privacy-option"
+            >
+              {this.state.privacy_level == 'PR' ? <CheckCircle /> : <Circle />}
+              <label>private</label>
+            </div>
+          </Tooltip>
+          <span className="contine-button">
             <Button
               onClick={() => {
-                this.setState({ exportStage: 2 });
+                this.setState({ exportStage: 3 });
                 // if already done rendering then start upload now
                 if (!this.props.isRendering) {
                   this.setState(
@@ -163,10 +203,13 @@ class ExportModal extends React.Component {
                     },
                     () => {
                       this.props.uploadExportRequest(
-                        this.props.exportFile,
+                        this.props.videoFile,
+                        this.props.previewFile,
+                        this.props.videoDimensions,
                         this.state.title,
                         this.state.description,
                         '',
+                        this.state.privacy_level,
                       );
                     },
                   );
@@ -177,7 +220,7 @@ class ExportModal extends React.Component {
             </Button>
           </span>
           <style jsx>{`
-            div {
+            .holder {
               position: relative;
               height: 100%;
               width: 100%;
@@ -186,9 +229,21 @@ class ExportModal extends React.Component {
               flex-direction: column;
               align-items: center;
               justify-content: center;
+              padding: 20px;
             }
 
-            span {
+            .privacy-option {
+              width: 100px;
+              display: flex;
+              align-items: center;
+              padding: 5px;
+            }
+
+            label {
+              padding-left: 7px;
+            }
+
+            .contine-button {
               display: inline-block;
               margin: 30px;
             }
@@ -246,27 +301,47 @@ class ExportModal extends React.Component {
       ? `https://splish.io/e/${this.props.lastUploadedExport.public_id}`
       : null;
 
+    const shareText =
+      this.state.privacy_level == 'PR' ? (
+        <span>
+          All rendered! See your private splish in your profile or export below.
+        </span>
+      ) : (
+        <React.Fragment>
+          <span>All rendered! Share your splish with this link:</span>
+          <span style={{ userSelect: 'auto' }}> {shareLink} </span>
+          <span> or </span>
+        </React.Fragment>
+      );
     return (
-      <div>
-        <span>All rendered! Share your splish with this link:</span>
-        <span style={{ userSelect: 'auto' }}> {shareLink} </span>
+      <div className="holder">
+        {shareText}
+        <div className="download-button">
+          <FileSaver fileHandler={this.export} extensions={['mp4']}>
+            <Button>export video with watermark</Button>
+          </FileSaver>
+        </div>
         <span> or </span>
-        <FileSaver fileHandler={this.export}>
-          <Button>download with watermark</Button>
-        </FileSaver>
+        <div className="download-button">
+          <FileSaver fileHandler={this.export} extensions={['gif']}>
+            <Button>export gif with watermark</Button>
+          </FileSaver>
+        </div>
         <div className="closeButton">
           <Button onClick={this.props.onComplete}>close</Button>
         </div>
         <style jsx>{`
-          div {
+          .holder {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            padding: 5px;
+            text-align: center;
           }
 
-          span {
-            margin: 5px 0;
+          .download-button {
+            margin-top: 10px;
           }
 
           .closeButton {
@@ -284,7 +359,7 @@ class ExportModal extends React.Component {
         <style jsx>{`
           .dialog {
             width: 400px;
-            height: 200px;
+            height: 300px;
             background-color: ${globalStyles.background};
             box-shadow: ${globalStyles.heavierBoxShadow};
             display: flex;
@@ -301,7 +376,7 @@ class ExportModal extends React.Component {
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 300000;
+            z-index: 100;
           }
         `}</style>
       </div>
