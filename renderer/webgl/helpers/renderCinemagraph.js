@@ -34,6 +34,9 @@ class Preview {
     this.canvas2d = document.getElementById('2dcinemagraph');
     this.ctx = this.canvas2d.getContext('2d');
 
+    this.vidCanvas = document.getElementById('2dcinemagraphvid');
+    this.vidctx = this.vidCanvas.getContext('2d');
+
     this.video = document.getElementById('cinemagraphVideo');
     this.video.onended = this.restartVideo;
     this.duration = this.video.duration;
@@ -211,7 +214,7 @@ class Preview {
     for (let i = 0; i < l; i++) {
       this.brushedImage.data[i * 4 + 3] = tempData[i * 4 + 3];
     }
-
+    this.recentlyUpdated = 5;
     this.setSeeking(false);
   };
 
@@ -290,6 +293,7 @@ class Preview {
 
   setMask = mask => {
     this.brushedImage.data.set(mask);
+    this.recentlyUpdated = 5;
   };
 
   getMask = () => {
@@ -301,6 +305,8 @@ class Preview {
     const resolution = this.resolution;
     let gl = this.gl;
 
+    this.vidctx.drawImage(this.video, 0, 0, this.videoWidth, this.videoHeight);
+
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.vidTexture);
 
@@ -310,7 +316,7 @@ class Preview {
       gl.RGBA,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      this.video,
+      this.vidCanvas,
     );
 
     // for now just take a snapshot of the first frame played

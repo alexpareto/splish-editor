@@ -24,6 +24,7 @@ import { getBoundingRect, setWindowSize } from '../../lib/windowSizeHelpers';
 import electron from 'electron';
 import fs from 'fs';
 import A from '../../components/a';
+import sizeOf from 'image-size';
 
 class MainMenu extends React.Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class MainMenu extends React.Component {
       loading: true,
     };
   }
+
   async componentDidMount() {
     const data = await checkLoggedIn();
     if (!data) {
@@ -54,25 +56,20 @@ class MainMenu extends React.Component {
 
     const videoPath = 'file://' + files[0];
 
-    const ffmpeg = getFfmpeg();
-    ffmpeg.ffprobe(videoPath, (err, metadata) => {
-      if (err) {
-        console.error(err);
-      }
+    let video = document.createElement('video');
+    video.style.opacity = 0;
+    video.src = videoPath;
+    document.body.append(video);
 
-      let naturalDimensions, duration;
-      for (let i = 0; i < 4; i++) {
-        naturalDimensions = {
-          width: metadata.streams[i].coded_width,
-          height: metadata.streams[i].coded_height,
-        };
+    video.onloadedmetadata = e => {
+      const naturalDimensions = {
+        width: e.target.clientWidth,
+        height: e.target.clientHeight,
+      };
+      const duration = e.target.duration;
+      video.parentNode.removeChild(video);
 
-        duration = metadata.streams[i].duration;
-
-        if (naturalDimensions.width && naturalDimensions.height) {
-          break;
-        }
-      }
+      const ffmpeg = getFfmpeg();
 
       const remote = electron.remote || false;
 
@@ -130,7 +127,7 @@ class MainMenu extends React.Component {
       Router.push('/cinemagraph');
 
       setWindowSize(boundingRect, hPadding, vPadding);
-    });
+    };
   };
 
   initializeAndOpenMovingStill = files => {
@@ -157,18 +154,11 @@ class MainMenu extends React.Component {
         orientation = exifData.image.Orientation;
       }
 
-      ffmpeg.ffprobe(imgPath, (err, metadata) => {
-        let naturalDimensions;
-        for (let i = 0; i < 4; i++) {
-          naturalDimensions = {
-            width: metadata.streams[i].coded_width,
-            height: metadata.streams[i].coded_height,
-          };
-
-          if (naturalDimensions.width && naturalDimensions.height) {
-            break;
-          }
-        }
+      sizeOf(imgPath.split('file://')[1], (err, dimensions) => {
+        let naturalDimensions = {
+          width: dimensions.width,
+          height: dimensions.height,
+        };
 
         naturalDimensions = getOrientedDimensions(
           orientation,
