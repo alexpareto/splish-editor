@@ -17,12 +17,8 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
 
-// Set up ffmpeg and ffprobe global paths
+// Set up ffmpeg global path
 global.ffmpegpath = require('ffmpeg-static').path.replace(
-  'app.asar',
-  'app.asar.unpacked',
-);
-global.ffprobepath = require('ffprobe-static').path.replace(
   'app.asar',
   'app.asar.unpacked',
 );

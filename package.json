@@ -50,7 +50,6 @@
     "es6-promise": "^4.2.1",
     "exif": "^0.6.0",
     "ffmpeg-static": "^2.1.0",
-    "ffprobe-static": "^2.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "image-size": "^0.6.2",
     "next": "beta",
