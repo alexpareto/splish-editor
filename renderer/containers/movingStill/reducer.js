@@ -8,7 +8,7 @@ import throttleQuality from '../../lib/throttleQuality';
 import * as DrawHelpers from '../../lib/drawHelpers';
 import Preview from '../../webgl/helpers/previewMovingStill';
 import fs from 'fs';
-
+import electron from 'electron';
 
 const initialState = {
   history: {
@@ -70,10 +70,6 @@ export const movingStillReducer = (state = initialState, action) => {
 
       // throttle preview to 2k to prevent crashes
       const previewDimensions = throttleQuality(action.naturalDimensions, '2K');
-      const data = fs.readFileSync(action.imgPath.split('file://')[1]);
-      const previewFile = new File([data], 'preview.jpg', {
-        type: 'image/jpeg',
-      });
 
       return {
         ...state,
@@ -81,7 +77,6 @@ export const movingStillReducer = (state = initialState, action) => {
         boundingRect: action.boundingRect,
         orientation: action.orientation,
         previewDimensions,
-        previewFile,
       };
     case actionTypes.INITIALIZE_MOVING_STILL_CANVAS:
       let vectorCanvas = d3.select('#movingStillSVG');
@@ -240,10 +235,24 @@ export const movingStillReducer = (state = initialState, action) => {
         showExportModal: true,
       };
     case actionTypes.MOVING_STILL_EXPORT_COMPLETE:
+      const remote = electron.remote || false;
+      let previewFile;
+
+      if (remote) {
+        const dir = remote.app.getPath('temp') + 'frames/';
+        const data = fs.readFileSync(dir + '000.jpg');
+        previewFile = new File([data], 'preview.jpg', {
+          type: 'image/jpeg',
+        });
+      }
+
+      state.preview.stop();
+
       return {
         ...state,
         videoFile: action.file,
         isRendering: false,
+        previewFile,
       };
     case actionTypes.MOVING_STILL_SHARE_COMPLETE:
       return {
