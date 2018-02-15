@@ -37,18 +37,22 @@ class ExportModal extends React.Component {
         {
           hasUploaded: true,
         },
-        () => {
-          this.props.uploadExportRequest(
-            this.props.exportFile,
-            this.state.title,
-            this.state.description,
-            '',
-            this.state.privacy_level,
-          );
-        },
+        this.callUploadExportRequest,
       );
     }
   }
+
+  callUploadExportRequest = () => {
+    this.props.uploadExportRequest(
+      this.props.videoFile,
+      this.props.previewFile,
+      this.props.videoDimensions,
+      this.state.title,
+      this.state.description,
+      '',
+      this.state.privacy_level,
+    );
+  };
 
   showExportSuccessDialog = () => {
     // first show confirm quit
@@ -201,17 +205,7 @@ class ExportModal extends React.Component {
                     {
                       hasUploaded: true,
                     },
-                    () => {
-                      this.props.uploadExportRequest(
-                        this.props.videoFile,
-                        this.props.previewFile,
-                        this.props.videoDimensions,
-                        this.state.title,
-                        this.state.description,
-                        '',
-                        this.state.privacy_level,
-                      );
-                    },
+                    this.callUploadExportRequest,
                   );
                 }
               }}
