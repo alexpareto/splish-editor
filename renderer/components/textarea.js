@@ -9,7 +9,7 @@ export default props => {
         <style jsx>{`
           textarea {
             height: 50px;
-            width: 300px;
+            max-width: 300px;
             background-color: ${globalStyles.textColor};
             color: ${globalStyles.background};
             border-style: none;
