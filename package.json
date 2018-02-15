@@ -63,6 +63,7 @@
     "react-feather": "^1.0.8",
     "react-ga": "^2.4.1",
     "react-redux": "^5.0.6",
+    "react-stack-grid": "^0.7.1",
     "react-tippy": "^1.2.2",
     "react-visibility-sensor": "^3.11.0",
     "redux": "^3.7.2",
