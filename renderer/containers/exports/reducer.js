@@ -5,6 +5,8 @@ const initialState = {
   uploadHasError: false,
   getRequestSent: false,
   getRequestError: false,
+  saveRequestSent: false,
+  saveRequestError: false,
   exports: [],
   lastUploadedExport: {},
 };
@@ -52,6 +54,33 @@ export const exportReducer = (state = initialState, action) => {
         getRequestError: false,
         exports: action.exports,
       };
+    case actionTypes.SAVE_EXPORT_REQUEST:
+      return {
+        ...state,
+        saveRequestSent: true,
+        saveRequestError: false,
+      };
+    case actionTypes.SAVE_EXPORT_FAILURE:
+      return {
+        ...state,
+        saveRequestSent: false,
+        saveRequestError: true,
+      };
+    case actionTypes.SAVE_EXPORT_SUCCESS:
+      // update export in exports list
+      const updatedExportArray = state.exports.map(exportItem => {
+        if (exportItem.public_id === action.exportItem.public_id) {
+          return action.exportItem;
+        }
+        return exportItem;
+      });
+      return {
+        ...state,
+        saveRequestSent: false,
+        saveRequestError: false,
+        exports: updatedExportArray,
+      };
+
     default:
       return state;
   }

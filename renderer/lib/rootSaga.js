@@ -11,6 +11,7 @@ function* rootSaga() {
     AuthSagas.signUpUserSaga(),
     ExportsSagas.uploadExportSaga(),
     ExportsSagas.getExportsSaga(),
+    ExportsSagas.saveExportsSaga(),
     ProfileSagas.updateSelfSaga(),
     ProfileSagas.getSelfSaga(),
     MovingStillSagas.undoSaga(),
