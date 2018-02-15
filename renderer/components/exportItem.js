@@ -226,7 +226,7 @@ class ExportItem extends React.Component {
               opacity: 0.8;
               display: flex;
               flex-direction: column;
-              align-items: center;
+              align-items: stretch;
               justify-content: space-between;
             }
 
@@ -242,8 +242,8 @@ class ExportItem extends React.Component {
               flex-direction: row;
               justify-content: space-around;
               align-items: center;
-              width: 150px;
-              height: 25px;
+              width: 100%;
+              height: 30px;
             }
           `}</style>
         </React.Fragment>
