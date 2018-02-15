@@ -10,7 +10,7 @@ export default props => {
           textarea {
             height: 50px;
             max-width: 300px;
-            background-color: ${globalStyles.textColor};
+            background-color: transparent;
             color: ${globalStyles.background};
             border-style: none;
             font-size: 14px;
