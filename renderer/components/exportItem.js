@@ -1,7 +1,7 @@
 import * as globalStyles from '../globalStyles';
 import Clipboard from 'react-clipboard.js';
 import VisibilitySensor from 'react-visibility-sensor';
-import { Edit2, X, Share, Save } from 'react-feather';
+import { Edit2, Share, Save } from 'react-feather';
 import { shell } from 'electron';
 import { Tooltip } from 'react-tippy';
 
@@ -253,9 +253,6 @@ class ExportItem extends React.Component {
       <React.Fragment>
         <span className="privacy-level">
           {privacy_levels[this.props.exportObject.privacy_level]}
-        </span>
-        <span className="button-delete">
-          <X color={'red'} size={20} />
         </span>
         <span className="button-edit" onClick={this.editExport}>
           <Edit2 color={globalStyles.background} size={20} />
