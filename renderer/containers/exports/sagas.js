@@ -25,7 +25,7 @@ const verifyWithDb = (
   title,
   description,
   license,
-  privacy_level
+  privacy_level,
 ) => {
   const getUrl = videoUrl
     .substring(0, videoUrl.indexOf('?'))
@@ -121,4 +121,38 @@ function* getExports(action) {
 
 export function* getExportsSaga() {
   yield takeEvery(Actions.actionTypes.GET_EXPORTS_REQUEST, getExports);
+}
+
+const saveExportCall = (public_id, description, privacy_level) => {
+  let formData = new FormData();
+  formData.append('description', description);
+  formData.append('privacy_level', privacy_level);
+  formData.append('public_id', public_id);
+  return api.call('exports/update', 'POST', formData);
+};
+
+function* saveExport(action) {
+  try {
+    // request all exports
+    const res = yield call(
+      saveExportCall,
+      action.public_id,
+      action.description,
+      action.privacy_level,
+    );
+
+    if (!res.ok) {
+      throw new Error(`${res.status}: ${res.statusText}`);
+    }
+
+    const data = yield res.json();
+    yield put(Actions.saveExportSuccess(data));
+  } catch (e) {
+    console.log(e);
+    yield put(Actions.getExportsFailure());
+  }
+}
+
+export function* saveExportsSaga() {
+  yield takeEvery(Actions.actionTypes.SAVE_EXPORT_REQUEST, saveExport);
 }
