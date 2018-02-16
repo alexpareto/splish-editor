@@ -80,6 +80,9 @@ void main() {
       // draw a line through each anchor perpendicular to the vector point
       // normalize impact based off of distance to that line
       vec2 pt1 = (p1[i] + 1.0) / 2.0;
+      vec2 pt2 = (p2[i] + 1.0) / 2.0;
+
+      vec2 closest;
       vec2 intersect;
       float min = 1.0 / ${anchorImpact};
       bool isDifSide = false;
@@ -87,12 +90,24 @@ void main() {
       for(int j = 0; j < NUM_ANCHORS - 1; j++)
       {
         float dist = distance(anchors[j], a_texCoord);
-        float dy = anchors[j].y - pt1.y;
-        float dx = anchors[j].x - pt1.x;
+
+        // determine closest point on the 
+        // vector segment to the anchor point
+        float dy = pt2.y - pt1.y;
+        float dx = pt1.x - pt1.x;
+
+        float dist1 = distance(pt1, anchors[j]);
+        float dist2 = distance(pt2, anchors[j]);
+
+        closest.x = (dist2 * pt1.x + dist1 * pt2.x) / (dist1 + dist2);
+        closest.y = (dist2 * pt1.y + dist1 * pt2.y) / (dist1 + dist2);
+
+        dy = anchors[j].y - closest.y;
+        dx = anchors[j].x - closest.x;
 
         // prevent divide by zero errors
-        dx += 0.000001;
-        dy += 0.000001;
+        dx += 0.0001;
+        dy += 0.0001;
 
         float slope = 1.0 / (-dy/dx);
         float yIntercept = anchors[j].y - (slope * anchors[j].x);
@@ -108,7 +123,7 @@ void main() {
 
         isDifSide = isDifSide ||
           (a_texCoord.y > (a_texCoord.x * slope + yIntercept)) !=
-          (pt1.y > (pt1.x * slope + yIntercept));
+          (closest.y > (closest.x * slope + yIntercept));
       }
 
       if(!isDifSide) {
